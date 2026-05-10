@@ -1,0 +1,16 @@
+:host ::ng-deep button[data-pc-name='pcmovealltotargetbutton'],
+:host ::ng-deep button[data-pc-name='pcmovealltosourcebutton'] {
+  display: none;
+}
+
+.hide-specific-button ::ng-deep button[data-pc-name='pcmovetotargetbutton'] {
+  opacity: 0.5 !important; /* Make it faded */
+  cursor: not-allowed !important; /* Show a "not-allowed" cursor */
+
+  /* 2. Functionally disable it */
+  pointer-events: none !important; /* Prevents all mouse events (clicks, hovers, etc.) */
+
+  /* 3. Optional: Remove focus/active styles that might still apply */
+  box-shadow: none !important;
+  outline: none !important;
+}

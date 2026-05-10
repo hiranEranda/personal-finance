@@ -1,3 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+@plugin 'tailwindcss-primeui';
+
+/* Tells Tailwind to enable dark mode when the .dark class is present */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body {
+    /* PrimeNG handles these specific color variables for you automatically */
+    @apply bg-surface-0 dark:bg-surface-900 text-surface-700 dark:text-surface-0 transition-colors duration-300;
+    margin: 0;
+  }
+}

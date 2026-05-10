@@ -1,0 +1,13 @@
+<div class="card p-6 bg-neutral-primary rounded-base border border-default">
+  <h2 class="text-heading text-xl font-bold mb-4">Fund Performance Over Time</h2>
+
+  @if (styledData()) {
+    <p-chart [type]="chartType()" [data]="styledData()" [options]="options()" class="block h-120 w-full" />
+  } @else {
+    <div
+      class="flex items-center justify-center h-120 w-full border border-dashed border-default rounded-base"
+    >
+      <span class="text-surface-500 font-medium">Loading performance data...</span>
+    </div>
+  }
+</div>
