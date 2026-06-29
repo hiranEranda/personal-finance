@@ -1,0 +1,230 @@
+@if (!hasData()) {
+  <div class="glass-panel p-6 rounded-xl">
+    <h3 class="text-lg font-semibold mb-2">Advanced Analytics</h3>
+    <p class="text-sm token-text-muted">Add investment data to unlock ROI, risk, benchmark, tax, and dividend analytics.</p>
+  </div>
+} @else {
+<div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+
+  <!-- Portfolio Performance -->
+  <div class="glass-panel p-6 rounded-xl">
+    <button type="button" (click)="toggleSection('performance')" class="w-full flex items-start justify-between text-left">
+      <div>
+        <h3 class="text-lg font-semibold mb-1">Portfolio Performance Snapshot</h3>
+        <p class="text-sm token-text-muted">Mathematical overview of realised and unrealised performance metrics.</p>
+      </div>
+      <span class="ml-4 text-sm font-medium token-text-muted">{{ isExpanded('performance') ? 'Hide details' : 'Show details' }}</span>
+    </button>
+    <div class="mt-4 grid grid-cols-2 gap-4">
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">ROI</p>
+        <p class="text-2xl font-bold">{{ pct(portfolioData().roi) }}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">CAGR</p>
+        <p class="text-2xl font-bold">{{ pct(portfolioData().cagr) }}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">IRR</p>
+        <p class="text-2xl font-bold">{{ pct(portfolioData().irr) }}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">Total Gain</p>
+        <p class="text-2xl font-bold">{{ fmt(portfolioData().totalGain) }}</p>
+      </div>
+    </div>
+    <p class="mt-4 text-sm token-text-muted">
+      Holding history spans approximately {{ portfolioData().holdingYears.toFixed(1) }} years with cumulative investments of {{ fmt(portfolioData().totalInvestment) }}.
+    </p>
+    @if (isExpanded('performance')) {
+      <div class="mt-4 text-sm token-text-muted space-y-3">
+        <p><strong>Return on Investment (ROI)</strong> measures net gain divided by capital deployed.</p>
+        <p><strong>CAGR</strong> annualises growth across the full holding period for fair comparison with benchmarks.</p>
+        <p><strong>IRR</strong> incorporates timing of cash flows. If IRR clears your hurdle rate, the strategy outperformed holding cash.</p>
+      </div>
+    }
+  </div>
+
+  <!-- Risk & Diversification -->
+  <div class="glass-panel p-6 rounded-xl">
+    <button type="button" (click)="toggleSection('risk')" class="w-full flex items-start justify-between text-left">
+      <div>
+        <h3 class="text-lg font-semibold mb-1">Risk & Diversification</h3>
+        <p class="text-sm token-text-muted">Volatility metrics derived from historical NAV sequences and allocation ratios.</p>
+      </div>
+      <span class="ml-4 text-sm font-medium token-text-muted">{{ isExpanded('risk') ? 'Hide details' : 'Show details' }}</span>
+    </button>
+    <div class="mt-4 grid grid-cols-3 gap-4 text-sm">
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">Volatility</p>
+        <p class="text-lg font-semibold">{{ pct(riskData().volatility) }}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">Downside Dev.</p>
+        <p class="text-lg font-semibold">{{ pct(riskData().downsideDeviation) }}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">Max Drawdown</p>
+        <p class="text-lg font-semibold">{{ pct(riskData().maxDrawdown) }}</p>
+      </div>
+    </div>
+    <div class="mt-4 space-y-2">
+      @for (item of diversificationData(); track item.type) {
+        <div class="flex items-center justify-between text-sm">
+          <div>
+            <p class="font-medium">{{ item.type }}</p>
+            <p class="token-text-muted">Value {{ fmt(item.value) }}</p>
+          </div>
+          <p class="font-semibold">{{ pct(item.allocation) }}</p>
+        </div>
+      }
+    </div>
+    @if (isExpanded('risk')) {
+      <div class="mt-4 text-sm token-text-muted space-y-2">
+        <p><strong>Volatility</strong> captures average size of returns. Higher means larger swings.</p>
+        <p><strong>Max drawdown</strong> reveals the worst peak-to-trough loss.</p>
+      </div>
+    }
+  </div>
+
+  <!-- Benchmark Comparison -->
+  <div class="glass-panel p-6 rounded-xl">
+    <button type="button" (click)="toggleSection('benchmarks')" class="w-full flex items-start justify-between text-left">
+      <div>
+        <h3 class="text-lg font-semibold mb-1">Market Index Comparison</h3>
+        <p class="text-sm token-text-muted">Expected values modelled using deterministic index growth rates.</p>
+      </div>
+      <span class="ml-4 text-sm font-medium token-text-muted">{{ isExpanded('benchmarks') ? 'Hide details' : 'Show details' }}</span>
+    </button>
+    <div class="mt-4 overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left token-text-muted">
+            <th class="py-1 pr-4">Index</th>
+            <th class="py-1 pr-4">Expected</th>
+            <th class="py-1 pr-4">Difference</th>
+            <th class="py-1">Relative</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (b of benchmarkRows(); track b.name) {
+            <tr>
+              <td class="py-1 pr-4">{{ b.name }}</td>
+              <td class="py-1 pr-4">{{ fmt(b.expectedValue) }}</td>
+              <td [class]="'py-1 pr-4 ' + (b.difference >= 0 ? 'token-positive' : 'token-negative')">{{ fmt(b.difference) }}</td>
+              <td class="py-1">{{ pct(b.relativePerformance) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Forecasting -->
+  <div class="glass-panel p-6 rounded-xl">
+    <button type="button" (click)="toggleSection('forecast')" class="w-full flex items-start justify-between text-left">
+      <div>
+        <h3 class="text-lg font-semibold mb-1">Forecasting Outlook</h3>
+        <p class="text-sm token-text-muted">Future value projections using compound growth with historical contribution rates.</p>
+      </div>
+      <span class="ml-4 text-sm font-medium token-text-muted">{{ isExpanded('forecast') ? 'Hide details' : 'Show details' }}</span>
+    </button>
+    <div class="mt-4 grid grid-cols-3 gap-4 text-sm">
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">1 Year</p>
+        <p class="text-xl font-semibold">{{ fmt(forecastData().total.oneYear) }}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">3 Years</p>
+        <p class="text-xl font-semibold">{{ fmt(forecastData().total.threeYear) }}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">5 Years</p>
+        <p class="text-xl font-semibold">{{ fmt(forecastData().total.fiveYear) }}</p>
+      </div>
+    </div>
+    <div class="mt-4">
+      <p class="text-xs uppercase tracking-wide token-text-muted mb-2">Per-fund projection</p>
+      @for (item of forecastData().perFund; track item.fundId) {
+        <div class="flex items-center justify-between text-sm">
+          <span class="font-medium">{{ item.name }}</span>
+          <span>{{ fmt(item.fiveYear) }} · {{ pct(item.growthAssumption) }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Performance Benchmarking (Top/Bottom funds) -->
+  <div class="glass-panel p-6 rounded-xl">
+    <button type="button" (click)="toggleSection('benchmarking')" class="w-full flex items-start justify-between text-left">
+      <div>
+        <h3 class="text-lg font-semibold mb-1">Performance Benchmarking</h3>
+        <p class="text-sm token-text-muted">Relative fund performance ordered by return on investment.</p>
+      </div>
+      <span class="ml-4 text-sm font-medium token-text-muted">{{ isExpanded('benchmarking') ? 'Hide details' : 'Show details' }}</span>
+    </button>
+    <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted mb-2">Top funds</p>
+        <ul class="space-y-2 text-sm">
+          @for (fund of topFunds(); track fund.fundId) {
+            <li [class]="'flex items-center justify-between ' + (highlightFund(fund.fundId) ? 'rounded-md bg-indigo-500/10 px-2 py-1' : '')">
+              <span [class]="highlightFund(fund.fundId) ? 'font-semibold' : ''">{{ fund.name }}</span>
+              <span class="token-positive">{{ pct(fund.roi) }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted mb-2">Lagging funds</p>
+        <ul class="space-y-2 text-sm">
+          @for (fund of underperformers(); track fund.fundId) {
+            <li [class]="'flex items-center justify-between ' + (highlightFund(fund.fundId) ? 'rounded-md bg-indigo-500/10 px-2 py-1' : '')">
+              <span [class]="highlightFund(fund.fundId) ? 'font-semibold' : ''">{{ fund.name }}</span>
+              <span [class]="fund.roi >= 0 ? 'token-positive' : 'token-negative'">{{ pct(fund.roi) }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tax & Dividends -->
+  <div class="glass-panel p-6 rounded-xl">
+    <button type="button" (click)="toggleSection('taxDividends')" class="w-full flex items-start justify-between text-left">
+      <div>
+        <h3 class="text-lg font-semibold mb-1">Tax & Dividend Outlook</h3>
+        <p class="text-sm token-text-muted">Potential liabilities if liquidated at current NAV and income via dividends.</p>
+      </div>
+      <span class="ml-4 text-sm font-medium token-text-muted">{{ isExpanded('taxDividends') ? 'Hide details' : 'Show details' }}</span>
+    </button>
+    <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">Long-term gains</p>
+        <p class="text-lg font-semibold">{{ fmt(taxData().longTermGain) }}</p>
+        <p class="text-xs token-text-muted">Tax: {{ fmt(taxData().longTermTax) }}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">Short-term gains</p>
+        <p class="text-lg font-semibold">{{ fmt(taxData().shortTermGain) }}</p>
+        <p class="text-xs token-text-muted">Tax: {{ fmt(taxData().shortTermTax) }}</p>
+      </div>
+    </div>
+    <div class="mt-4 grid grid-cols-3 gap-4 text-sm">
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">Total dividends</p>
+        <p class="text-lg font-semibold">{{ fmt(dividendData().totalDividends) }}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">12M dividends</p>
+        <p class="text-lg font-semibold">{{ fmt(dividendData().annualDividend) }}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-wide token-text-muted">Dividend yield</p>
+        <p class="text-lg font-semibold">{{ pct(dividendData().dividendYield) }}</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+}

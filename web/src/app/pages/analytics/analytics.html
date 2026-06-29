@@ -1,0 +1,45 @@
+<div class="space-y-6">
+  <app-saving-status></app-saving-status>
+
+  <div class="glass-panel p-6 rounded-xl">
+    <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">Advanced Analytics</h2>
+        <p class="text-sm token-text-muted">
+          Explore each section to understand how your portfolio performs, what risks it carries, and how to interpret every metric.
+        </p>
+      </div>
+      @if (hasData()) {
+        <div class="flex flex-col gap-1 md:items-end">
+          <label class="text-sm font-medium token-text-muted">View scope</label>
+          <select [value]="selectedFundId()" (change)="onScopeChange($any($event.target).value)"
+            class="mt-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="overall">Overall portfolio</option>
+            @for (fund of funds(); track fund.fundId) {
+              <option [value]="'' + fund.fundId">{{ fund.name }}</option>
+            }
+          </select>
+          @if (selectedFund()) {
+            <p class="text-xs token-text-muted">Showing analytics for <span class="font-medium">{{ selectedFund()!.name }}</span>.</p>
+          } @else {
+            <p class="text-xs token-text-muted">Showing consolidated portfolio analytics.</p>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (hasData()) {
+    <app-advanced-analytics
+      [analytics]="activeAnalytics()"
+      [scope]="activeScope()"
+      [selectedFundId]="activeFundId()">
+    </app-advanced-analytics>
+  } @else {
+    <div class="glass-panel p-8 text-center rounded-xl">
+      <p class="token-text-muted text-base">
+        Add funds and transactions to unlock analytics. Once you have data, this page will map ROI, risk, taxes, and dividends automatically.
+      </p>
+    </div>
+  }
+</div>

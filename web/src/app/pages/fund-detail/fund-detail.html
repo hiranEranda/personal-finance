@@ -1,0 +1,153 @@
+@if (!fund()) {
+  <div class="glass-panel p-6 rounded-xl">Fund not found.</div>
+} @else {
+<div class="space-y-6">
+  <button (click)="goBack()" class="flex items-center space-x-2 text-sm font-medium token-text-muted hover:text-blue-500 transition-colors mb-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+    <span>Back to Funds</span>
+  </button>
+
+  <app-fund-hero [fund]="fund()!" [analytics]="fundAnalytics()"></app-fund-hero>
+
+  <!-- Value Growth Chart -->
+  <div class="glass-panel p-6 rounded-xl">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
+      <h3 class="text-lg font-bold token-text-primary">Value Growth History</h3>
+      <div class="flex space-x-1 bg-gray-50 dark:bg-gray-800 p-1 rounded-lg overflow-x-auto">
+        @for (range of timeRanges; track range) {
+          <button
+            (click)="selectedRange.set(range)"
+            [class]="selectedRange() === range
+              ? 'px-3 py-1 text-xs font-medium rounded-md whitespace-nowrap bg-white dark:bg-gray-700 shadow-sm token-text-primary'
+              : 'px-3 py-1 text-xs font-medium rounded-md whitespace-nowrap token-text-muted hover:bg-gray-200 dark:hover:bg-gray-700 transition-all'"
+          >{{ range }}</button>
+        }
+      </div>
+    </div>
+    <div style="height: 350px;">
+      <p-chart type="line" [data]="chartData()" [options]="chartOptions" width="100%" height="100%"></p-chart>
+    </div>
+  </div>
+
+  @if (fundAnalytics(); as fa) {
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Risk -->
+      <div class="glass-panel p-6 rounded-xl">
+        <h3 class="text-lg font-bold token-text-primary mb-4">Risk Assessment</h3>
+        <div class="space-y-4">
+          <div class="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700">
+            <span class="text-sm token-text-muted">Volatility</span>
+            <span class="font-semibold token-text-primary">{{ pct(fa.risk.volatility) }}</span>
+          </div>
+          <div class="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700">
+            <span class="text-sm token-text-muted">Max Drawdown</span>
+            <span class="font-semibold token-negative">{{ pct(fa.risk.maxDrawdown) }}</span>
+          </div>
+          <div class="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700">
+            <span class="text-sm token-text-muted">Downside Deviation</span>
+            <span class="font-semibold token-text-primary">{{ pct(fa.risk.downsideDeviation) }}</span>
+          </div>
+          <div class="flex justify-between items-center py-2">
+            <span class="text-sm token-text-muted">Data Points</span>
+            <span class="font-semibold token-text-primary">{{ fa.risk.returnSeries.length }} observations</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tax -->
+      <div class="glass-panel p-6 rounded-xl">
+        <h3 class="text-lg font-bold token-text-primary mb-4">Tax Liability Estimate</h3>
+        <div class="grid grid-cols-2 gap-4 mt-2">
+          <div class="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+            <p class="text-xs uppercase tracking-wider token-text-muted mb-1">Long Term</p>
+            <p class="text-lg font-bold token-positive">{{ fmt(fa.tax.longTermGain) }}</p>
+            <p class="text-xs mt-1 text-red-500">Tax: {{ fmt(fa.tax.longTermTax) }}</p>
+          </div>
+          <div class="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+            <p class="text-xs uppercase tracking-wider token-text-muted mb-1">Short Term</p>
+            <p class="text-lg font-bold" style="color: var(--color-warning)">{{ fmt(fa.tax.shortTermGain) }}</p>
+            <p class="text-xs mt-1 text-red-500">Tax: {{ fmt(fa.tax.shortTermTax) }}</p>
+          </div>
+        </div>
+        <p class="text-xs token-text-muted mt-4">* Estimated based on FIFO method. Actual tax may vary.</p>
+      </div>
+
+      <!-- Forecast -->
+      <div class="glass-panel p-6 rounded-xl md:col-span-2">
+        <h3 class="text-lg font-bold token-text-primary mb-4">Projected Value Forecast</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+          @for (item of [{label: '1 Year', value: fa.forecast.oneYear}, {label: '3 Years', value: fa.forecast.threeYear}, {label: '5 Years', value: fa.forecast.fiveYear}]; track item.label) {
+            <div class="p-4 bg-blue-50/50 dark:bg-blue-900/10 rounded-xl border border-blue-100 dark:border-blue-800/30">
+              <p class="text-xs uppercase tracking-wider text-blue-600 dark:text-blue-400 font-semibold mb-1">{{ item.label }}</p>
+              <p class="text-2xl font-bold token-text-primary">{{ fmt(item.value) }}</p>
+            </div>
+          }
+        </div>
+        <p class="text-sm token-text-muted">Based on <strong>{{ fa.forecast.modelUsed }}</strong> model.</p>
+      </div>
+
+      <!-- Benchmark -->
+      <div class="glass-panel p-6 rounded-xl md:col-span-2">
+        <h3 class="text-lg font-bold token-text-primary mb-4">Benchmark Comparison</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left token-text-muted border-b border-gray-100 dark:border-gray-700">
+                <th class="py-3 px-4 font-medium">Benchmark</th>
+                <th class="py-3 px-4 font-medium">Expected Value</th>
+                <th class="py-3 px-4 font-medium">Difference</th>
+                <th class="py-3 px-4 font-medium">Relative</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (b of fa.benchmarkComparisons; track b.name) {
+                <tr class="border-b border-gray-50 dark:border-gray-800 last:border-0">
+                  <td class="py-3 px-4 token-text-primary">{{ b.name }}</td>
+                  <td class="py-3 px-4 font-mono">{{ fmt(b.expectedValue) }}</td>
+                  <td [class]="'py-3 px-4 font-mono font-medium ' + (b.difference >= 0 ? 'token-positive' : 'token-negative')">{{ fmt(b.difference) }}</td>
+                  <td class="py-3 px-4 font-bold">{{ pct(b.relativePerformance) }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Transaction History -->
+  @if (fund()!.transactions && fund()!.transactions.length > 0) {
+    <div class="glass-panel p-6 rounded-xl">
+      <h3 class="text-lg font-bold token-text-primary mb-4">Transaction History</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left token-text-muted border-b border-gray-100 dark:border-gray-700">
+              <th class="py-3 px-4 font-medium">Date</th>
+              <th class="py-3 px-4 font-medium">Type</th>
+              <th class="py-3 px-4 font-medium text-right">Units</th>
+              <th class="py-3 px-4 font-medium text-right">NAV</th>
+              <th class="py-3 px-4 font-medium text-right">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (tx of fund()!.transactions.slice().sort(sortByDateDesc); track $index) {
+              <tr class="border-b border-gray-50 dark:border-gray-800 last:border-0 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors">
+                <td class="py-3 px-4 token-text-primary">{{ tx.date }}</td>
+                <td class="py-3 px-4">
+                  <span [class]="'px-2 py-0.5 rounded-full text-xs font-semibold ' + (tx.amount >= 0 ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400')">
+                    {{ tx.amount >= 0 ? 'Buy' : 'Sell' }}
+                  </span>
+                </td>
+                <td class="py-3 px-4 font-mono text-right">{{ tx.units.toFixed(4) }}</td>
+                <td class="py-3 px-4 font-mono text-right">{{ tx.nav.toFixed(2) }}</td>
+                <td class="py-3 px-4 font-bold text-right token-text-primary">{{ fmt(Math.abs(tx.amount)) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>
+}

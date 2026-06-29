@@ -1,0 +1,240 @@
+<div class="space-y-6">
+  <app-saving-status></app-saving-status>
+
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold gradient-text">Portfolio Forecast</h1>
+      <p class="text-sm token-text-muted mt-1">Simulate future SIP investments and project portfolio growth</p>
+    </div>
+    <div class="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+      <button
+        (click)="viewMode.set('combined')"
+        [class]="viewMode() === 'combined'
+          ? 'px-4 py-2 text-sm font-medium rounded-md bg-white dark:bg-gray-700 shadow-sm token-text-primary'
+          : 'px-4 py-2 text-sm font-medium rounded-md token-text-muted hover:bg-gray-200 dark:hover:bg-gray-700 transition-all'"
+      >Combined</button>
+      <button
+        (click)="viewMode.set('individual')"
+        [class]="viewMode() === 'individual'
+          ? 'px-4 py-2 text-sm font-medium rounded-md bg-white dark:bg-gray-700 shadow-sm token-text-primary'
+          : 'px-4 py-2 text-sm font-medium rounded-md token-text-muted hover:bg-gray-200 dark:hover:bg-gray-700 transition-all'"
+      >Per Fund</button>
+    </div>
+  </div>
+
+  <!-- Settings Panel -->
+  <div class="glass-panel p-6 rounded-xl">
+    <h2 class="text-base font-bold token-text-primary mb-4">Forecast Settings</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Years -->
+      <div class="flex flex-col gap-2">
+        <label class="text-xs font-semibold uppercase tracking-wider token-text-muted">Forecast Horizon</label>
+        <div class="flex items-center gap-2">
+          <input
+            type="range" min="1" max="30" step="1"
+            [value]="yearsToForecast()"
+            (input)="yearsToForecast.set(+$any($event.target).value)"
+            class="flex-1 accent-blue-500"
+          />
+          <span class="text-sm font-bold token-text-primary w-16 text-right">{{ yearsToForecast() }} yr</span>
+        </div>
+      </div>
+
+      <!-- Step-up Rate -->
+      <div class="flex flex-col gap-2">
+        <label class="text-xs font-semibold uppercase tracking-wider token-text-muted">Annual SIP Step-up</label>
+        <div class="flex items-center gap-2">
+          <input
+            type="range" min="0" max="50" step="1"
+            [value]="stepUpRate()"
+            (input)="stepUpRate.set(+$any($event.target).value)"
+            class="flex-1 accent-blue-500"
+          />
+          <span class="text-sm font-bold token-text-primary w-16 text-right">{{ stepUpRate() }}%</span>
+        </div>
+      </div>
+
+      <!-- Model -->
+      <div class="flex flex-col gap-2">
+        <label class="text-xs font-semibold uppercase tracking-wider token-text-muted">Forecast Model</label>
+        <select
+          [value]="selectedModel()"
+          (change)="selectedModel.set($any($event.target).value)"
+          class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm token-text-primary"
+        >
+          @for (model of models; track model) {
+            <option [value]="model">{{ model }}</option>
+          }
+        </select>
+      </div>
+
+      <!-- Logistic Capacity -->
+      <div class="flex flex-col gap-2">
+        <label class="text-xs font-semibold uppercase tracking-wider token-text-muted">Logistic Capacity (NAV)</label>
+        <input
+          type="number" min="1"
+          [value]="capacity()"
+          (input)="capacity.set(+$any($event.target).value)"
+          class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm token-text-primary"
+        />
+      </div>
+    </div>
+
+    <!-- Per-Fund SIP -->
+    @if (funds().length > 0) {
+      <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
+          <h3 class="text-sm font-semibold token-text-primary">Monthly SIP per Fund</h3>
+          <span class="text-sm token-text-muted">Total SIP: <strong class="token-text-primary">{{ fmt(totalSIP()) }}</strong></span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          @for (fund of funds(); track fund.id) {
+            <div class="flex items-center gap-3">
+              <div class="flex-1 min-w-0">
+                <p class="text-xs font-medium token-text-primary truncate">{{ fund.name }}</p>
+                <p class="text-xs token-text-muted">{{ fund.type }}</p>
+              </div>
+              <input
+                type="number" min="0" step="500"
+                [value]="fundSIPs()[fund.id] ?? 0"
+                (input)="updateFundSIP(fund.id, $any($event.target).value)"
+                class="w-28 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-1.5 text-sm font-mono token-text-primary text-right"
+              />
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  @if (funds().length === 0) {
+    <div class="glass-panel p-12 rounded-xl text-center">
+      <p class="text-lg font-semibold token-text-primary">No funds found</p>
+      <p class="text-sm token-text-muted mt-1">Add funds in Manage Funds to see forecasts.</p>
+    </div>
+  } @else {
+
+    <!-- Summary Cards -->
+    @let res = forecastResult();
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="glass-panel p-5 rounded-xl">
+        <p class="text-xs uppercase tracking-wider token-text-muted font-semibold mb-1">Current Value</p>
+        <p class="text-xl font-bold token-text-primary">{{ formatCompact(currentPortfolioValue()) }}</p>
+      </div>
+      <div class="glass-panel p-5 rounded-xl">
+        <p class="text-xs uppercase tracking-wider token-text-muted font-semibold mb-1">SIP Invested ({{ yearsToForecast() }}yr)</p>
+        <p class="text-xl font-bold text-blue-400">{{ formatCompact(res.totalSIPInvested) }}</p>
+      </div>
+      <div class="glass-panel p-5 rounded-xl">
+        <p class="text-xs uppercase tracking-wider token-text-muted font-semibold mb-1">Projected Value</p>
+        <p class="text-xl font-bold token-positive">{{ formatCompact(res.finalValue) }}</p>
+      </div>
+      <div class="glass-panel p-5 rounded-xl">
+        <p class="text-xs uppercase tracking-wider token-text-muted font-semibold mb-1">Est. Returns</p>
+        <p [class]="'text-xl font-bold ' + (res.totalReturns >= 0 ? 'token-positive' : 'token-negative')">
+          {{ formatCompact(res.totalReturns) }}
+        </p>
+        <p class="text-xs token-text-muted mt-1">CAGR: {{ (res.annualizedRate * 100).toFixed(1) }}%</p>
+      </div>
+    </div>
+
+    @if (viewMode() === 'combined') {
+      <!-- Combined Chart -->
+      <div class="glass-panel p-6 rounded-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
+          <div>
+            <h2 class="text-base font-bold token-text-primary">Combined Portfolio Projection</h2>
+            <p class="text-xs token-text-muted mt-0.5">Model: {{ res.modelName }}</p>
+          </div>
+        </div>
+        <div style="height: 400px;">
+          <p-chart type="line" [data]="chartData()" [options]="chartOptions()" width="100%" height="100%"></p-chart>
+        </div>
+      </div>
+
+      <!-- Per-Fund Breakdown Table -->
+      @if (res.perFund.length > 0) {
+        <div class="glass-panel p-6 rounded-xl">
+          <h2 class="text-base font-bold token-text-primary mb-4">Per-Fund Breakdown</h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-left token-text-muted border-b border-gray-100 dark:border-gray-700">
+                  <th class="py-3 px-4 font-medium">Fund</th>
+                  <th class="py-3 px-4 font-medium">Model</th>
+                  <th class="py-3 px-4 font-medium text-right">Current</th>
+                  <th class="py-3 px-4 font-medium text-right">Monthly SIP</th>
+                  <th class="py-3 px-4 font-medium text-right">SIP Total</th>
+                  <th class="py-3 px-4 font-medium text-right">Proj. Value</th>
+                  <th class="py-3 px-4 font-medium text-right">Est. Return</th>
+                  <th class="py-3 px-4 font-medium text-right">CAGR</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (pf of res.perFund; track pf.fundId) {
+                  <tr class="border-b border-gray-50 dark:border-gray-800 last:border-0 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors">
+                    <td class="py-3 px-4">
+                      <p class="font-medium token-text-primary">{{ pf.name }}</p>
+                      <p class="text-xs token-text-muted">{{ pf.type }}</p>
+                    </td>
+                    <td class="py-3 px-4">
+                      <span class="px-2 py-0.5 bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400 rounded-full text-xs font-semibold">{{ pf.model }}</span>
+                    </td>
+                    <td class="py-3 px-4 font-mono text-right token-text-primary">{{ formatCompact(pf.currentValue) }}</td>
+                    <td class="py-3 px-4 font-mono text-right token-text-primary">{{ fmt(pf.fundSIP) }}</td>
+                    <td class="py-3 px-4 font-mono text-right text-blue-400">{{ formatCompact(pf.sipContribution) }}</td>
+                    <td class="py-3 px-4 font-mono font-bold text-right token-positive">{{ formatCompact(pf.finalValue) }}</td>
+                    <td [class]="'py-3 px-4 font-mono font-medium text-right ' + (pf.returns >= 0 ? 'token-positive' : 'token-negative')">{{ formatCompact(pf.returns) }}</td>
+                    <td class="py-3 px-4 font-mono font-bold text-right token-text-primary">{{ (pf.annualRate * 100).toFixed(1) }}%</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+    }
+
+    @if (viewMode() === 'individual') {
+      <p class="text-sm token-text-muted">Per-fund SIP projections below are estimated using each fund's individual NAV model.</p>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        @for (pf of res.perFund; track pf.fundId) {
+          <div class="glass-panel p-5 rounded-xl space-y-4">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <p class="font-bold token-text-primary">{{ pf.name }}</p>
+                <p class="text-xs token-text-muted">{{ pf.type }} &bull; {{ pf.model }}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-lg font-bold token-positive">{{ formatCompact(pf.finalValue) }}</p>
+                <p class="text-xs token-text-muted">{{ yearsToForecast() }}yr projection</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-sm">
+              <div class="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                <p class="text-xs token-text-muted mb-1">Current Value</p>
+                <p class="font-bold token-text-primary">{{ formatCompact(pf.currentValue) }}</p>
+              </div>
+              <div class="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                <p class="text-xs token-text-muted mb-1">Monthly SIP</p>
+                <p class="font-bold token-text-primary">{{ fmt(pf.fundSIP) }}</p>
+              </div>
+              <div class="p-3 bg-blue-50 dark:bg-blue-900/10 rounded-lg">
+                <p class="text-xs token-text-muted mb-1">Total SIP</p>
+                <p class="font-bold text-blue-400">{{ formatCompact(pf.sipContribution) }}</p>
+              </div>
+              <div class="p-3 bg-green-50 dark:bg-green-900/10 rounded-lg">
+                <p class="text-xs token-text-muted mb-1">Est. Returns</p>
+                <p [class]="'font-bold ' + (pf.returns >= 0 ? 'token-positive' : 'token-negative')">{{ formatCompact(pf.returns) }}</p>
+              </div>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <span class="token-text-muted">CAGR</span>
+              <span class="font-bold token-text-primary">{{ (pf.annualRate * 100).toFixed(2) }}%</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

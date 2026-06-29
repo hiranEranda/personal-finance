@@ -1,0 +1,188 @@
+<div class="space-y-6">
+
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div>
+      <h1 class="text-2xl font-bold gradient-text">Fund Comparison</h1>
+      <p class="text-sm token-text-muted mt-1">Compare Sri Lankan unit trust market funds against your portfolio</p>
+    </div>
+    @if (selectedMarketFundNames().length > 0 || selectedPortfolioFundId()) {
+      <button (click)="clearAll()" class="text-xs font-medium text-red-400 hover:text-red-300 border border-red-400/40 px-3 py-1.5 rounded-lg transition-colors">
+        Clear all
+      </button>
+    }
+  </div>
+
+  @if (isLoading()) {
+    <div class="glass-panel p-12 rounded-xl flex items-center justify-center gap-3">
+      <span class="text-sm token-text-muted">Loading market data...</span>
+    </div>
+  } @else if (loadError()) {
+    <div class="glass-panel p-6 rounded-xl border border-red-400/30 text-red-400 text-sm">{{ loadError() }}</div>
+  } @else {
+
+    <!-- Settings Row -->
+    <div class="glass-panel p-4 rounded-xl flex flex-wrap gap-4 items-end">
+
+      <!-- Normalize toggle -->
+      <div class="flex flex-col gap-1">
+        <label class="text-xs font-semibold uppercase tracking-wider token-text-muted">Display</label>
+        <div class="flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5">
+          <button
+            (click)="normalizeMode.set(true)"
+            [class]="normalizeMode() ? 'px-3 py-1.5 text-xs font-medium rounded-md bg-white dark:bg-gray-700 shadow-sm token-text-primary' : 'px-3 py-1.5 text-xs font-medium rounded-md token-text-muted'"
+          >% Change</button>
+          <button
+            (click)="normalizeMode.set(false)"
+            [class]="!normalizeMode() ? 'px-3 py-1.5 text-xs font-medium rounded-md bg-white dark:bg-gray-700 shadow-sm token-text-primary' : 'px-3 py-1.5 text-xs font-medium rounded-md token-text-muted'"
+          >NAV Price</button>
+        </div>
+      </div>
+
+      <!-- Date From -->
+      <div class="flex flex-col gap-1">
+        <label class="text-xs font-semibold uppercase tracking-wider token-text-muted">From</label>
+        <input type="date"
+          [value]="dateFrom()"
+          (change)="dateFrom.set($any($event.target).value)"
+          class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-1.5 text-sm token-text-primary"
+        />
+      </div>
+
+      <!-- Date To -->
+      <div class="flex flex-col gap-1">
+        <label class="text-xs font-semibold uppercase tracking-wider token-text-muted">To</label>
+        <input type="date"
+          [value]="dateTo()"
+          (change)="dateTo.set($any($event.target).value)"
+          class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-1.5 text-sm token-text-primary"
+        />
+      </div>
+
+      <!-- Portfolio fund selector -->
+      @if (portfolioFunds().length > 0) {
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-semibold uppercase tracking-wider token-text-muted">My Fund (overlay)</label>
+          <select
+            [value]="selectedPortfolioFundId() ?? ''"
+            (change)="selectedPortfolioFundId.set($any($event.target).value || null)"
+            class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-1.5 text-sm token-text-primary"
+          >
+            <option value="">-- None --</option>
+            @for (f of portfolioFunds(); track f.id) {
+              <option [value]="f.id">{{ f.name }}</option>
+            }
+          </select>
+        </div>
+      }
+
+      <span class="text-xs token-text-muted self-end pb-1.5">
+        {{ selectedMarketFundNames().length }}/7 market funds selected
+      </span>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+      <!-- Left: Fund Selector -->
+      <div class="glass-panel rounded-xl flex flex-col" style="max-height: 640px;">
+        <div class="p-4 border-b border-gray-100 dark:border-gray-700">
+          <h2 class="text-sm font-bold token-text-primary mb-2">Market Funds <span class="token-text-muted font-normal">({{ marketData().length }})</span></h2>
+          <input
+            type="text"
+            placeholder="Search fund or company..."
+            [value]="searchQuery()"
+            (input)="searchQuery.set($any($event.target).value)"
+            class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm token-text-primary placeholder:token-text-muted focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div class="overflow-y-auto flex-1 p-2">
+          @for (fund of filteredMarketFunds(); track fund.name) {
+            <button
+              (click)="toggleMarketFund(fund.name)"
+              [class]="'w-full text-left px-3 py-2.5 rounded-lg mb-1 transition-all text-sm ' +
+                (isSelected(fund.name)
+                  ? 'bg-blue-500/15 border border-blue-500/40 token-text-primary'
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-800 token-text-muted hover:token-text-primary border border-transparent')"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <div class="min-w-0">
+                  <p class="font-medium truncate leading-tight">{{ fund.name }}</p>
+                  <p class="text-xs opacity-60 truncate">{{ fund.company }}</p>
+                </div>
+                <div class="text-right shrink-0">
+                  <p [class]="'text-xs font-bold ' + (fund.changePercent >= 0 ? 'token-positive' : 'token-negative')">
+                    {{ fund.changePercent >= 0 ? '+' : '' }}{{ fund.changePercent.toFixed(1) }}%
+                  </p>
+                  <p class="text-xs opacity-50">{{ fund.lastPrice.toFixed(4) }}</p>
+                </div>
+              </div>
+            </button>
+          }
+          @if (filteredMarketFunds().length === 0) {
+            <p class="text-sm token-text-muted text-center py-8">No funds match your search.</p>
+          }
+        </div>
+      </div>
+
+      <!-- Right: Chart + Table -->
+      <div class="xl:col-span-2 space-y-6">
+
+        @if (selectedMarketFundNames().length === 0 && !selectedPortfolioFundId()) {
+          <div class="glass-panel p-12 rounded-xl text-center">
+            <p class="text-base font-semibold token-text-primary">Select funds to compare</p>
+            <p class="text-sm token-text-muted mt-1">Pick up to 7 market funds from the list, or overlay your own fund.</p>
+          </div>
+        } @else {
+
+          <!-- Chart -->
+          <div class="glass-panel p-5 rounded-xl">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-base font-bold token-text-primary">NAV Performance Comparison</h2>
+              <span class="text-xs token-text-muted">{{ normalizeMode() ? 'Normalised to % change from start' : 'Absolute NAV prices' }}</span>
+            </div>
+            <div style="height: 380px;">
+              <p-chart type="line" [data]="chartData()" [options]="chartOptions()" width="100%" height="100%"></p-chart>
+            </div>
+          </div>
+
+          <!-- Summary Table -->
+          @if (summaryRows().length > 0) {
+            <div class="glass-panel p-5 rounded-xl">
+              <h2 class="text-base font-bold token-text-primary mb-4">Performance Summary</h2>
+              <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead>
+                    <tr class="text-left token-text-muted border-b border-gray-100 dark:border-gray-700">
+                      <th class="py-2 px-3 font-medium">Fund</th>
+                      <th class="py-2 px-3 font-medium">Company</th>
+                      <th class="py-2 px-3 font-medium text-right">Start NAV</th>
+                      <th class="py-2 px-3 font-medium text-right">Current NAV</th>
+                      <th class="py-2 px-3 font-medium text-right">Return</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (row of summaryRows(); track row.name) {
+                      <tr [class]="'border-b border-gray-50 dark:border-gray-800 last:border-0 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-colors ' + (row.isPortfolio ? 'bg-blue-50/30 dark:bg-blue-900/10' : '')">
+                        <td class="py-2.5 px-3">
+                          <span class="font-medium token-text-primary">
+                            @if (row.isPortfolio) { <span class="text-blue-400 mr-1">★</span> }
+                            {{ row.name }}
+                          </span>
+                        </td>
+                        <td class="py-2.5 px-3 text-xs token-text-muted">{{ row.company }}</td>
+                        <td class="py-2.5 px-3 font-mono text-right token-text-primary">{{ row.first.toFixed(4) }}</td>
+                        <td class="py-2.5 px-3 font-mono text-right token-text-primary">{{ row.last.toFixed(4) }}</td>
+                        <td [class]="'py-2.5 px-3 font-bold text-right ' + (row.change >= 0 ? 'token-positive' : 'token-negative')">
+                          {{ row.change >= 0 ? '+' : '' }}{{ row.change.toFixed(2) }}%
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>

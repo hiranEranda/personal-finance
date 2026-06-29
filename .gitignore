@@ -1,15 +1,24 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# Angular build output & cache
+/web/dist
+/web/out-tsc
+/web/bazel-out
+/web/.angular/cache
+/web/.sass-cache/
+/web/coverage
 
-# Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
-
-# Node
-/node_modules
+# Node modules (all sub-projects)
+node_modules/
+/web/node_modules/
+/server/node_modules/
 npm-debug.log
 yarn-error.log
+
+# Python / RAG
+/rag/__pycache__/
+/rag/**/__pycache__/
+/rag/.venv/
+/rag/storage/pdfs/
+*.pyc
 
 # IDEs and editors
 .idea/
@@ -29,12 +38,9 @@ yarn-error.log
 !.vscode/mcp.json
 .history/*
 
-# Miscellaneous
-/.angular/cache
-.sass-cache/
+# Misc
+/tmp
 /connect.lock
-/coverage
-/libpeerconnection.log
 testem.log
 /typings
 __screenshots__/

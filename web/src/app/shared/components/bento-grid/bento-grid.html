@@ -1,0 +1,61 @@
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+  <!-- Hero Card -->
+  <div class="md:col-span-2 md:row-span-2 glass-panel p-6 rounded-2xl relative overflow-hidden group">
+    <div class="relative z-10 flex flex-col justify-between h-full space-y-8">
+      <div>
+        <h3 class="text-sm font-medium token-text-muted uppercase tracking-wider mb-2">Total Portfolio Value</h3>
+        <span class="text-4xl md:text-5xl font-bold tracking-tight gradient-text">
+          {{ fmt(totals().currentValue) }}
+        </span>
+      </div>
+      <div>
+        <div class="flex items-center space-x-2 mb-1">
+          <span [class]="isPositive() ? 'text-xl font-semibold token-positive' : 'text-xl font-semibold token-negative'">
+            {{ isPositive() ? '+' : '' }}{{ fmt(totals().totalGain) }}
+          </span>
+        </div>
+        <p class="text-sm token-text-muted">
+          Total return on invested capital of {{ fmt(totals().totalInvestment) }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAGR -->
+  <div class="glass-panel p-5 rounded-xl flex flex-col justify-center">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm font-medium token-text-muted">CAGR</span>
+    </div>
+    <span class="text-2xl font-bold token-text-primary">{{ pct(cagr()) }}</span>
+    <span class="text-xs token-text-muted mt-1">Compound Annual Growth Rate</span>
+  </div>
+
+  <!-- IRR -->
+  <div class="glass-panel p-5 rounded-xl flex flex-col justify-center">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm font-medium token-text-muted">Net IRR</span>
+    </div>
+    <span class="text-2xl font-bold token-text-primary">{{ pct(irr()) }}</span>
+    <span class="text-xs token-text-muted mt-1">Internal Rate of Return</span>
+  </div>
+
+  <!-- ROI -->
+  <div class="glass-panel p-5 rounded-xl flex flex-col justify-center">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm font-medium token-text-muted">Absolute ROI</span>
+    </div>
+    <span [class]="isPositive() ? 'text-2xl font-bold token-positive' : 'text-2xl font-bold token-negative'">
+      {{ pct(roi()) }}
+    </span>
+    <span class="text-xs token-text-muted mt-1">Simple Return on Investment</span>
+  </div>
+
+  <!-- Volatility -->
+  <div class="glass-panel p-5 rounded-xl flex flex-col justify-center">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm font-medium token-text-muted">Volatility</span>
+    </div>
+    <span class="text-2xl font-bold token-text-primary">{{ pct(volatility()) }}</span>
+    <span class="text-xs token-text-muted mt-1">Portfolio Standard Deviation</span>
+  </div>
+</div>

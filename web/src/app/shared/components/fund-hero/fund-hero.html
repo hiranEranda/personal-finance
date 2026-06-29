@@ -1,0 +1,58 @@
+<div class="glass-panel p-6 md:p-8 rounded-2xl mb-8 relative overflow-hidden">
+  <div [class]="'absolute -right-20 -top-20 w-64 h-64 rounded-full opacity-10 blur-3xl ' + (isPositive() ? 'bg-green-500' : 'bg-red-500')"></div>
+  <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+    <div>
+      <div class="flex items-center gap-3 mb-2 flex-wrap">
+        <h1 class="text-3xl md:text-4xl font-bold tracking-tight token-text-primary">{{ fund().name }}</h1>
+        <span class="px-2 py-1 text-xs font-semibold rounded-full border bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800">
+          {{ fund().type }}
+        </span>
+        <span [class]="'px-2 py-1 text-xs font-semibold rounded-full border ' +
+          (riskLevel() === 'High Risk' ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-300' :
+           riskLevel() === 'Medium Risk' ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300' :
+           'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-300')">
+          {{ riskLevel() }}
+        </span>
+      </div>
+      <div class="flex items-baseline gap-2">
+        <span class="text-sm token-text-muted">Current NAV:</span>
+        <span class="text-lg font-mono font-medium token-text-primary">{{ fmt(fund().currentNav) }}</span>
+      </div>
+    </div>
+    <div class="flex flex-col items-end">
+      <span class="text-sm token-text-muted uppercase tracking-wider mb-1">Current Value</span>
+      <span class="text-4xl font-bold gradient-text">{{ fmt(fund().currentValue) }}</span>
+      <div class="flex items-center gap-2 mt-1">
+        <span [class]="'text-lg font-semibold ' + (isPositive() ? 'token-positive' : 'token-negative')">
+          {{ isPositive() ? '+' : '' }}{{ fmt(fund().totalGain) }}
+        </span>
+        <span [class]="'text-sm px-2 py-0.5 rounded-md ' + (isPositive() ? 'token-positive bg-green-500/10' : 'token-negative bg-red-500/10')">
+          {{ pct(fund().gainPercentage / 100) }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-gray-200/20">
+    <div>
+      <span class="block text-xs token-text-muted mb-1">Total Invested</span>
+      <span class="text-xl font-semibold token-text-primary">{{ fmt(fund().totalInvestment) }}</span>
+    </div>
+    <div>
+      <span class="block text-xs token-text-muted mb-1">Units Held</span>
+      <span class="text-xl font-semibold token-text-primary">{{ fund().totalUnits.toFixed(4) }}</span>
+    </div>
+    <div>
+      <span class="block text-xs token-text-muted mb-1">CAGR (Annualized)</span>
+      <span [class]="'text-xl font-semibold ' + ((analytics()?.cagr ?? 0) >= 0.1 ? 'token-positive' : 'token-text-primary')">
+        {{ analytics()?.cagr ? pct(analytics()!.cagr) : '-' }}
+      </span>
+    </div>
+    <div>
+      <span class="block text-xs token-text-muted mb-1">ROI</span>
+      <span class="text-xl font-semibold token-text-primary">
+        {{ analytics()?.roi ? pct(analytics()!.roi) : '-' }}
+      </span>
+    </div>
+  </div>
+</div>

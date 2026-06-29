@@ -1,0 +1,29 @@
+<div class="glass-panel p-6 rounded-xl h-full">
+  <div class="flex items-center mb-4 space-x-3 border-b pb-4 border-gray-100 dark:border-gray-700">
+    <h2 class="text-lg font-bold">Your Investments</h2>
+  </div>
+  <div class="space-y-3 max-h-[350px] overflow-y-auto pr-2">
+    @for (fund of funds(); track fund.id) {
+      <div
+        (click)="navigate(fund.id)"
+        class="p-4 rounded-lg cursor-pointer transition-all duration-200 border border-transparent hover:border-blue-100 hover:shadow-sm bg-gray-50 dark:bg-gray-800 hover:bg-white dark:hover:bg-gray-750"
+      >
+        <div class="flex items-center justify-between mb-1">
+          <p class="font-semibold text-base">{{ fund.name }}</p>
+          <p [class]="'font-bold text-base ' + gainColor(fund.totalGain)">{{ fmt(fund.currentValue) }}</p>
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400 flex justify-between">
+          <span>Invested: {{ fmt(fund.totalInvestment) }}</span>
+          <span [class]="'font-semibold ' + gainColor(fund.gainPercentage)">
+            {{ fund.gainPercentage.toFixed(2) }}%
+          </span>
+        </div>
+      </div>
+    }
+    @if (funds().length === 0) {
+      <div class="text-center py-8 text-gray-400">
+        <p class="text-sm">No funds added yet.</p>
+      </div>
+    }
+  </div>
+</div>

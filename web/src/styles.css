@@ -1,0 +1,52 @@
+@import 'tailwindcss';
+@plugin 'tailwindcss-primeui';
+
+/* Tells Tailwind to enable dark mode when the .dark class is present */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body {
+    @apply bg-surface-0 dark:bg-surface-900 text-surface-700 dark:text-surface-0 transition-colors duration-300;
+    margin: 0;
+  }
+}
+
+/* Design tokens ported from investment-tracker */
+:root {
+  --color-positive: #22c55e;
+  --color-negative: #ef4444;
+  --color-warning: #f59e0b;
+  --color-text-muted: #94a3b8;
+  --color-text-primary: inherit;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.dark {
+  --glass-bg: rgba(30, 41, 59, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  --color-text-muted: #64748b;
+}
+
+.glass-panel {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.token-positive { color: var(--color-positive); }
+.token-negative { color: var(--color-negative); }
+.token-warning  { color: var(--color-warning); }
+.token-text-muted   { color: var(--color-text-muted); }
+.token-text-primary { color: var(--color-text-primary); }

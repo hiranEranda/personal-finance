@@ -1,0 +1,144 @@
+INFO:     Started server process [44132]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:49718 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49794 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50834 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51039 - "GET /api/v1/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51570 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51944 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52080 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 4154.56it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:02<03:17,  1.96it/s]Loading weights: 100%|██████████| 391/391 [00:02<00:00, 152.30it/s]
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 8886.38it/s]
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44132]
+/Users/hiran/.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+��─────────────────────────────────────────────────────
+2026-06-29 21:37:54,313 INFO     backend.chat: [QUERY   ] question='how many reports do we have?'
+2026-06-29 21:37:54,313 INFO     backend.chat: [ROUTER  ] intent='kb_meta'
+2026-06-29 21:37:54,313 INFO     backend.chat: [ROUTER  ] Metadata query — answering from Qdrant stats directly
+2026-06-29 21:37:54,393 INFO     backend.chat: [ROUTER  ] Done (kb_meta fast path)
+2026-06-29 21:37:54,393 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-06-29 21:39:17,871 INFO     uvicorn.access: 127.0.0.1:51944 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-06-29 21:39:17,873 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-06-29 21:39:17,874 INFO     backend.chat: [QUERY   ] question='how many reports do we have'
+2026-06-29 21:39:17,874 INFO     backend.chat: [ROUTER  ] intent='kb_meta'
+2026-06-29 21:39:17,874 INFO     backend.chat: [ROUTER  ] Metadata query — answering from Qdrant stats directly
+2026-06-29 21:39:17,944 INFO     backend.chat: [ROUTER  ] Done (kb_meta fast path)
+2026-06-29 21:39:17,945 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-06-29 21:39:45,518 INFO     uvicorn.access: 127.0.0.1:52080 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-06-29 21:39:45,519 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-06-29 21:39:45,519 INFO     backend.chat: [QUERY   ] question='only list the names'
+2026-06-29 21:39:45,519 INFO     backend.chat: [ROUTER  ] intent='complex'
+2026-06-29 21:39:45,519 INFO     backend.chat: [RETRIEVE] Starting hybrid search — top_k=10 (intent=complex)
+2026-06-29 21:41:42,948 INFO     backend.chat: [RETRIEVE] Done — 10 candidates  (117.43s)
+2026-06-29 21:41:42,948 INFO     backend.chat: [RERANK  ] Starting — 10 candidates → top 5
+2026-06-29 21:41:42,949 INFO     backend.reranker: [RERANK  ] Loading model 'BAAI/bge-reranker-v2-m3' ...
+2026-06-29 21:41:46,630 INFO     backend.reranker: [RERANK  ] Model ready
+2026-06-29 21:41:52,597 INFO     backend.reranker: [RERANK  ] [██████████░░░░░░░░░░] 5/10 (50%)
+2026-06-29 21:41:54,357 INFO     backend.reranker: [RERANK  ] [████████████████████] 10/10 (100%)
+2026-06-29 21:41:54,358 INFO     backend.chat: [RERANK  ] Done — 5 selected  best=0.006  (11.41s)
+2026-06-29 21:41:54,358 INFO     backend.chat: [LLM     ] Sending to 'qwen2.5:7b' — 5 sources in context
+2026-06-29 21:42:21,020 INFO     backend.chat: [LLM     ] First token received  (26.66s)
+2026-06-29 21:42:33,928 INFO     backend.chat: [LLM     ] Streaming complete  (39.57s total)
+2026-06-29 21:42:33,929 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-06-29 21:43:19,796 INFO     uvicorn.error: Shutting down
+2026-06-29 21:43:19,903 INFO     uvicorn.error: Waiting for application shutdown.
+2026-06-29 21:43:19,905 INFO     uvicorn.error: Application shutdown complete.
+2026-06-29 21:43:19,905 INFO     uvicorn.error: Finished server process [44132]
+2026-06-29 21:43:53,922 INFO     uvicorn.error: Started server process [47564]
+INFO:     Started server process [47564]
+2026-06-29 21:43:53,922 INFO     uvicorn.error: Waiting for application startup.
+INFO:     Waiting for application startup.
+2026-06-29 21:43:53,923 INFO     backend: [STARTUP ] Pre-warming embedding model...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 5449.74it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:04<05:16,  1.22it/s]Loading weights: 100%|██████████| 391/391 [00:04<00:00, 95.11it/s]
+2026-06-29 21:45:35,207 INFO     backend: [STARTUP ] Pre-warming reranker model...
+2026-06-29 21:45:35,208 INFO     backend.reranker: [RERANK  ] Loading model 'BAAI/bge-reranker-v2-m3' ...
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 6293.14it/s]
+2026-06-29 21:47:00,120 INFO     backend.reranker: [RERANK  ] Model ready
+2026-06-29 21:47:00,121 INFO     backend: [STARTUP ] Models ready — server accepting requests
+2026-06-29 21:47:00,121 INFO     uvicorn.error: Application startup complete.
+INFO:     Application startup complete.
+2026-06-29 21:47:00,124 INFO     uvicorn.error: Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:55587 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+2026-06-29 21:48:57,586 INFO     uvicorn.access: 127.0.0.1:55587 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-06-29 21:48:57,586 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-06-29 21:48:57,586 INFO     backend.chat: [QUERY   ] question='what was the revenue of cic in year 2025'
+2026-06-29 21:48:57,586 INFO     backend.chat: [ROUTER  ] intent='simple'
+2026-06-29 21:48:57,587 INFO     backend.chat: [RETRIEVE] Starting hybrid search — top_k=5 (intent=simple)
+2026-06-29 21:48:58,389 INFO     backend.chat: [RETRIEVE] Done — 5 candidates  (0.80s)
+2026-06-29 21:48:58,389 INFO     backend.chat: [RERANK  ] Starting — 5 candidates → top 5
+2026-06-29 21:49:05,047 INFO     backend.reranker: [RERANK  ] [████████████████████] 5/5 (100%)
+2026-06-29 21:49:05,048 INFO     backend.chat: [RERANK  ] Done — 5 selected  best=0.998  (6.66s)
+2026-06-29 21:49:05,048 INFO     backend.chat: [LLM     ] Sending to 'qwen2.5:7b' — 5 sources in context
+2026-06-29 21:49:28,462 INFO     backend.chat: [LLM     ] First token received  (23.41s)
+2026-06-29 21:49:32,680 INFO     backend.chat: [LLM     ] Streaming complete  (27.63s total)
+2026-06-29 21:49:32,680 INFO     backend.chat: ────────────────────────────────────────────────────────────
+INFO:     127.0.0.1:56167 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+2026-06-29 21:50:52,981 INFO     uvicorn.access: 127.0.0.1:56167 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-06-29 21:50:52,984 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-06-29 21:50:52,984 INFO     backend.chat: [QUERY   ] question='summerize the journey of growth of cic'
+2026-06-29 21:50:52,984 INFO     backend.chat: [ROUTER  ] intent='complex'
+2026-06-29 21:50:52,984 INFO     backend.chat: [RETRIEVE] Starting hybrid search — top_k=10 (intent=complex)
+2026-06-29 21:50:54,294 INFO     backend.chat: [RETRIEVE] Done — 10 candidates  (1.31s)
+2026-06-29 21:50:54,294 INFO     backend.chat: [RERANK  ] Starting — 10 candidates → top 5
+2026-06-29 21:50:58,948 INFO     backend.reranker: [RERANK  ] [██████████░░░░░░░░░░] 5/10 (50%)
+2026-06-29 21:51:00,906 INFO     backend.reranker: [RERANK  ] [████████████████████] 10/10 (100%)
+2026-06-29 21:51:00,907 INFO     backend.chat: [RERANK  ] Done — 5 selected  best=0.652  (6.61s)
+2026-06-29 21:51:00,909 INFO     backend.chat: [LLM     ] Sending to 'qwen2.5:7b' — 5 sources in context
+2026-06-29 21:51:14,549 INFO     backend.chat: [LLM     ] First token received  (13.64s)
+2026-06-29 21:51:47,269 INFO     backend.chat: [LLM     ] Streaming complete  (46.36s total)
+2026-06-29 21:51:47,270 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-06-29 22:09:29,561 INFO     uvicorn.error: Shutting down
+INFO:     Shutting down
+2026-06-29 22:09:29,680 INFO     uvicorn.error: Waiting for application shutdown.
+INFO:     Waiting for application shutdown.
+2026-06-29 22:09:29,694 INFO     uvicorn.error: Application shutdown complete.
+INFO:     Application shutdown complete.
+2026-06-29 22:09:29,696 INFO     uvicorn.error: Finished server process [47564]
+INFO:     Finished server process [47564]
+/Users/hiran/.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+2026-06-29 22:09:44,634 INFO     uvicorn.error: Started server process [55257]
+INFO:     Started server process [55257]
+2026-06-29 22:09:44,634 INFO     uvicorn.error: Waiting for application startup.
+INFO:     Waiting for application startup.
+2026-06-29 22:09:44,634 INFO     backend: [STARTUP ] Pre-warming embedding model...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 13339.25it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights:   1%|▏         | 5/391 [00:02<03:10,  2.03it/s]Loading weights: 100%|██████████| 391/391 [00:02<00:00, 158.45it/s]
+2026-06-29 22:11:33,554 INFO     backend: [STARTUP ] Pre-warming reranker model...
+2026-06-29 22:11:33,554 INFO     backend.reranker: [RERANK  ] Loading model 'BAAI/bge-reranker-v2-m3' ...
+Loading weights:   0%|          | 0/393 [00:00<?, ?it/s]Loading weights: 100%|██████████| 393/393 [00:00<00:00, 8788.64it/s]
+2026-06-29 22:11:36,981 INFO     backend.reranker: [RERANK  ] Model ready
+2026-06-29 22:11:36,981 INFO     backend: [STARTUP ] Models ready — server accepting requests
+2026-06-29 22:11:36,981 INFO     uvicorn.error: Application startup complete.
+INFO:     Application startup complete.
+2026-06-29 22:11:36,984 INFO     uvicorn.error: Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:62029 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+2026-06-29 22:13:12,027 INFO     uvicorn.access: 127.0.0.1:62029 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-06-29 22:13:12,028 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-06-29 22:13:12,028 INFO     backend.chat: [QUERY   ] question='how has the revenue grown in dist'
+2026-06-29 22:13:12,028 INFO     backend.chat: [ROUTER  ] intent='complex'
+2026-06-29 22:13:12,028 INFO     backend.chat: [RETRIEVE] Starting hybrid search — top_k=20 (intent=complex)
+2026-06-29 22:13:12,638 INFO     backend.chat: [RETRIEVE] Done — 20 candidates  (0.61s)
+2026-06-29 22:13:12,638 INFO     backend.chat: [RERANK  ] Starting — 20 candidates → top 7
+2026-06-29 22:13:18,924 INFO     backend.reranker: [RERANK  ] [█████░░░░░░░░░░░░░░░] 5/20 (25%)
+2026-06-29 22:13:20,615 INFO     backend.reranker: [RERANK  ] [██████████░░░░░░░░░░] 10/20 (50%)
+2026-06-29 22:13:22,266 INFO     backend.reranker: [RERANK  ] [███████████████░░░░░] 15/20 (75%)
+2026-06-29 22:13:23,970 INFO     backend.reranker: [RERANK  ] [████████████████████] 20/20 (100%)
+2026-06-29 22:13:23,971 INFO     backend.chat: [RERANK  ] Done — 7 selected  best=0.028  (11.33s)
+2026-06-29 22:13:23,972 INFO     backend.chat: [LLM     ] Sending to 'qwen2.5:7b' — 7 sources in context
+2026-06-29 22:13:52,127 INFO     backend.chat: [LLM     ] First token received  (28.16s)
+2026-06-29 22:14:02,230 INFO     backend.chat: [LLM     ] Streaming complete  (38.26s total)
+2026-06-29 22:14:02,230 INFO     backend.chat: ────────────────────────────────────────────────────────────

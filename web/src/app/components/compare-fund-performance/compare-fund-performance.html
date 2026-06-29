@@ -1,0 +1,21 @@
+<div>
+  <div class="chart-controls">
+    <button
+      class="normalize-toggle"
+      [class.active]="normalized()"
+      (click)="toggleNormalized()"
+      id="normalize-toggle-btn"
+    >
+      <span class="toggle-icon">📊</span>
+      {{ normalized() ? 'Show Absolute NAV' : 'Normalize for Comparison' }}
+    </button>
+    @if (normalized()) {
+      <span class="normalize-hint">All funds rebased to 100 at their first data point</span>
+    }
+  </div>
+
+  <app-chart [chartType]="chartType" [data]="chartData() || null" [yAxisLabel]="yAxisLabel()" />
+  <div class="mt-8">
+    <app-picklist [(sourceProducts)]="sourceProducts" [(targetProducts)]="chosenList"></app-picklist>
+  </div>
+</div>

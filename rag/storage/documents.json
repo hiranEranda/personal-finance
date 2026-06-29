@@ -1,0 +1,28 @@
+{
+  "documents": [
+    {
+      "doc_id": "a6f85060-5fc1-4e2b-8fe9-93dd10d10433",
+      "file_hash": "c185acdd1bc09f9d4ab1f4e1164e27f2095e64f5eed5a014c30b4bf738f0d193",
+      "filename": "DIST24:25.pdf",
+      "ingested_at": "2026-06-29T13:28:43.114383+00:00",
+      "status": "done",
+      "chunk_count": 408,
+      "institution": "Distilleries Company of Sri Lanka PLC (DCSL)",
+      "period_start": null,
+      "period_end": null,
+      "currency": null
+    },
+    {
+      "doc_id": "a45aa29a-a871-45f8-b402-69a998f666a9",
+      "file_hash": "311b6ed146a72ec34ff08566a214d5e84cd8691e60e31edfe5137240fc33d227",
+      "filename": "CIC25:26.pdf",
+      "ingested_at": "2026-06-29T14:34:00.290632+00:00",
+      "status": "done",
+      "chunk_count": 768,
+      "institution": "CIC Holdings PLC",
+      "period_start": null,
+      "period_end": null,
+      "currency": null
+    }
+  ]
+}

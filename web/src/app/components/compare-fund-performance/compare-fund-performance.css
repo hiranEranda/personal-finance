@@ -1,0 +1,42 @@
+.chart-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.normalize-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  border: 1px solid var(--p-content-border-color, #374151);
+  background: var(--p-surface-800, #1e293b);
+  color: var(--p-text-color, #e2e8f0);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.normalize-toggle:hover {
+  background: var(--p-surface-700, #334155);
+  border-color: var(--p-primary-color, #60a5fa);
+}
+
+.normalize-toggle.active {
+  background: color-mix(in srgb, var(--p-primary-color, #60a5fa) 15%, transparent);
+  border-color: var(--p-primary-color, #60a5fa);
+  color: var(--p-primary-color, #60a5fa);
+}
+
+.toggle-icon {
+  font-size: 1rem;
+}
+
+.normalize-hint {
+  font-size: 0.8rem;
+  color: var(--p-text-muted-color, #94a3b8);
+  font-style: italic;
+}

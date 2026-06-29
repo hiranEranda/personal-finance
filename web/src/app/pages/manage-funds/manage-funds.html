@@ -1,0 +1,142 @@
+<div class="space-y-8">
+  <app-saving-status></app-saving-status>
+
+  <!-- Transaction Sub-Page -->
+  @if (fundForTransactions(); as fund) {
+    <div class="glass-panel p-6 rounded-xl">
+      <!-- Fund Modal -->
+      @if (showTransactionModal()) {
+        <div class="fixed inset-0 z-20 flex items-center justify-center p-4 bg-black bg-opacity-75">
+          <div class="bg-surface-0 dark:bg-surface-900 p-6 rounded-lg shadow-xl w-full max-w-md">
+            <h3 class="mb-4 text-xl font-bold">{{ transactionToEdit() ? 'Edit' : 'Add' }} Transaction</h3>
+            <div class="space-y-4">
+              <input type="date" [value]="txDate()" (change)="txDate.set($any($event.target).value)" required class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input type="number" placeholder="Amount Invested" [value]="txAmount()" (input)="txAmount.set($any($event.target).value)" required min="0" step="0.0001" class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <input type="number" placeholder="NAV at Purchase" [value]="txNav()" (input)="txNav.set($any($event.target).value)" required min="0" step="0.0001" class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <div class="flex justify-end space-x-3 pt-2">
+                <button type="button" (click)="showTransactionModal.set(false)" class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 transition-colors">Cancel</button>
+                <button type="button" (click)="saveTransaction()" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white transition-colors">Save Transaction</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <button (click)="backToFundList()" class="flex items-center space-x-2 text-gray-500 hover:text-gray-700 dark:hover:text-gray-200 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 19-7-7 7-7M19 12H5"/></svg>
+        <span>Back to Manage Funds</span>
+      </button>
+
+      <h2 class="mb-4 text-2xl font-bold">Transactions for: {{ fund.name }}</h2>
+
+      <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-6">
+        <h4 class="mb-2 font-semibold">Update Current NAV Manually</h4>
+        <div class="flex items-center space-x-3">
+          <input type="number" [value]="manualNav()" (input)="manualNav.set(+$any($event.target).value)" min="0" step="0.0001"
+            class="flex-grow p-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <button (click)="updateNav()" class="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 text-white transition-colors">Update NAV</button>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold">Transaction History</h3>
+        <button (click)="openAddTransactionModal()" class="flex items-center space-x-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="16"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
+          <span>Add Transaction</span>
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+              <th class="p-2">Date</th>
+              <th class="p-2">Investment</th>
+              <th class="p-2">NAV</th>
+              <th class="p-2">Units</th>
+              <th class="p-2 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (tx of fund.transactions; track $index) {
+              <tr class="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800">
+                <td class="p-2">{{ tx.date }}</td>
+                <td class="p-2">{{ fmt(tx.amount) }}</td>
+                <td class="p-2">{{ tx.nav.toFixed(4) }}</td>
+                <td class="p-2">{{ tx.units.toFixed(4) }}</td>
+                <td class="p-2 text-right">
+                  <button (click)="openEditTransactionModal(tx, $index)" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 mr-2 p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </button>
+                  <button (click)="deleteTransaction($index)" class="text-red-600 dark:text-red-400 hover:text-red-800 p-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  } @else {
+    <!-- Fund List -->
+    @if (showFundModal()) {
+      <div class="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-70">
+        <div class="bg-surface-0 dark:bg-surface-900 p-6 rounded-lg shadow-xl w-full max-w-md">
+          <h3 class="mb-4 text-xl font-bold">{{ fundToEdit() ? 'Edit Fund' : 'Add New Fund' }}</h3>
+          <div class="space-y-4">
+            <input type="text" placeholder="Fund Name" [value]="formName()" (input)="formName.set($any($event.target).value)" required
+              class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <select [value]="formType()" (change)="formType.set($any($event.target).value)"
+              class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              @for (type of fundTypes; track type) {
+                <option [value]="type">{{ type }}</option>
+              }
+            </select>
+            <div class="flex justify-end space-x-3">
+              <button type="button" (click)="showFundModal.set(false)" class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 transition-colors">Cancel</button>
+              <button type="button" (click)="saveFund()" class="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 text-white transition-colors">Save Fund</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-bold">Manage Your Funds</h2>
+      <button (click)="openAddFundModal()" class="flex items-center space-x-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="16"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
+        <span>Add New Fund</span>
+      </button>
+    </div>
+
+    <div class="glass-panel p-6 rounded-xl">
+      <h3 class="mb-4 text-xl font-bold">Existing Funds</h3>
+      <div class="space-y-3">
+        @for (fund of funds(); track fund.id) {
+          <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg flex justify-between items-center">
+            <div>
+              <p class="font-semibold">{{ fund.name }}</p>
+              <p class="text-sm token-text-muted">Type: {{ fund.type }} · Current NAV: {{ fmt(fund.currentNav) }}</p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button (click)="openTransactions(fund.id)" class="flex items-center space-x-1 text-sm px-3 py-1 border border-gray-400 dark:border-gray-500 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <span>Transactions</span>
+              </button>
+              <button (click)="openEditFundModal(fund)" class="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+              <button (click)="deleteFund(fund.id)" class="p-2 rounded-md text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+              </button>
+            </div>
+          </div>
+        }
+        @if (funds().length === 0) {
+          <p class="text-center py-8 token-text-muted">No funds yet. Add your first fund above.</p>
+        }
+      </div>
+    </div>
+  }
+</div>
