@@ -7,7 +7,7 @@ const { Pool, types } = require("pg");
 types.setTypeParser(1082, (val) => val);
 
 // DATABASE_URL is the single source of truth for the Postgres connection,
-// shared with the Python RAG backend via rag/.env (see database/migrate.py).
+// shared with the Python RAG backend via rag/.env (see database/init_db.py).
 function loadDatabaseUrl() {
 	if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
 	const envPath = path.join(__dirname, "..", "rag", ".env");

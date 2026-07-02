@@ -56,26 +56,22 @@ PostgreSQL is used for all structured state. The schema lives in `personal-finan
 # 1. Create the database (only needed once)
 createdb financeos
 
-# 2. Apply migrations (safe to re-run — skips already-applied files)
+# 2. Create the schema (safe to re-run)
 cd personal-finance
-python database/migrate.py
+python database/init_db.py
 ```
 
-The migration runner reads `DATABASE_URL` from `rag/.env`. The default value in `.env.example` uses the local `postgres` superuser with no password — change it if your PostgreSQL requires credentials:
+The script reads `DATABASE_URL` from `rag/.env`. The default value in `.env.example` uses the local `postgres` superuser with no password — change it if your PostgreSQL requires credentials:
 
 ```
 DATABASE_URL=postgresql://postgres@localhost:5432/financeos
 ```
 
-### Adding migrations later
+### Changing the schema later
 
-Create a new numbered SQL file in `personal-finance/database/`:
-
-```
-003_some_feature.sql
-```
-
-Then re-run `python database/migrate.py`. Only new files are applied.
+There's no migration history to manage — `database/schema.sql` always reflects
+the complete current schema (everything is `CREATE TABLE IF NOT EXISTS`). Edit
+it in place and re-run `python database/init_db.py` against your dev database.
 
 ---
 
@@ -304,32 +300,13 @@ The `session_id` event is always the first event in the stream — the frontend 
 
 ## Running locally
 
+See the root `README.md` for the full setup (Docker Compose for
+Postgres/Qdrant/server/web, `rag/` run natively). Quick reference for the
+RAG-specific pieces once the stack is up:
+
 ```bash
-# 1. Create the PostgreSQL database (first time only)
-createdb financeos
-
-# 2. Apply DB migrations (first time, or after pulling new migration files)
-cd personal-finance
-python database/migrate.py
-
-# 3. Install the new psycopg2-binary dependency
-cd personal-finance/rag
-uv sync
-
-# 4. Start Qdrant
-docker compose up -d
-
-# 5. Start the RAG backend
-cd personal-finance/rag
-uv run uvicorn backend.main:app --reload --port 8000
-
-# 6. Start Node server (proxies /api/rag)
-cd personal-finance/server
-node server.js
-
-# 7. Start Angular frontend
-cd personal-finance
-ng serve
+python database/init_db.py   # create the schema (idempotent)
+cd rag && uv sync && uv run uvicorn backend.main:app --reload --port 8000
 ```
 
 Open `http://localhost:4200`
@@ -344,10 +321,9 @@ First upload will be slow (~2 min) while BGE-M3 and the reranker download. Subse
 
 ```
 personal-finance/
-├── database/                  ← SQL migrations + migration runner
-│   ├── 001_documents.sql      ← documents table
-│   ├── 002_chat.sql           ← chat_sessions, chat_messages, chat_sources
-│   └── migrate.py             ← migration runner script
+├── database/                  ← schema + init script
+│   ├── schema.sql              ← complete schema (documents, chat_*, funds, etc.)
+│   └── init_db.py              ← runs schema.sql against DATABASE_URL
 ├── docs/
 │   └── rag-system.md          ← this file
 ├── rag/                       ← FastAPI backend
@@ -366,15 +342,3 @@ personal-finance/
     └── rag-chat/              ← Chat Q&A interface
 ```
 
----
-
-## Migrating from the old JSON storage
-
-If you had documents ingested before the database integration, the old `rag/storage/documents.json` is no longer read. A dedicated migration script imports those records into PostgreSQL:
-
-```bash
-cd personal-finance
-python database/migrate_from_json.py
-```
-
-The script is safe to re-run — it skips records that are already in the DB. The original `documents.json` is not deleted.

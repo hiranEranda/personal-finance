@@ -12,7 +12,7 @@ and AI-assisted document Q&A, all backed by one PostgreSQL database.
 | `rag/` | Document ingestion + Q&A chat over your financial PDFs (BGE-M3 embeddings, reranking, Ollama for chat) | Python/FastAPI | **native** (`:8000`) — needs Metal GPU |
 | `price-scraper/` | Syncs daily unit trust NAVs from utasl.lk into `nav_history` (incremental + backfill) | Python/FastAPI | container (`:8001`) |
 | `deposit-parser/` | Parses bank deposit-confirmation PDFs into fund `transactions`, with a review queue for unmatched fund names | Python/FastAPI | container (`:8002`) |
-| `database/` | SQL migrations (`NNN_*.sql`) + one-off historical data-migration scripts | SQL / Python | run via `migrate.py` |
+| `database/` | `schema.sql` — the complete schema, run once via `init_db.py` | SQL / Python | run via `init_db.py` |
 | Postgres | Single database (`financeos`) — source of truth for everything above | Postgres 16 | container (`:5432`) |
 | Qdrant | Vector store for RAG document embeddings | Qdrant | container (`:6333`) |
 | Ollama | Local LLM for RAG chat (`qwen2.5:3b`/`7b`) | Ollama | **native** (`:11434`) — needs Metal GPU |
@@ -26,7 +26,7 @@ else runs via `docker compose`.
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 - [Ollama](https://ollama.com/) — native install, not the Docker image
-- [uv](https://docs.astral.sh/uv/) — for running `rag/` and the migration scripts
+- [uv](https://docs.astral.sh/uv/) — for running `rag/` and `database/init_db.py`
 
 ## Start the application
 
@@ -39,8 +39,8 @@ ollama pull qwen2.5:7b
 cd personal-finance
 docker compose up -d
 
-# 3. Apply database migrations (idempotent — safe to re-run)
-uv run --project rag python database/migrate.py
+# 3. Create the database schema (idempotent — safe to re-run)
+uv run --project rag python database/init_db.py
 
 # 4. Start the RAG backend natively (separate terminal — needs GPU access)
 cd rag
@@ -53,11 +53,15 @@ Open **http://localhost:4200**.
 ### Config
 
 `rag/.env` is the single source of truth for `DATABASE_URL` and is also read by
-the migration scripts and (for the containers) overridden via `docker-compose.yml`
+`database/init_db.py` and (for the containers) overridden via `docker-compose.yml`
 environment variables so they resolve `postgres`/`qdrant` by service name instead
 of `localhost`. Copy `rag/.env.example` to `rag/.env` and adjust if needed —
 defaults work out of the box with the compose file's Postgres credentials
 (`postgres`/no password, trust auth, database `financeos`).
+
+Each service that has one keeps its own `.env`/`.env.example` pair the same
+way (e.g. `deposit-parser/.env.example`) — copy to `.env` and fill in real
+values. `.env` files are gitignored; only the `.example` templates are tracked.
 
 ## Day-to-day
 
@@ -84,7 +88,7 @@ visible/backup-able as normal files on disk.
 ```
 personal-finance/
 ├── docker-compose.yml       # postgres, qdrant, server, web, price-scraper, deposit-parser
-├── database/                # SQL migrations + one-off data-migration scripts
+├── database/                # schema.sql + init_db.py (run once to set up all tables)
 ├── infra/                   # bind-mounted postgres/qdrant data, DB backups
 ├── web/                     # Angular frontend
 ├── server/                  # Express API gateway
