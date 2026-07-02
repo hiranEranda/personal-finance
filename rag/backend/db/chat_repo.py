@@ -99,6 +99,23 @@ def create_message(
         return msg_id
 
 
+def list_recent_messages(session_id: str, limit: int = 6) -> list[dict]:
+    """Return the last `limit` messages (role + content only) for query rewriting."""
+    with get_conn() as conn:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(
+            """
+            SELECT role, content FROM chat_messages
+            WHERE session_id = %s
+            ORDER BY created_at DESC
+            LIMIT %s
+            """,
+            (session_id, limit),
+        )
+        rows = cur.fetchall()
+    return [dict(r) for r in reversed(rows)]
+
+
 def list_messages(session_id: str) -> list[dict]:
     """Return all messages for a session, each with its sources list embedded."""
     with get_conn() as conn:

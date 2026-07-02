@@ -1,0 +1,79 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: financeos
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./infra/postgres-data:/var/lib/postgresql/data
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./infra/qdrant-data:/qdrant/storage
+
+  # rag-backend intentionally stays native (not containerized) — it runs BGE-M3
+  # embedding + reranking via local PyTorch in-process, same as Ollama, and would
+  # lose Metal GPU acceleration inside Docker Desktop's Linux VM. Run it the usual
+  # way: `cd rag && uv run uvicorn backend.main:app --reload --port 8000`. Its
+  # DATABASE_URL (rag/.env) keeps pointing at localhost:5432, which still resolves
+  # correctly since the postgres container publishes that port to the host.
+
+  price-scraper:
+    build: ./price-scraper
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./price-scraper:/app
+    environment:
+      DATABASE_URL: postgresql://postgres@postgres:5432/financeos
+    depends_on:
+      - postgres
+
+  deposit-parser:
+    build: ./deposit-parser
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./deposit-parser:/app
+      - ../data/cal_ut_deposit_confirmations:/data/cal_ut:ro
+      - ../data/ndbw_ut_deposit_confirmations:/data/ndbw:ro
+    environment:
+      DATABASE_URL: postgresql://postgres@postgres:5432/financeos
+    depends_on:
+      - postgres
+
+  server:
+    build: ./server
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      DATABASE_URL: postgresql://postgres@postgres:5432/financeos
+      RAG_BACKEND_URL: http://host.docker.internal:8000
+      PRICE_SCRAPER_URL: http://price-scraper:8001
+      DEPOSIT_PARSER_URL: http://deposit-parser:8002
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - postgres
+      - price-scraper
+      - deposit-parser
+
+  web:
+    build: ./web
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    depends_on:
+      - server

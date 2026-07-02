@@ -2,11 +2,13 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FundService } from '../../shared/services/fund.service';
 import { SavingStatus } from '../../shared/components/saving-status/saving-status';
+import { FundsSubnav } from '../../shared/components/funds-subnav/funds-subnav';
+import { DepositSync } from '../../shared/components/deposit-sync/deposit-sync';
 import { Fund, Transaction } from '../../shared/types/fund.types';
 
 @Component({
   selector: 'app-manage-funds',
-  imports: [FormsModule, SavingStatus],
+  imports: [FormsModule, SavingStatus, FundsSubnav, DepositSync],
   templateUrl: './manage-funds.html',
   styleUrl: './manage-funds.css',
 })

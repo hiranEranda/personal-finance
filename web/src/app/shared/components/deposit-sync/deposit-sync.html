@@ -1,0 +1,52 @@
+<div class="relative inline-block">
+  <div class="flex items-center gap-1.5">
+    <button
+      (click)="syncNow()"
+      [disabled]="depositSyncService.syncing()"
+      class="flex items-center space-x-2 bg-gray-700 hover:bg-gray-600 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap"
+    >
+      <span>{{ depositSyncService.syncing() ? 'Syncing…' : 'Sync Purchases' }}</span>
+    </button>
+
+    @if (depositSyncService.reviewQueue().length; as pendingCount) {
+      <button
+        (click)="toggleReview()"
+        class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold hover:bg-yellow-200 transition-colors"
+        title="Deposits waiting for a fund to be mapped"
+      >
+        {{ pendingCount }} to review
+      </button>
+    }
+  </div>
+
+  @if (depositSyncService.error(); as error) {
+    <div class="absolute right-0 mt-1 z-30 p-2 text-xs text-white bg-red-500 rounded-md whitespace-nowrap">{{ error }}</div>
+  }
+
+  @if (showReview() && depositSyncService.reviewQueue().length) {
+    <div class="absolute right-0 mt-2 z-30 w-80 max-h-80 overflow-y-auto bg-surface-0 dark:bg-surface-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl p-3 space-y-2">
+      <p class="text-sm font-medium text-gray-700 dark:text-gray-200">
+        {{ depositSyncService.reviewQueue().length }} deposit(s) need a fund mapped:
+      </p>
+      @for (item of depositSyncService.reviewQueue(); track item.id) {
+        <div class="flex flex-wrap items-center gap-2 text-sm p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-md">
+          <span class="font-medium">{{ item.parsed_fund_name }}</span>
+          <span class="text-gray-500 text-xs">{{ item.issued_date }} · LKR {{ item.amount }}</span>
+          <select [(ngModel)]="selectedFund[item.id]" class="border rounded-md px-2 py-1 text-xs w-full">
+            <option [ngValue]="undefined">Map to fund…</option>
+            @for (fund of fundService.funds(); track fund.id) {
+              <option [ngValue]="fund.id">{{ fund.name }}</option>
+            }
+          </select>
+          <button
+            (click)="map(item.id)"
+            [disabled]="!selectedFund[item.id] || depositSyncService.mappingId() === item.id"
+            class="px-2 py-1 bg-gray-800 hover:bg-gray-900 disabled:opacity-50 text-white rounded-md text-xs font-medium ml-auto"
+          >
+            Confirm
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

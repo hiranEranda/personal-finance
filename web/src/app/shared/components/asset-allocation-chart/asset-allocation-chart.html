@@ -1,0 +1,17 @@
+<div class="glass-panel p-6 rounded-xl flex flex-col" style="height: 420px;">
+  <div class="flex items-center mb-4 space-x-3 border-b pb-4 border-gray-100 dark:border-gray-700">
+    <div>
+      <h2 class="text-lg font-bold token-text-primary">Asset Allocation</h2>
+      <p class="text-sm token-text-muted">Distribution across Funds, Shares, and Fixed Deposits</p>
+    </div>
+  </div>
+  <div class="flex-grow min-h-0 relative">
+    <p-chart type="doughnut" [data]="chartData()" [options]="chartOptions()" width="100%" height="100%"></p-chart>
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none" style="padding-right: 120px;">
+      <div class="text-center">
+        <span class="text-xs token-text-muted block">Total</span>
+        <span class="text-sm font-bold token-text-primary">{{ fmt(totalValue()) }}</span>
+      </div>
+    </div>
+  </div>
+</div>

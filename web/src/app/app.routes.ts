@@ -11,6 +11,8 @@ import { FundDetail } from './pages/fund-detail/fund-detail';
 import { Compare } from './pages/compare/compare';
 import { RagDocuments } from './pages/rag-documents/rag-documents';
 import { RagChat } from './pages/rag-chat/rag-chat';
+import { Shares } from './pages/shares/shares';
+import { FixedDeposits } from './pages/fixed-deposits/fixed-deposits';
 
 export const routes: Routes = [
   // 1. Public / Auth Routes (Standalone)
@@ -26,6 +28,8 @@ export const routes: Routes = [
       { path: 'analytics', component: Analytics },
       { path: 'forecast', component: Forecast },
       { path: 'funds', component: Funds },
+      { path: 'shares', component: Shares },
+      { path: 'fixed-deposits', component: FixedDeposits },
       { path: 'fund/:id', component: FundDetail },
       { path: 'compare', component: Compare },
       { path: 'documents', component: RagDocuments },

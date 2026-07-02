@@ -4,42 +4,200 @@
 /* Tells Tailwind to enable dark mode when the .dark class is present */
 @custom-variant dark (&:where(.dark, .dark *));
 
-@layer base {
-  body {
-    @apply bg-surface-0 dark:bg-surface-900 text-surface-700 dark:text-surface-0 transition-colors duration-300;
-    margin: 0;
-  }
-}
-
-/* Design tokens ported from investment-tracker */
+/* ============================================================
+   Design tokens — ported from the Share Market Portfolio Tracker
+   Light: soft gray canvas, white cards, cyan accent, ink buttons
+   Dark: deep blue-gray canvas, elevated cards, bright cyan accent
+   ============================================================ */
 :root {
-  --color-positive: #22c55e;
-  --color-negative: #ef4444;
+  --app-bg: #f7f8fa;
+  --app-card: #ffffff;
+  --app-card-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 1px 6px rgba(16, 24, 40, 0.04);
+  --app-border: #eef0f3;
+  --app-border-strong: #dde1e6;
+  --app-text: #1a1f27;
+  --app-text-soft: #4b5563;
+  --app-text-muted: #8a94a3;
+  --app-text-faint: #b0b7c1;
+  --app-accent: #0891b2;
+  --app-accent-soft: rgba(8, 145, 178, 0.1);
+  --app-ink: #111827;
+  --app-ink-contrast: #ffffff;
+  --app-chip: #eef0f3;
+  --app-input-bg: #ffffff;
+
+  --color-positive: #2dc653;
+  --color-negative: #e63946;
   --color-warning: #f59e0b;
-  --color-text-muted: #94a3b8;
-  --color-text-primary: inherit;
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(0, 0, 0, 0.06);
-  --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --color-text-muted: var(--app-text-muted);
+  --color-text-primary: var(--app-text);
+
+  /* Legacy glass tokens now map to the flat card look */
+  --glass-bg: var(--app-card);
+  --glass-border: transparent;
+  --glass-shadow: var(--app-card-shadow);
 }
 
 .dark {
-  --glass-bg: rgba(30, 41, 59, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-  --color-text-muted: #64748b;
+  --app-bg: #0f141b;
+  --app-card: #171e28;
+  --app-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 8px rgba(0, 0, 0, 0.25);
+  --app-border: #232c39;
+  --app-border-strong: #33404f;
+  --app-text: #e7ebf0;
+  --app-text-soft: #b6bfca;
+  --app-text-muted: #7d8794;
+  --app-text-faint: #576270;
+  --app-accent: #22d3ee;
+  --app-accent-soft: rgba(34, 211, 238, 0.12);
+  --app-ink: #e7ebf0;
+  --app-ink-contrast: #0f141b;
+  --app-chip: #222b37;
+  --app-input-bg: #10161e;
+
+  --color-positive: #34d97b;
+  --color-negative: #ff5c6a;
+  --color-text-muted: var(--app-text-muted);
+  --color-text-primary: var(--app-text);
+
+  --glass-bg: var(--app-card);
+  --glass-border: var(--app-border);
+  --glass-shadow: var(--app-card-shadow);
 }
 
-.glass-panel {
-  background: var(--glass-bg);
+@layer base {
+  body {
+    margin: 0;
+    background: var(--app-bg);
+    color: var(--app-text);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  h1, h2, h3, h4 {
+    letter-spacing: -0.02em;
+  }
+
+  input, select, textarea, button {
+    font-family: inherit;
+  }
+}
+
+/* ---- Cards ------------------------------------------------ */
+.glass-panel,
+.pt-card {
+  background: var(--app-card);
   border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  border-radius: 14px;
+  box-shadow: var(--app-card-shadow);
 }
 
+.pt-card {
+  padding: 22px;
+}
+
+.pt-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--app-text);
+}
+
+.pt-kicker {
+  font-size: 12px;
+  color: var(--app-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ---- Inputs & buttons -------------------------------------- */
+.pt-input {
+  border: 1.5px solid var(--app-border-strong);
+  border-radius: 7px;
+  padding: 7px 9px;
+  outline: none;
+  font-size: 13.5px;
+  background: var(--app-input-bg);
+  color: var(--app-text);
+  transition: border-color 0.15s;
+}
+
+.pt-input:focus {
+  border-color: var(--app-accent);
+}
+
+.pt-input::placeholder {
+  color: var(--app-text-faint);
+}
+
+.pt-label {
+  font-size: 11.5px;
+  color: var(--app-text-muted);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.pt-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-weight: 600;
+  font-size: 13.5px;
+  cursor: pointer;
+  background: var(--app-ink);
+  color: var(--app-ink-contrast);
+  transition: opacity 0.15s;
+}
+
+.pt-btn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.pt-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pt-btn-ghost {
+  background: var(--app-chip);
+  color: var(--app-text-soft);
+}
+
+.pt-btn-accent {
+  background: var(--app-accent);
+  color: #fff;
+}
+
+/* ---- Tables ------------------------------------------------ */
+table.pt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+table.pt-table th {
+  text-align: left;
+  color: var(--app-text-muted);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  padding: 0 8px 10px 0;
+}
+
+table.pt-table td {
+  padding: 10px 8px 10px 0;
+  border-top: 1px solid var(--app-border);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Accent & status tokens -------------------------------- */
 .gradient-text {
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%);
+  background: linear-gradient(135deg, var(--app-accent) 0%, #6366f1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -50,3 +208,15 @@
 .token-warning  { color: var(--color-warning); }
 .token-text-muted   { color: var(--color-text-muted); }
 .token-text-primary { color: var(--color-text-primary); }
+
+/* ---- Legacy semantic utility names used across templates ----
+   These were previously undefined; mapping them to theme tokens
+   keeps every page consistent in both light and dark mode. */
+.text-heading { color: var(--app-text); }
+.text-body { color: var(--app-text-soft); }
+.text-fg-brand { color: var(--app-accent); }
+.bg-neutral-primary { background: var(--app-card); }
+.bg-neutral-secondary-soft { background: var(--app-chip); }
+.bg-neutral-tertiary { background: var(--app-chip); }
+.border-default { border-color: var(--app-border); }
+.rounded-base { border-radius: 8px; }

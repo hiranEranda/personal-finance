@@ -1,0 +1,496 @@
+<div class="shares-page">
+  <!-- Header -->
+  <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
+    <div>
+      <h1 class="text-2xl font-extrabold tracking-tight">Share Market Tracker</h1>
+      <p class="text-[13px] token-text-muted mt-0.5">CSE · LKR</p>
+    </div>
+    <div class="flex gap-1.5 flex-wrap">
+      @for (tab of tabs; track tab.id) {
+        <button
+          type="button"
+          class="shares-tab"
+          [class.shares-tab-active]="activeTab() === tab.id"
+          (click)="activeTab.set(tab.id)"
+        >{{ tab.label }}</button>
+      }
+    </div>
+  </div>
+
+  @if (svc.error()) {
+    <div class="pt-card mb-4 border border-[color:var(--color-negative)]/40">
+      <p class="token-negative text-sm font-medium">{{ svc.error() }}</p>
+    </div>
+  }
+
+  @if (svc.loading()) {
+    <div class="flex flex-col items-center justify-center p-20 gap-4">
+      <div class="w-10 h-10 border-4 border-[color:var(--app-accent)] border-t-transparent rounded-full animate-spin"></div>
+      <p class="token-text-muted font-medium">Loading your portfolio…</p>
+    </div>
+  } @else {
+
+    <!-- ============ DASHBOARD ============ -->
+    @if (activeTab() === 'dashboard') {
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+        <div class="pt-card">
+          <div class="pt-kicker">Market Value</div>
+          <div class="text-[26px] font-bold mt-2 num tracking-tight">{{ money(svc.totals().totalMarketValue) }}</div>
+        </div>
+        <div class="pt-card">
+          <div class="pt-kicker">Total Cost (incl. fees)</div>
+          <div class="text-[26px] font-bold mt-2 num tracking-tight">{{ money(svc.totals().totalCost) }}</div>
+        </div>
+        <div class="pt-card">
+          <div class="pt-kicker">Unrealized P&amp;L</div>
+          <div class="text-[26px] font-bold mt-2 num tracking-tight" [class]="plClass(svc.totals().totalUnrealizedPL)">
+            {{ pl(svc.totals().totalUnrealizedPL) }}
+          </div>
+          <div class="text-[13px] font-semibold mt-0.5 num" [class]="plClass(svc.totals().totalUnrealizedPL)">
+            {{ signedPct(svc.totals().totalUnrealizedPct) }}
+          </div>
+        </div>
+        <div class="pt-card">
+          <div class="pt-kicker">Realized P&amp;L</div>
+          <div class="text-[26px] font-bold mt-2 num tracking-tight" [class]="plClass(svc.totals().totalRealizedPL)">
+            {{ pl(svc.totals().totalRealizedPL) }}
+          </div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-[1.7fr_1fr] gap-4 items-start">
+        <div class="pt-card overflow-x-auto">
+          <div class="pt-card-title">Holdings</div>
+          <table class="pt-table">
+            <thead>
+              <tr>
+                <th>Ticker</th><th>Sector</th>
+                <th class="text-right!">Qty Held</th><th class="text-right!">Avg Cost</th>
+                <th class="text-right!">Current Price</th><th class="text-right!">Break Even</th>
+                <th class="text-right!">Market Value</th><th class="text-right! pr-0!">Unrealized P&amp;L</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (h of svc.holdings(); track h.ticker) {
+                <tr>
+                  <td>
+                    <div class="font-bold">{{ h.ticker }}</div>
+                    <div class="text-[11.5px] token-text-muted">{{ h.companyName }}</div>
+                  </td>
+                  <td class="text-body">{{ h.sector }}</td>
+                  <td class="text-right num">{{ qty(h.qtyHeld) }}</td>
+                  <td class="text-right num">{{ num(h.avgCost) }}</td>
+                  <td class="text-right num">
+                    @if (editingTicker() === h.ticker) {
+                      <input
+                        class="pt-input w-20 text-right"
+                        [(ngModel)]="editPriceValue"
+                        (blur)="saveEdit(h.ticker)"
+                        (keydown)="onEditKeydown($event, h.ticker)"
+                        autofocus
+                      />
+                    } @else {
+                      <span class="shares-editable" (click)="startEdit(h)">{{ num(h.currentPrice) }}</span>
+                    }
+                  </td>
+                  <td class="text-right num token-text-muted">{{ num(h.breakEvenPrice) }}</td>
+                  <td class="text-right num font-semibold">{{ money(h.marketValue) }}</td>
+                  <td class="text-right num font-semibold pr-0!" [class]="plClass(h.unrealizedPL)">{{ pl(h.unrealizedPL) }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+          <div class="text-[11.5px] mt-3" style="color: var(--app-text-faint)">
+            Click any Current Price to edit — recalculates the whole portfolio instantly.
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <div class="pt-card">
+            <div class="pt-card-title">Weight by Ticker</div>
+            <div class="flex items-center gap-5">
+              <div class="w-[120px] h-[120px] flex-none">
+                <p-chart type="doughnut" [data]="weightChartData()" [options]="doughnutOptions()" class="block w-full h-full" />
+              </div>
+              <div class="flex flex-col gap-2 flex-1">
+                @for (h of svc.holdings(); track h.ticker) {
+                  <div class="flex items-center gap-2 text-[13px]">
+                    <div class="w-[9px] h-[9px] rounded-full flex-none" [style.background]="h.color"></div>
+                    <div class="flex-1 text-body">{{ h.ticker }}</div>
+                    <div class="font-semibold num">{{ pct(h.weight) }}</div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+          <div class="pt-card">
+            <div class="pt-card-title">Allocation by Sector</div>
+            <div class="flex flex-col gap-3">
+              @for (s of sectorBars(); track s.sector) {
+                <div>
+                  <div class="flex justify-between text-[12.5px] mb-1">
+                    <span class="text-body">{{ s.sector }}</span>
+                    <span class="font-semibold num">{{ pct(s.pct) }}</span>
+                  </div>
+                  <div class="h-[7px] rounded overflow-hidden" style="background: var(--app-chip)">
+                    <div class="h-full rounded" style="background: var(--app-accent)" [style.width]="s.barWidth"></div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- ============ TICKER REGISTER ============ -->
+    @if (activeTab() === 'register') {
+      <div class="pt-card mb-4">
+        <div class="pt-card-title">Add Ticker</div>
+        <div class="flex gap-2.5 flex-wrap items-end">
+          <div>
+            <label class="pt-label">Ticker</label>
+            <input class="pt-input w-32" [(ngModel)]="newTicker.ticker" placeholder="ABC.N0000" />
+          </div>
+          <div>
+            <label class="pt-label">Company Name</label>
+            <input class="pt-input w-52" [(ngModel)]="newTicker.companyName" placeholder="Company PLC" />
+          </div>
+          <div>
+            <label class="pt-label">Sector</label>
+            <select class="pt-input w-44" [(ngModel)]="newTicker.sector">
+              @for (sec of svc.sectorList(); track sec) {
+                <option [value]="sec">{{ sec }}</option>
+              }
+            </select>
+          </div>
+          <div>
+            <label class="pt-label">Current Price</label>
+            <input class="pt-input w-24" [(ngModel)]="newTicker.currentPrice" placeholder="0.00" />
+          </div>
+          <button class="pt-btn" (click)="addTicker()" [disabled]="addTickerDisabled()">+ Add ticker</button>
+        </div>
+      </div>
+      <div class="pt-card overflow-x-auto">
+        <div class="pt-card-title">Ticker Register</div>
+        <table class="pt-table">
+          <thead>
+            <tr>
+              <th>Ticker</th><th>Company</th><th>Sector</th>
+              <th class="text-right!">Current Price</th><th class="text-right!">Break Even</th><th>Notes</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (h of svc.holdings(); track h.ticker) {
+              <tr>
+                <td class="font-bold">{{ h.ticker }}</td>
+                <td>
+                  <input class="pt-input w-48" [ngModel]="h.companyName"
+                    (change)="svc.updateTicker(h.ticker, { companyName: $any($event.target).value })" />
+                </td>
+                <td>
+                  <select class="pt-input w-40" [ngModel]="h.sector"
+                    (change)="svc.updateTicker(h.ticker, { sector: $any($event.target).value })">
+                    @for (sec of svc.sectorList(); track sec) {
+                      <option [value]="sec">{{ sec }}</option>
+                    }
+                  </select>
+                </td>
+                <td class="text-right">
+                  <input class="pt-input w-20 text-right" [ngModel]="h.currentPrice"
+                    (change)="onRegisterPriceChange(h.ticker, $any($event.target).value, h.currentPrice)" />
+                </td>
+                <td class="text-right num token-text-muted">{{ num(h.breakEvenPrice) }}</td>
+                <td>
+                  <input class="pt-input w-52" [ngModel]="h.notes" placeholder="—"
+                    (change)="svc.updateTicker(h.ticker, { notes: $any($event.target).value })" />
+                </td>
+                <td>
+                  <button type="button" class="shares-delete" (click)="svc.deleteTicker(h.ticker)">Delete</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- ============ TRADE LOG ============ -->
+    @if (activeTab() === 'trades') {
+      <div class="pt-card mb-4">
+        <div class="pt-card-title">Add Trade (Buy)</div>
+        <div class="flex gap-2.5 flex-wrap items-end">
+          <div>
+            <label class="pt-label">Ticker</label>
+            <select class="pt-input w-36" [(ngModel)]="newTrade.ticker">
+              @for (t of svc.tickers(); track t.ticker) {
+                <option [value]="t.ticker">{{ t.ticker }}</option>
+              }
+            </select>
+          </div>
+          <div>
+            <label class="pt-label">Buy Date</label>
+            <input type="date" class="pt-input" [(ngModel)]="newTrade.buyDate" />
+          </div>
+          <div>
+            <label class="pt-label">Qty</label>
+            <input class="pt-input w-20" [(ngModel)]="newTrade.qty" />
+          </div>
+          <div>
+            <label class="pt-label">Buy Price</label>
+            <input class="pt-input w-24" [(ngModel)]="newTrade.buyPrice" />
+          </div>
+          <div>
+            <label class="pt-label">Notes</label>
+            <input class="pt-input w-40" [(ngModel)]="newTrade.notes" placeholder="Contract #" />
+          </div>
+          <button class="pt-btn" (click)="addTrade()" [disabled]="addTradeDisabled()">Save trade</button>
+        </div>
+        <div class="text-[11.5px] mt-2.5" style="color: var(--app-text-faint)">
+          Fees are applied automatically at {{ pct(svc.feeRate(), 2) }} of gross value (qty × buy px).
+        </div>
+      </div>
+      <div class="pt-card overflow-x-auto">
+        <div class="pt-card-title">Trade Log</div>
+        <table class="pt-table">
+          <thead>
+            <tr>
+              <th>Date</th><th>Ticker</th>
+              <th class="text-right!">Qty</th><th class="text-right!">Buy Px</th>
+              <th class="text-right!">Gross Value</th>
+              <th class="text-right!">Fees ({{ pct(svc.feeRate(), 2) }})</th>
+              <th class="text-right!">Total Cost</th><th>Notes</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (t of sortedTrades(); track t.id) {
+              <tr>
+                <td class="num">{{ fmtDate(t.buyDate) }}</td>
+                <td class="font-bold">{{ t.ticker }}</td>
+                <td class="text-right num">{{ qty(t.qty) }}</td>
+                <td class="text-right num">{{ num(t.buyPrice) }}</td>
+                <td class="text-right num">{{ num(gross(t)) }}</td>
+                <td class="text-right num">{{ num(fees(t)) }}</td>
+                <td class="text-right num font-semibold">{{ num(totalCost(t)) }}</td>
+                <td class="token-text-muted">{{ t.notes }}</td>
+                <td>
+                  <button type="button" class="shares-delete" (click)="svc.deleteTrade(t.id)">Delete</button>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="9" class="text-center py-5" style="color: var(--app-text-faint)">No trades recorded yet</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- ============ SELL LOG ============ -->
+    @if (activeTab() === 'sells') {
+      <div class="pt-card mb-4">
+        <div class="pt-card-title">Add Sell</div>
+        <div class="flex gap-2.5 flex-wrap items-end">
+          <div>
+            <label class="pt-label">Ticker</label>
+            <select class="pt-input w-36" [(ngModel)]="newSell.ticker">
+              @for (t of svc.tickers(); track t.ticker) {
+                <option [value]="t.ticker">{{ t.ticker }}</option>
+              }
+            </select>
+          </div>
+          <div>
+            <label class="pt-label">Sell Date</label>
+            <input type="date" class="pt-input" [(ngModel)]="newSell.sellDate" />
+          </div>
+          <div>
+            <label class="pt-label">Qty</label>
+            <input class="pt-input w-20" [(ngModel)]="newSell.qty" />
+          </div>
+          <div>
+            <label class="pt-label">Sell Price</label>
+            <input class="pt-input w-24" [(ngModel)]="newSell.sellPrice" />
+          </div>
+          <div>
+            <label class="pt-label">Commission</label>
+            <input class="pt-input w-24" [(ngModel)]="newSell.commission" />
+          </div>
+          <div>
+            <label class="pt-label">Notes</label>
+            <input class="pt-input w-40" [(ngModel)]="newSell.notes" />
+          </div>
+          <button class="pt-btn" (click)="addSell()" [disabled]="addSellDisabled()">Save sell</button>
+        </div>
+      </div>
+      <div class="pt-card overflow-x-auto">
+        <div class="pt-card-title">Sell Log</div>
+        <table class="pt-table">
+          <thead>
+            <tr>
+              <th>Date</th><th>Ticker</th>
+              <th class="text-right!">Qty</th><th class="text-right!">Sell Px</th>
+              <th class="text-right!">Commission</th><th class="text-right!">Net Proceeds</th><th>Notes</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (s of sortedSells(); track s.id) {
+              <tr>
+                <td class="num">{{ fmtDate(s.sellDate) }}</td>
+                <td class="font-bold">{{ s.ticker }}</td>
+                <td class="text-right num">{{ qty(s.qty) }}</td>
+                <td class="text-right num">{{ num(s.sellPrice) }}</td>
+                <td class="text-right num">{{ num(s.commission) }}</td>
+                <td class="text-right num font-semibold">{{ num(netProceeds(s)) }}</td>
+                <td class="token-text-muted">{{ s.notes }}</td>
+                <td>
+                  <button type="button" class="shares-delete" (click)="svc.deleteSell(s.id)">Delete</button>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="8" class="text-center py-5" style="color: var(--app-text-faint)">No sells recorded yet</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- ============ WEEKLY PRICES ============ -->
+    @if (activeTab() === 'weekly') {
+      <div class="pt-card mb-4">
+        <div class="pt-card-title">Add Week</div>
+        <div class="flex gap-2.5 items-end">
+          <div>
+            <label class="pt-label">Week Ending</label>
+            <input type="date" class="pt-input" [(ngModel)]="newWeekDate" />
+          </div>
+          <button class="pt-btn" (click)="addWeek()" [disabled]="!newWeekDate">+ Add week</button>
+        </div>
+        <div class="text-[11.5px] mt-2.5" style="color: var(--app-text-faint)">
+          Weekly cadence keeps this light to maintain while still showing clear trend lines — no need to enter daily prices.
+        </div>
+      </div>
+      <div class="pt-card overflow-x-auto">
+        <div class="pt-card-title">Weekly Prices</div>
+        <table class="pt-table">
+          <thead>
+            <tr>
+              <th>Week Ending</th>
+              @for (t of svc.tickers(); track t.ticker) {
+                <th class="text-right!">{{ t.ticker }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (w of svc.weeklyPrices(); track w.weekEnding) {
+              <tr>
+                <td class="num">{{ fmtDate(w.weekEnding) }}</td>
+                @for (t of svc.tickers(); track t.ticker) {
+                  <td class="text-right">
+                    <input class="pt-input w-20 text-right" [ngModel]="weeklyCell(w.prices, t.ticker)" placeholder="—"
+                      (change)="onWeeklyPriceChange(w.weekEnding, t.ticker, $any($event.target).value)" />
+                  </td>
+                }
+              </tr>
+            } @empty {
+              <tr><td [attr.colspan]="svc.tickers().length + 1" class="text-center py-5" style="color: var(--app-text-faint)">No weeks added yet</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- ============ CHARTS ============ -->
+    @if (activeTab() === 'charts') {
+      <div class="grid lg:grid-cols-2 gap-4 mb-4">
+        <div class="pt-card">
+          <div class="pt-card-title">Portfolio Value vs Invested — Over Time</div>
+          <p-chart type="line" [data]="valueLineData()" [options]="lineChartOptions()" class="block h-[220px] w-full" />
+        </div>
+        <div class="pt-card">
+          <div class="pt-card-title">Individual Share Price Trends</div>
+          <p-chart type="line" [data]="priceTrendData()" [options]="lineChartOptions()" class="block h-[220px] w-full" />
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-4 mb-4">
+        <div class="pt-card">
+          <div class="pt-card-title">Unrealized P&amp;L by Ticker</div>
+          <p-chart type="bar" [data]="plBarData()" [options]="plBarOptions()" class="block h-[200px] w-full" />
+        </div>
+        <div class="pt-card">
+          <div class="pt-card-title">Cost Basis vs Market Value by Ticker</div>
+          <p-chart type="bar" [data]="cbmvBarData()" [options]="cbmvBarOptions()" class="block h-[200px] w-full" />
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-4">
+        <div class="pt-card text-center">
+          <div class="pt-card-title text-left">Portfolio Weight by Ticker</div>
+          <div class="w-[150px] h-[150px] mx-auto mb-3.5">
+            <p-chart type="doughnut" [data]="weightChartData()" [options]="doughnutOptions()" class="block w-full h-full" />
+          </div>
+          <div class="flex justify-center gap-3.5 flex-wrap text-[12.5px]">
+            @for (h of svc.holdings(); track h.ticker) {
+              <div class="flex items-center gap-1.5">
+                <span class="inline-block w-[9px] h-[9px] rounded-full" [style.background]="h.color"></span>
+                {{ h.ticker }} <span class="num">{{ pct(h.weight) }}</span>
+              </div>
+            }
+          </div>
+        </div>
+        <div class="pt-card text-center">
+          <div class="pt-card-title text-left">Portfolio Allocation by Sector</div>
+          <div class="w-[150px] h-[150px] mx-auto mb-3.5">
+            <p-chart type="doughnut" [data]="sectorChartData()" [options]="doughnutOptions()" class="block w-full h-full" />
+          </div>
+          <div class="flex justify-center gap-3.5 flex-wrap text-[12.5px]">
+            @for (s of svc.sectors(); track s.sector) {
+              <div class="flex items-center gap-1.5">
+                <span class="inline-block w-[9px] h-[9px] rounded-full" [style.background]="s.color"></span>
+                {{ s.sector }} <span class="num">{{ pct(s.pct) }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- ============ SETTINGS ============ -->
+    @if (activeTab() === 'settings') {
+      <div class="flex flex-col gap-4 max-w-lg">
+        <div class="pt-card">
+          <div class="pt-card-title">Transaction Fee Rate</div>
+          <div class="flex items-center gap-2">
+            <input class="pt-input w-24" [(ngModel)]="feeRateInput" (ngModelChange)="onFeeRateChange()" />
+            <span class="token-text-muted text-sm">% — applied to buys (fees in Total Cost) and sells (Break Even Price)</span>
+          </div>
+        </div>
+        <div class="pt-card">
+          <div class="pt-card-title">Currency Display</div>
+          <div class="text-body text-sm">LKR — Rs. #,##0.00</div>
+        </div>
+        <div class="pt-card">
+          <div class="pt-card-title">Data Storage</div>
+          <div class="text-body text-sm">PostgreSQL (<code class="text-[12px]">financeos</code> DB, <code class="text-[12px]">share_*</code> tables) via the Node API on <code class="text-[12px]">:3001</code>.</div>
+          @if (svc.isSaving()) {
+            <div class="text-[12px] mt-2" style="color: var(--app-accent)">Saving…</div>
+          }
+        </div>
+        <div class="pt-card">
+          <div class="pt-card-title">Sector List</div>
+          <div class="flex flex-wrap gap-2 mb-3.5">
+            @for (sec of svc.sectorList(); track sec) {
+              <div class="shares-chip">
+                {{ sec }}
+                <button type="button" class="shares-chip-x" (click)="svc.removeSector(sec)">×</button>
+              </div>
+            }
+          </div>
+          <div class="flex gap-2">
+            <input class="pt-input flex-1" [(ngModel)]="newSectorName" placeholder="Add new sector" (keydown.enter)="addSector()" />
+            <button class="pt-btn" (click)="addSector()" [disabled]="!newSectorName.trim()">Add</button>
+          </div>
+        </div>
+      </div>
+    }
+  }
+</div>

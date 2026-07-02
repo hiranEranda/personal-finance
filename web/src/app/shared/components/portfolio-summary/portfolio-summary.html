@@ -1,0 +1,51 @@
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+  <!-- Hero Card -->
+  <div class="md:col-span-2 md:row-span-2 glass-panel p-6 rounded-2xl relative overflow-hidden group">
+    <div class="relative z-10 flex flex-col justify-between h-full space-y-8">
+      <div>
+        <h3 class="text-sm font-medium token-text-muted uppercase tracking-wider mb-2">Total Net Worth</h3>
+        <span class="text-4xl md:text-5xl font-bold tracking-tight gradient-text">
+          {{ fmt(currentValue()) }}
+        </span>
+      </div>
+      <div>
+        <div class="flex items-center space-x-2 mb-1">
+          <span [class]="isPositive() ? 'text-xl font-semibold token-positive' : 'text-xl font-semibold token-negative'">
+            {{ isPositive() ? '+' : '' }}{{ fmt(totalGain()) }}
+          </span>
+        </div>
+        <p class="text-sm token-text-muted">
+          Total return on invested capital of {{ fmt(totalInvested()) }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Funds -->
+  <div class="glass-panel p-5 rounded-xl flex flex-col justify-center">
+    <span class="text-sm font-medium token-text-muted mb-2">Funds</span>
+    <span class="text-2xl font-bold token-text-primary">{{ fmt(fundsValue()) }}</span>
+    <span class="text-xs token-text-muted mt-1">Unit trust holdings</span>
+  </div>
+
+  <!-- Shares -->
+  <div class="glass-panel p-5 rounded-xl flex flex-col justify-center">
+    <span class="text-sm font-medium token-text-muted mb-2">Shares</span>
+    <span class="text-2xl font-bold token-text-primary">{{ fmt(sharesValue()) }}</span>
+    <span class="text-xs token-text-muted mt-1">CSE holdings</span>
+  </div>
+
+  <!-- Fixed Deposits -->
+  <div class="glass-panel p-5 rounded-xl flex flex-col justify-center">
+    <span class="text-sm font-medium token-text-muted mb-2">Fixed Deposits</span>
+    <span class="text-2xl font-bold token-text-primary">{{ fmt(fdValue()) }}</span>
+    <span class="text-xs token-text-muted mt-1">Bank deposits</span>
+  </div>
+
+  <!-- Total Invested -->
+  <div class="glass-panel p-5 rounded-xl flex flex-col justify-center">
+    <span class="text-sm font-medium token-text-muted mb-2">Total Invested</span>
+    <span class="text-2xl font-bold token-text-primary">{{ fmt(totalInvested()) }}</span>
+    <span class="text-xs token-text-muted mt-1">Across all accounts</span>
+  </div>
+</div>

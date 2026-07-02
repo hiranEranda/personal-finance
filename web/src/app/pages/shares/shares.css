@@ -1,0 +1,70 @@
+.shares-tab {
+  border: none;
+  cursor: pointer;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--app-chip);
+  color: var(--app-text-muted);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.shares-tab:hover {
+  color: var(--app-text);
+}
+
+.shares-tab-active,
+.shares-tab-active:hover {
+  background: var(--app-ink);
+  color: var(--app-ink-contrast);
+}
+
+.shares-editable {
+  cursor: pointer;
+  border-bottom: 1.5px dashed var(--app-border-strong);
+  padding-bottom: 1px;
+}
+
+.shares-editable:hover {
+  border-bottom-color: var(--app-accent);
+  color: var(--app-accent);
+}
+
+.shares-delete {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--app-text-faint);
+  font-size: 12px;
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.shares-delete:hover {
+  color: var(--color-negative);
+}
+
+.shares-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--app-chip);
+  border-radius: 20px;
+  padding: 5px 6px 5px 12px;
+  font-size: 12.5px;
+}
+
+.shares-chip-x {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--app-text-muted);
+  padding: 0 6px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.shares-chip-x:hover {
+  color: var(--color-negative);
+}

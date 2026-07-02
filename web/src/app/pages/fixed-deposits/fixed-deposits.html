@@ -1,0 +1,138 @@
+<div class="max-w-5xl mx-auto space-y-6">
+  @if (fixedDepositsService.error(); as error) {
+    <div class="p-2 mb-4 text-center text-white bg-red-500 rounded-md">{{ error }}</div>
+  }
+
+  <!-- Add/Edit Modal -->
+  @if (showModal()) {
+    <div class="fixed inset-0 z-20 flex items-center justify-center p-4 bg-black bg-opacity-75">
+      <div class="bg-surface-0 dark:bg-surface-900 p-6 rounded-lg shadow-xl w-full max-w-md">
+        <h3 class="mb-4 text-xl font-bold">{{ editing() ? 'Edit' : 'Add' }} Fixed Deposit</h3>
+        <div class="space-y-4">
+          <input
+            type="text" placeholder="Bank Name" [value]="formBankName()" (input)="formBankName.set($any($event.target).value)"
+            class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="number" placeholder="Principal (LKR)"
+            [value]="formPrincipal() ?? ''"
+            (input)="formPrincipal.set($any($event.target).value === '' ? null : +$any($event.target).value)"
+            min="0" step="0.01"
+            class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="number" placeholder="Interest Rate (annual %)"
+            [value]="formInterestRate() ?? ''"
+            (input)="formInterestRate.set($any($event.target).value === '' ? null : +$any($event.target).value)"
+            min="0" step="0.001"
+            class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs text-gray-500">Start Date</label>
+              <input
+                type="date" [value]="formStartDate()" (change)="formStartDate.set($any($event.target).value)"
+                class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label class="text-xs text-gray-500">Term (months)</label>
+              <input
+                type="number" placeholder="e.g. 12" min="1" step="1"
+                [value]="formMonths() ?? ''"
+                (input)="formMonths.set($any($event.target).value === '' ? null : +$any($event.target).value)"
+                class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+          <select
+            [value]="formPayoutFrequency()" (change)="formPayoutFrequency.set($any($event.target).value)"
+            class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="at_maturity">Payout at Maturity</option>
+            <option value="monthly">Monthly Payout</option>
+            <option value="quarterly">Quarterly Payout</option>
+          </select>
+          <select
+            [value]="formStatus()" (change)="formStatus.set($any($event.target).value)"
+            class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="active">Active</option>
+            <option value="matured">Matured</option>
+            <option value="withdrawn">Withdrawn</option>
+          </select>
+          <input
+            type="text" placeholder="Notes (optional)" [value]="formNotes()" (input)="formNotes.set($any($event.target).value)"
+            class="w-full p-2 rounded border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <div class="flex justify-end space-x-3 pt-2">
+            <button type="button" (click)="showModal.set(false)" class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 transition-colors">Cancel</button>
+            <button type="button" (click)="save()" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white transition-colors">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="glass-panel p-6 rounded-xl">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div>
+        <p class="text-sm text-gray-500">Total Principal</p>
+        <p class="text-2xl font-bold">LKR {{ fixedDepositsService.totals().totalPrincipal | number: '1.0-2' }}</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Current Value</p>
+        <p class="text-2xl font-bold">LKR {{ fixedDepositsService.totals().currentValue | number: '1.0-2' }}</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Accrued Interest</p>
+        <p class="text-2xl font-bold text-green-600">LKR {{ fixedDepositsService.totals().totalGain | number: '1.0-2' }}</p>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-xl font-bold">Fixed Deposits</h3>
+      <button (click)="openAddModal()" class="flex items-center space-x-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+        <span>+ Add Fixed Deposit</span>
+      </button>
+    </div>
+
+    @if (fixedDepositsService.loading()) {
+      <p class="text-gray-500 text-center py-8">Loading…</p>
+    } @else if (fixedDepositsService.depositsWithValues().length === 0) {
+      <p class="text-gray-500 text-center py-8">No fixed deposits yet. Add one to start tracking.</p>
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+              <th class="p-2">Bank</th>
+              <th class="p-2">Principal</th>
+              <th class="p-2">Rate</th>
+              <th class="p-2">Maturity</th>
+              <th class="p-2">Status</th>
+              <th class="p-2 text-right">Value at Maturity</th>
+              <th class="p-2 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (fd of fixedDepositsService.depositsWithValues(); track fd.id) {
+              <tr class="border-b border-gray-100 dark:border-gray-800">
+                <td class="p-2">{{ fd.bankName }}</td>
+                <td class="p-2">LKR {{ fd.principal | number: '1.0-2' }}</td>
+                <td class="p-2">{{ fd.interestRate }}%</td>
+                <td class="p-2">{{ fd.maturityDate }}</td>
+                <td class="p-2 capitalize">{{ fd.status }}</td>
+                <td class="p-2 text-right font-medium">LKR {{ fd.maturityValue | number: '1.0-2' }}</td>
+                <td class="p-2 text-right space-x-2">
+                  <button (click)="openEditModal(fd)" class="text-blue-600 hover:underline text-sm">Edit</button>
+                  <button (click)="remove(fd.id)" class="text-red-600 hover:underline text-sm">Delete</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+</div>

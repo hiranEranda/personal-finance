@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     pdf_storage_path: Path = Path("./storage/pdfs")
 
     classifier_model: str = "qwen2.5:3b"
+    rewriter_model: str = "qwen2.5:3b"
     qa_model: str = "qwen2.5:7b"
     embedding_model: str = "BAAI/bge-m3"
     reranker_model: str = "BAAI/bge-reranker-base"

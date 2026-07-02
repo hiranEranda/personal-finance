@@ -19,6 +19,17 @@ yarn-error.log
 /rag/.venv/
 /rag/storage/pdfs/
 *.pyc
+**/.venv/
+
+# Local secrets — real credentials live in these, never commit them.
+# .env.example files are intentionally kept tracked as templates.
+**/.env
+!**/.env.example
+
+# Docker bind-mounted data
+/infra/postgres-data/
+/infra/qdrant-data/
+/infra/backups/
 
 # IDEs and editors
 .idea/

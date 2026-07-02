@@ -1,0 +1,85 @@
+.app-nav {
+  background: var(--app-card);
+  border-bottom: 1px solid var(--app-border);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+.app-nav-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--app-ink);
+  color: var(--app-ink-contrast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  flex: none;
+}
+
+.app-nav-sub {
+  display: block;
+  font-size: 11px;
+  color: var(--app-text-muted);
+}
+
+.app-tab {
+  display: block;
+  padding: 7px 13px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--app-text-muted);
+  transition: background-color 0.15s, color 0.15s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.app-tab:hover {
+  background: var(--app-chip);
+  color: var(--app-text);
+}
+
+.app-tab-active {
+  background: var(--app-ink);
+  color: var(--app-ink-contrast);
+}
+
+.app-tab-active:hover {
+  background: var(--app-ink);
+  color: var(--app-ink-contrast);
+}
+
+.app-nav-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--app-border-strong);
+  margin: 0 6px;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .app-nav-divider {
+    display: block;
+  }
+}
+
+.app-nav-icon-btn {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  background: var(--app-chip);
+  color: var(--app-text-soft);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.app-nav-icon-btn:hover {
+  color: var(--app-text);
+}

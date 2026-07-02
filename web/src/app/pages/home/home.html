@@ -1,34 +1,27 @@
 <div class="space-y-8">
   <app-saving-status></app-saving-status>
 
-  @if (fundService.loading()) {
+  @if (loading()) {
     <div class="flex flex-col items-center justify-center p-20 space-y-4">
       <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
       <p class="text-gray-500 font-medium">Loading your investment data...</p>
     </div>
   } @else {
-    <app-bento-grid></app-bento-grid>
-    <app-growth-graph></app-growth-graph>
+    <app-portfolio-summary></app-portfolio-summary>
+    <app-asset-allocation-chart></app-asset-allocation-chart>
 
-    <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
-      <app-allocation-chart></app-allocation-chart>
-      <app-investment-list></app-investment-list>
-    </div>
-
-    @if (fundService.analytics()?.funds?.length) {
-      <div class="glass-panel p-6 rounded-xl">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div>
-            <h3 class="text-lg font-semibold mb-1">Need Deeper Insights?</h3>
-            <p class="text-gray-500 text-sm">
-              Visit the Analytics tab to explore ROI, risk, forecasting, taxation, and dividend breakdowns.
-            </p>
-          </div>
-          <a routerLink="/analytics" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium transition-colors whitespace-nowrap">
-            View Analytics
-          </a>
+    <div class="glass-panel p-6 rounded-xl">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-semibold mb-1">Need Deeper Insights?</h3>
+          <p class="text-gray-500 text-sm">
+            Visit Funds for holdings and history, or Analytics for ROI, risk, forecasting, taxation, and dividend breakdowns.
+          </p>
         </div>
+        <a routerLink="/analytics" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium transition-colors whitespace-nowrap">
+          View Analytics
+        </a>
       </div>
-    }
+    </div>
   }
 </div>

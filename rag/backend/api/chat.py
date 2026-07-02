@@ -13,12 +13,14 @@ from backend.rag.kb_meta import format_kb_answer
 from backend.rag.qa_engine import stream_answer
 from backend.rag.reranker import rerank
 from backend.rag.retriever import retrieve
+from backend.rag.rewriter import rewrite
 from backend.rag.router import classify
 
 router = APIRouter(prefix="/api/v1/chat", tags=["chat"])
 logger = logging.getLogger("backend.chat")
 
 _DIV = "─" * 60
+_SCORE_CUTOFF = 0.05
 
 _RETRIEVAL_K: dict[str, int] = {
     "simple": 5,
@@ -46,6 +48,10 @@ async def query(req: QueryRequest):
         )
         yield f"data: {json.dumps({'session_id': session_id})}\n\n"
 
+        # Fetch prior turns before saving the current message so history
+        # contains only the conversation up to (not including) this question.
+        history = await asyncio.to_thread(chat_repo.list_recent_messages, session_id)
+
         # Save user message
         await asyncio.to_thread(
             chat_repo.create_message,
@@ -54,20 +60,35 @@ async def query(req: QueryRequest):
             req.institution, req.period,
         )
 
+        # ── REC-002: rewrite follow-up into standalone query ─────────
+        rewritten_query = req.question
+        if history:
+            logger.info(f"[REWRITE ] Rewriting with {len(history)} prior message(s)...")
+            t_rw = time.perf_counter()
+            rewritten_query = await asyncio.to_thread(rewrite, req.question, history)
+            elapsed = time.perf_counter() - t_rw
+            if rewritten_query != req.question:
+                logger.info(f"[REWRITE ] Done ({elapsed:.2f}s): '{rewritten_query}'")
+            else:
+                logger.info(f"[REWRITE ] No change ({elapsed:.2f}s)")
+
+        stored_rewrite = rewritten_query if rewritten_query != req.question else None
+
         # ── Route ───────────────────────────────────────────────────
-        intent = classify(req.question)
+        intent = classify(rewritten_query)
         logger.info(f"[ROUTER  ] intent={intent!r}")
 
         # ── KB metadata shortcut ────────────────────────────────────
         if intent == "kb_meta":
             logger.info("[ROUTER  ] Metadata query — answering from Qdrant stats directly")
-            answer = await asyncio.to_thread(format_kb_answer, req.question)
+            answer = await asyncio.to_thread(format_kb_answer, rewritten_query)
             for line in answer.splitlines(keepends=True):
                 yield f"data: {json.dumps({'text': line})}\n\n"
 
             await asyncio.to_thread(
                 chat_repo.create_message,
                 session_id, "assistant", answer,
+                stored_rewrite,
             )
             yield "data: [DONE]\n\n"
             logger.info("[ROUTER  ] Done (kb_meta fast path)")
@@ -83,7 +104,9 @@ async def query(req: QueryRequest):
         top_k = _RETRIEVAL_K.get(intent, settings.retrieval_top_k)
         logger.info(f"[RETRIEVE] Starting hybrid search — top_k={top_k} (intent={intent})")
         t0 = time.perf_counter()
-        candidates = await asyncio.to_thread(retrieve, req.question, req.institution, req.period, top_k)
+        candidates = await asyncio.to_thread(
+            retrieve, rewritten_query, req.institution, req.period, top_k
+        )
         logger.info(f"[RETRIEVE] Done — {len(candidates)} candidates  ({time.perf_counter()-t0:.2f}s)")
 
         if not candidates:
@@ -93,6 +116,7 @@ async def query(req: QueryRequest):
             await asyncio.to_thread(
                 chat_repo.create_message,
                 session_id, "assistant", no_result,
+                stored_rewrite,
             )
             yield "data: [DONE]\n\n"
             return
@@ -105,12 +129,31 @@ async def query(req: QueryRequest):
         else:
             logger.info(f"[RERANK  ] Starting — {len(candidates)} candidates → top {settings.rerank_top_k}")
             t0 = time.perf_counter()
-            top = await asyncio.to_thread(rerank, req.question, candidates)
+            top = await asyncio.to_thread(rerank, rewritten_query, candidates)
             best_score = top[0]["rerank_score"] if top else 0.0
             logger.info(
                 f"[RERANK  ] Done — {len(top)} selected  "
                 f"best={best_score:.3f}  ({time.perf_counter()-t0:.2f}s)"
             )
+
+        # ── REC-001: low-confidence cutoff ──────────────────────────
+        if best_score is not None and best_score < _SCORE_CUTOFF:
+            logger.info(
+                f"[RERANK  ] Score {best_score:.3f} below cutoff {_SCORE_CUTOFF} — skipping LLM"
+            )
+            low_conf_msg = (
+                "I couldn't find anything in the documents relevant to that question. "
+                "Try rephrasing, or check that the relevant report has been uploaded."
+            )
+            yield f"data: {json.dumps({'text': low_conf_msg})}\n\n"
+            await asyncio.to_thread(
+                chat_repo.create_message,
+                session_id, "assistant", low_conf_msg,
+                stored_rewrite, best_score, req.institution, req.period,
+            )
+            yield "data: [DONE]\n\n"
+            logger.info(_DIV)
+            return
 
         sources = [
             {"institution": c["institution"], "period": c["period"], "section": c["section"]}
@@ -123,7 +166,7 @@ async def query(req: QueryRequest):
         t0 = time.perf_counter()
         first_token = True
         full_text_parts: list[str] = []
-        async for token in stream_answer(req.question, top):
+        async for token in stream_answer(rewritten_query, top):
             if first_token:
                 logger.info(f"[LLM     ] First token received  ({time.perf_counter()-t0:.2f}s)")
                 first_token = False
@@ -138,7 +181,7 @@ async def query(req: QueryRequest):
         assistant_msg_id = await asyncio.to_thread(
             chat_repo.create_message,
             session_id, "assistant", full_text,
-            None,          # rewritten_query (REC-002, not yet implemented)
+            stored_rewrite,
             best_score,
             req.institution,
             req.period,

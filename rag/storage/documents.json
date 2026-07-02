@@ -23,6 +23,54 @@
       "period_start": null,
       "period_end": null,
       "currency": null
+    },
+    {
+      "doc_id": "f9592a67-74f4-4517-9d24-66bd49f13af0",
+      "file_hash": "3ad5a389cff66958c7086da549979cb15a26ccb86fa8a14dbc16406ccab9f068",
+      "filename": "CCS26-march.pdf",
+      "ingested_at": "2026-07-01T15:21:08.938570+00:00",
+      "status": "deleted",
+      "chunk_count": 858,
+      "institution": "Ceylon Cold Stores PLC",
+      "period_start": null,
+      "period_end": null,
+      "currency": null
+    },
+    {
+      "doc_id": "5594d38f-4f3e-4b4b-b0bc-4de770c7cd70",
+      "file_hash": "9bf7799d78e5b04c34f3cfd8acc434cbf6f0b3340bdd8e0c4d254a9814a39d03",
+      "filename": "HASU26-march.pdf",
+      "ingested_at": "2026-07-01T15:21:24.168181+00:00",
+      "status": "deleted",
+      "chunk_count": 1272,
+      "institution": "HNB ASSURANCE PLC",
+      "period_start": null,
+      "period_end": null,
+      "currency": null
+    },
+    {
+      "doc_id": "239cdc0f-0c9e-4de1-b880-1f06dc467e99",
+      "file_hash": "c179e6a3b58468d53fbfa9f64a5b925dfb881b3b993b9ab544861debe7b60f17",
+      "filename": "CCS25:26.pdf",
+      "ingested_at": "2026-07-01T15:31:13.602337+00:00",
+      "status": "done",
+      "chunk_count": 741,
+      "institution": "Ceylon Cold Stores PLC",
+      "period_start": null,
+      "period_end": null,
+      "currency": null
+    },
+    {
+      "doc_id": "0a91a5a2-4aef-47db-aad2-af3a08c7575d",
+      "file_hash": "2be849b02cff9c5483b5e83368a72cd19352fc42b30071fa9a882ff6673f1913",
+      "filename": "HASU25:26.pdf",
+      "ingested_at": "2026-07-01T15:31:55.649300+00:00",
+      "status": "done",
+      "chunk_count": 1036,
+      "institution": "HNB ASSURANCE PLC",
+      "period_start": null,
+      "period_end": null,
+      "currency": null
     }
   ]
 }

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ChartModule } from 'primeng/chart';
 import { FundService } from '../../shared/services/fund.service';
 import { SavingStatus } from '../../shared/components/saving-status/saving-status';
+import { FundsSubnav } from '../../shared/components/funds-subnav/funds-subnav';
 import {
   predictNaive, predictMovingAverage, predictLinear, predictExponential, predictLogistic, findBestFitModel,
 } from '../../shared/utils/forecasting';
@@ -11,7 +12,7 @@ import { PortfolioFund } from '../../shared/types/fund.types';
 
 @Component({
   selector: 'app-forecast',
-  imports: [FormsModule, ChartModule, SavingStatus],
+  imports: [FormsModule, ChartModule, SavingStatus, FundsSubnav],
   templateUrl: './forecast.html',
   styleUrl: './forecast.css',
 })

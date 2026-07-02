@@ -28,6 +28,7 @@ export class RagChat implements AfterViewChecked {
   isStreaming = signal(false);
   error = signal<string | null>(null);
   showFilters = signal(false);
+  private sessionId = signal<string | null>(null);
 
   hasMessages = computed(() => this.messages().length > 0);
   private shouldScroll = false;
@@ -55,7 +56,10 @@ export class RagChat implements AfterViewChecked {
 
     this.isStreaming.set(true);
     try {
-      for await (const event of this.ragService.streamChat(q, this.institution(), this.period())) {
+      for await (const event of this.ragService.streamChat(q, this.institution(), this.period(), this.sessionId() ?? undefined)) {
+        if (event.session_id) {
+          this.sessionId.set(event.session_id);
+        }
         if (event.sources) {
           this.messages.update(msgs => {
             const updated = [...msgs];
@@ -106,5 +110,6 @@ export class RagChat implements AfterViewChecked {
   clearChat() {
     this.messages.set([]);
     this.error.set(null);
+    this.sessionId.set(null);
   }
 }

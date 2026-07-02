@@ -1,0 +1,33 @@
+/* Sized to match .funds-subnav-tab exactly (same font-size/border-radius, padding
+   adjusted for the input's border so both end up the same rendered height). */
+.price-sync-input {
+  width: 92px;
+  padding: 6px 10px;
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  font-size: 13px;
+  background: var(--app-card);
+  color: var(--app-text);
+}
+
+.price-sync-btn {
+  padding: 7px 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  background: var(--app-ink);
+  color: var(--app-ink-contrast);
+  transition: opacity 0.15s;
+}
+
+.price-sync-btn:hover {
+  opacity: 0.9;
+}
+
+.price-sync-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

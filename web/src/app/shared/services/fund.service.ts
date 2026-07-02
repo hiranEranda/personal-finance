@@ -1,4 +1,4 @@
-import { Injectable, inject, signal, computed, effect } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject, EMPTY, combineLatest, of } from 'rxjs';
 import { debounceTime, switchMap, tap, catchError } from 'rxjs/operators';
@@ -47,13 +47,26 @@ export class FundService {
   });
 
   constructor() {
+    // Triggered explicitly by each mutator below — NOT by an effect() watching
+    // _funds(), which would also fire on the reconciliation .set() after a save
+    // completes (signals notify on every .set() regardless of whether the value
+    // actually changed), creating a save -> reconcile -> save loop that never stops.
     this.saveSubject.pipe(
       debounceTime(1000),
       switchMap(funds => {
         this._isSaving.set(true);
         this._error.set(null);
-        return this.http.post<{ message: string }>(API_URL, funds).pipe(
-          tap(() => this._isSaving.set(false)),
+        // The server assigns real UUIDs to any fund that didn't already have a
+        // persisted id (i.e. one just added via addFund()) and echoes back the
+        // full saved list — reconcile it so temporary client-side ids get replaced.
+        return this.http.post<Fund[]>(API_URL, funds).pipe(
+          tap(savedFunds => {
+            this._funds.set(savedFunds.map(saved => {
+              const local = funds.find(f => f.id === saved.id);
+              return local ? { ...saved, navHistory: local.navHistory, fundInfo: local.fundInfo, yearlyPerformance: local.yearlyPerformance } : saved;
+            }));
+            this._isSaving.set(false);
+          }),
           catchError(() => {
             this._error.set('Failed to save changes. Please check server connection.');
             this._isSaving.set(false);
@@ -62,13 +75,6 @@ export class FundService {
         );
       })
     ).subscribe();
-
-    effect(() => {
-      const funds = this._funds();
-      if (!this._loading()) {
-        this.saveSubject.next(funds);
-      }
-    });
 
     this.loadFunds();
   }
@@ -103,25 +109,35 @@ export class FundService {
     });
   }
 
+  private save(): void {
+    this.saveSubject.next(this._funds());
+  }
+
   addFund(newFund: Partial<Fund>): void {
+    // id is a client-side placeholder for local rendering only — the debounced
+    // save's response replaces it with the real UUID the server assigns.
     const fundWithId: Fund = {
       ...(newFund as Fund),
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       transactions: newFund.transactions || [],
       currentNav: newFund.currentNav || 0,
     };
     this._funds.update(funds => [...funds, fundWithId]);
+    this.save();
   }
 
   editFund(updatedFund: Fund): void {
     this._funds.update(funds => funds.map(f => f.id === updatedFund.id ? updatedFund : f));
+    this.save();
   }
 
   deleteFund(fundId: string): void {
     this._funds.update(funds => funds.filter(f => f.id !== fundId));
+    this.save();
   }
 
   updateFundTransactions(fundId: string, updatedData: Partial<Fund>): void {
     this._funds.update(funds => funds.map(f => f.id === fundId ? { ...f, ...updatedData } : f));
+    this.save();
   }
 }

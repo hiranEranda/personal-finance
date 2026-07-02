@@ -1,0 +1,21 @@
+<div class="flex items-center gap-1.5">
+  @if (statusText(); as status) {
+    <span class="text-xs text-gray-500 whitespace-nowrap">{{ status }}</span>
+  }
+  <input
+    type="number"
+    min="1"
+    placeholder="Months"
+    title="Optional: months of history to backfill. Leave empty for a quick daily sync."
+    [ngModel]="backfillMonths()"
+    (ngModelChange)="backfillMonths.set($event)"
+    class="price-sync-input"
+  />
+  <button
+    (click)="sync()"
+    [disabled]="isBusy()"
+    class="price-sync-btn"
+  >
+    {{ isBusy() ? 'Syncing…' : 'Sync Prices' }}
+  </button>
+</div>

@@ -1,4 +1,5 @@
 <div class="space-y-8">
+  <app-funds-subnav></app-funds-subnav>
   <app-saving-status></app-saving-status>
 
   <!-- Transaction Sub-Page -->
@@ -105,10 +106,13 @@
 
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-bold">Manage Your Funds</h2>
-      <button (click)="openAddFundModal()" class="flex items-center space-x-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="16"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
-        <span>Add New Fund</span>
-      </button>
+      <div class="flex items-center gap-4">
+        <app-deposit-sync></app-deposit-sync>
+        <button (click)="openAddFundModal()" class="flex items-center space-x-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="16"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
+          <span>Add New Fund</span>
+        </button>
+      </div>
     </div>
 
     <div class="glass-panel p-6 rounded-xl">

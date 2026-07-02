@@ -1,18 +1,24 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FundService } from '../../shared/services/fund.service';
+import { PortfolioService } from '../shares/portfolio.service';
+import { FixedDepositsService } from '../../shared/services/fixed-deposits.service';
 import { SavingStatus } from '../../shared/components/saving-status/saving-status';
-import { BentoGrid } from '../../shared/components/bento-grid/bento-grid';
-import { GrowthGraph } from '../../shared/components/growth-graph/growth-graph';
-import { AllocationChart } from '../../shared/components/allocation-chart/allocation-chart';
-import { InvestmentList } from '../../shared/components/investment-list/investment-list';
+import { PortfolioSummary } from '../../shared/components/portfolio-summary/portfolio-summary';
+import { AssetAllocationChart } from '../../shared/components/asset-allocation-chart/asset-allocation-chart';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, SavingStatus, BentoGrid, GrowthGraph, AllocationChart, InvestmentList],
+  imports: [RouterLink, SavingStatus, PortfolioSummary, AssetAllocationChart],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home {
   fundService = inject(FundService);
+  portfolioService = inject(PortfolioService);
+  fixedDepositsService = inject(FixedDepositsService);
+
+  loading = computed(
+    () => this.fundService.loading() || this.portfolioService.loading() || this.fixedDepositsService.loading(),
+  );
 }

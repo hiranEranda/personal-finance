@@ -1,0 +1,23 @@
+/* Matches the shares page's in-page tab bar (.shares-tab) for visual consistency. */
+.funds-subnav-tab {
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--app-chip);
+  color: var(--app-text-muted);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.funds-subnav-tab:hover {
+  color: var(--app-text);
+}
+
+.funds-subnav-tab-active,
+.funds-subnav-tab-active:hover {
+  background: var(--app-ink);
+  color: var(--app-ink-contrast);
+}

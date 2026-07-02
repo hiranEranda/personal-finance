@@ -142,3 +142,481 @@ INFO:     127.0.0.1:62029 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
 2026-06-29 22:13:52,127 INFO     backend.chat: [LLM     ] First token received  (28.16s)
 2026-06-29 22:14:02,230 INFO     backend.chat: [LLM     ] Streaming complete  (38.26s total)
 2026-06-29 22:14:02,230 INFO     backend.chat: ────────────────────────────────────────────────────────────
+INFO:     127.0.0.1:59332 - "GET /health HTTP/1.1" 200 OK
+2026-06-29 23:04:18,988 INFO     uvicorn.access: 127.0.0.1:59332 - "GET /health HTTP/1.1" 200
+INFO:     127.0.0.1:59639 - "GET /health HTTP/1.1" 200 OK
+2026-06-29 23:05:21,371 INFO     uvicorn.access: 127.0.0.1:59639 - "GET /health HTTP/1.1" 200
+INFO:     127.0.0.1:64263 - "GET /api/v1/documents HTTP/1.1" 200 OK
+2026-06-29 23:22:23,128 INFO     uvicorn.access: 127.0.0.1:64263 - "GET /api/v1/documents HTTP/1.1" 200
+INFO:     127.0.0.1:64263 - "GET /api/v1/documents HTTP/1.1" 200 OK
+2026-06-29 23:22:27,808 INFO     uvicorn.access: 127.0.0.1:64263 - "GET /api/v1/documents HTTP/1.1" 200
+INFO:     127.0.0.1:64263 - "GET /api/v1/documents HTTP/1.1" 200 OK
+2026-06-29 23:22:31,868 INFO     uvicorn.access: 127.0.0.1:64263 - "GET /api/v1/documents HTTP/1.1" 200
+INFO:     127.0.0.1:64263 - "GET /api/v1/documents HTTP/1.1" 200 OK
+2026-06-29 23:22:36,749 INFO     uvicorn.access: 127.0.0.1:64263 - "GET /api/v1/documents HTTP/1.1" 200
+INFO:     127.0.0.1:53221 - "GET /api/v1/documents HTTP/1.1" 200 OK
+2026-07-01 20:49:03,821 INFO     uvicorn.access: 127.0.0.1:53221 - "GET /api/v1/documents HTTP/1.1" 200
+INFO:     127.0.0.1:53257 - "POST /api/v1/documents/upload HTTP/1.1" 200 OK
+2026-07-01 20:51:08,947 INFO     uvicorn.access: 127.0.0.1:53257 - "POST /api/v1/documents/upload HTTP/1.1" 200
+INFO:     127.0.0.1:53257 - "GET /api/v1/documents HTTP/1.1" 200 OK
+2026-07-01 20:51:08,991 INFO     uvicorn.access: 127.0.0.1:53257 - "GET /api/v1/documents HTTP/1.1" 200
+INFO:     127.0.0.1:53263 - "POST /api/v1/documents/upload HTTP/1.1" 200 OK
+2026-07-01 20:51:24,192 INFO     uvicorn.access: 127.0.0.1:53263 - "POST /api/v1/documents/upload HTTP/1.1" 200
+INFO:     127.0.0.1:53263 - "GET /api/v1/documents HTTP/1.1" 200 OK
+2026-07-01 20:51:24,411 INFO     uvicorn.access: 127.0.0.1:53263 - "GET /api/v1/documents HTTP/1.1" 200
+pre tokenize:   0%|          | 0/108 [00:00<?, ?it/s]pre tokenize:   1%|          | 1/108 [00:00<00:19,  5.53it/s]pre tokenize:   9%|▉         | 10/108 [00:00<00:02, 41.61it/s]pre tokenize:  20%|██        | 22/108 [00:00<00:01, 70.22it/s]pre tokenize:  32%|███▏      | 35/108 [00:00<00:00, 89.96it/s]pre tokenize:  42%|████▏     | 45/108 [00:00<00:00, 70.29it/s]pre tokenize:  53%|█████▎    | 57/108 [00:00<00:00, 83.09it/s]pre tokenize:  66%|██████▌   | 71/108 [00:00<00:00, 97.11it/s]pre tokenize:  79%|███████▊  | 85/108 [00:01<00:00, 107.50it/s]pre tokenize:  92%|█████████▏| 99/108 [00:01<00:00, 114.87it/s]pre tokenize: 100%|██████████| 108/108 [00:01<00:00, 92.59it/s]
+Inference Embeddings:   0%|          | 0/108 [00:00<?, ?it/s]Inference Embeddings:   1%|          | 1/108 [00:02<03:51,  2.17s/it]Inference Embeddings:   2%|▏         | 2/108 [00:03<02:38,  1.49s/it]Inference Embeddings:   3%|▎         | 3/108 [00:04<02:15,  1.29s/it]Inference Embeddings:   4%|▎         | 4/108 [00:05<02:05,  1.20s/it]Inference Embeddings:   5%|▍         | 5/108 [00:06<01:58,  1.15s/it]
+pre tokenize:   0%|          | 0/159 [00:00<?, ?it/s][A
+pre tokenize:  23%|██▎       | 36/159 [00:00<00:00, 356.79it/s][AInference Embeddings:   6%|▌         | 6/108 [00:07<01:52,  1.10s/it]
+pre tokenize:  65%|██████▍   | 103/159 [00:00<00:00, 540.14it/s][Apre tokenize: 100%|██████████| 159/159 [00:00<00:00, 720.75it/s]
+Inference Embeddings:   6%|▋         | 7/108 [00:08<01:55,  1.14s/it]
+Inference Embeddings:   0%|          | 0/159 [00:00<?, ?it/s][AInference Embeddings:   7%|▋         | 8/108 [00:10<02:14,  1.34s/it]
+Inference Embeddings:   1%|          | 1/159 [00:02<05:50,  2.22s/it][AInference Embeddings:   8%|▊         | 9/108 [00:12<02:26,  1.47s/it]
+Inference Embeddings:   1%|▏         | 2/159 [00:03<05:05,  1.94s/it][AInference Embeddings:   9%|▉         | 10/108 [00:13<02:33,  1.57s/it]
+Inference Embeddings:   2%|▏         | 3/159 [00:05<04:49,  1.86s/it][AInference Embeddings:  10%|█         | 11/108 [00:15<02:39,  1.64s/it]
+Inference Embeddings:   3%|▎         | 4/159 [00:07<04:45,  1.84s/it][AInference Embeddings:  11%|█         | 12/108 [00:17<02:41,  1.69s/it]
+Inference Embeddings:   3%|▎         | 5/159 [00:09<04:43,  1.84s/it][AInference Embeddings:  12%|█▏        | 13/108 [00:19<02:47,  1.76s/it]
+Inference Embeddings:   4%|▍         | 6/159 [00:11<04:42,  1.84s/it][AInference Embeddings:  13%|█▎        | 14/108 [00:21<02:46,  1.78s/it]
+Inference Embeddings:   4%|▍         | 7/159 [00:13<04:40,  1.84s/it][AInference Embeddings:  14%|█▍        | 15/108 [00:23<02:47,  1.80s/it]
+Inference Embeddings:   5%|▌         | 8/159 [00:14<04:36,  1.83s/it][AInference Embeddings:  15%|█▍        | 16/108 [00:24<02:46,  1.82s/it]
+Inference Embeddings:   6%|▌         | 9/159 [00:16<04:33,  1.83s/it][AInference Embeddings:  16%|█▌        | 17/108 [00:26<02:47,  1.84s/it]
+Inference Embeddings:   6%|▋         | 10/159 [00:18<04:40,  1.89s/it][AInference Embeddings:  17%|█▋        | 18/108 [00:28<02:49,  1.88s/it]
+Inference Embeddings:   7%|▋         | 11/159 [00:20<04:41,  1.90s/it][AInference Embeddings:  18%|█▊        | 19/108 [00:30<02:48,  1.89s/it]
+Inference Embeddings:   8%|▊         | 12/159 [00:22<04:36,  1.88s/it][AInference Embeddings:  19%|█▊        | 20/108 [00:32<02:44,  1.87s/it]
+Inference Embeddings:   8%|▊         | 13/159 [00:24<04:34,  1.88s/it][AInference Embeddings:  19%|█▉        | 21/108 [00:34<02:43,  1.87s/it]
+Inference Embeddings:   9%|▉         | 14/159 [00:26<04:33,  1.89s/it][AInference Embeddings:  20%|██        | 22/108 [00:36<02:41,  1.87s/it]
+Inference Embeddings:   9%|▉         | 15/159 [00:28<04:29,  1.87s/it][AInference Embeddings:  21%|██▏       | 23/108 [00:38<02:38,  1.86s/it]
+Inference Embeddings:  10%|█         | 16/159 [00:29<04:26,  1.86s/it][AInference Embeddings:  22%|██▏       | 24/108 [00:40<02:35,  1.85s/it]
+Inference Embeddings:  11%|█         | 17/159 [00:31<04:20,  1.84s/it][AInference Embeddings:  23%|██▎       | 25/108 [00:41<02:31,  1.82s/it]
+Inference Embeddings:  11%|█▏        | 18/159 [00:33<04:15,  1.81s/it][AInference Embeddings:  24%|██▍       | 26/108 [00:43<02:27,  1.80s/it]
+Inference Embeddings:  12%|█▏        | 19/159 [00:35<04:13,  1.81s/it][AInference Embeddings:  25%|██▌       | 27/108 [00:45<02:28,  1.83s/it]
+Inference Embeddings:  13%|█▎        | 20/159 [00:37<04:20,  1.87s/it][AInference Embeddings:  26%|██▌       | 28/108 [00:47<02:27,  1.84s/it]
+Inference Embeddings:  13%|█▎        | 21/159 [00:39<04:19,  1.88s/it][AInference Embeddings:  27%|██▋       | 29/108 [00:49<02:26,  1.85s/it]
+Inference Embeddings:  14%|█▍        | 22/159 [00:41<04:16,  1.87s/it][AInference Embeddings:  28%|██▊       | 30/108 [00:50<02:23,  1.84s/it]
+Inference Embeddings:  14%|█▍        | 23/159 [00:42<04:12,  1.86s/it][AInference Embeddings:  29%|██▊       | 31/108 [00:52<02:22,  1.85s/it]
+Inference Embeddings:  15%|█▌        | 24/159 [00:44<04:15,  1.90s/it][AInference Embeddings:  30%|██▉       | 32/108 [00:54<02:22,  1.87s/it]
+Inference Embeddings:  16%|█▌        | 25/159 [00:46<04:11,  1.88s/it][AInference Embeddings:  31%|███       | 33/108 [00:56<02:18,  1.85s/it]
+Inference Embeddings:  16%|█▋        | 26/159 [00:48<04:14,  1.91s/it][AInference Embeddings:  31%|███▏      | 34/108 [00:58<02:19,  1.88s/it]
+Inference Embeddings:  17%|█▋        | 27/159 [00:50<04:08,  1.89s/it][AInference Embeddings:  32%|███▏      | 35/108 [01:00<02:15,  1.85s/it]
+Inference Embeddings:  18%|█▊        | 28/159 [00:52<04:05,  1.87s/it][AInference Embeddings:  33%|███▎      | 36/108 [01:02<02:14,  1.86s/it]
+Inference Embeddings:  18%|█▊        | 29/159 [00:54<04:03,  1.87s/it][AInference Embeddings:  34%|███▍      | 37/108 [01:03<02:09,  1.83s/it]
+Inference Embeddings:  19%|█▉        | 30/159 [00:56<04:00,  1.86s/it][AInference Embeddings:  35%|███▌      | 38/108 [01:05<02:10,  1.86s/it]
+Inference Embeddings:  19%|█▉        | 31/159 [00:57<03:59,  1.87s/it][AInference Embeddings:  36%|███▌      | 39/108 [01:07<02:09,  1.87s/it]
+Inference Embeddings:  20%|██        | 32/159 [00:59<04:01,  1.90s/it][AInference Embeddings:  37%|███▋      | 40/108 [01:09<02:08,  1.90s/it]
+Inference Embeddings:  21%|██        | 33/159 [01:01<03:53,  1.85s/it][AInference Embeddings:  38%|███▊      | 41/108 [01:11<02:05,  1.87s/it]
+Inference Embeddings:  21%|██▏       | 34/159 [01:03<03:35,  1.72s/it][AInference Embeddings:  39%|███▉      | 42/108 [01:14<02:18,  2.10s/it]
+Inference Embeddings:  22%|██▏       | 35/159 [01:04<03:38,  1.76s/it][A
+Inference Embeddings:  23%|██▎       | 36/159 [01:06<03:40,  1.79s/it][AInference Embeddings:  40%|███▉      | 43/108 [01:16<02:19,  2.14s/it]
+Inference Embeddings:  23%|██▎       | 37/159 [01:08<03:37,  1.78s/it][AInference Embeddings:  41%|████      | 44/108 [01:18<02:21,  2.21s/it]
+Inference Embeddings:  24%|██▍       | 38/159 [01:10<03:29,  1.73s/it][AInference Embeddings:  42%|████▏     | 45/108 [01:21<02:21,  2.25s/it]
+Inference Embeddings:  25%|██▍       | 39/159 [01:11<03:30,  1.76s/it][A
+Inference Embeddings:  25%|██▌       | 40/159 [01:14<03:39,  1.85s/it][AInference Embeddings:  43%|████▎     | 46/108 [01:23<02:22,  2.30s/it]
+Inference Embeddings:  26%|██▌       | 41/159 [01:15<03:36,  1.83s/it][AInference Embeddings:  44%|████▎     | 47/108 [01:25<02:19,  2.28s/it]
+Inference Embeddings:  26%|██▋       | 42/159 [01:18<04:07,  2.11s/it][AInference Embeddings:  44%|████▍     | 48/108 [01:29<02:34,  2.57s/it]
+Inference Embeddings:  27%|██▋       | 43/159 [01:20<03:49,  1.98s/it][AInference Embeddings:  45%|████▌     | 49/108 [01:31<02:25,  2.46s/it]
+Inference Embeddings:  28%|██▊       | 44/159 [01:22<03:39,  1.90s/it][A
+Inference Embeddings:  28%|██▊       | 45/159 [01:23<03:29,  1.84s/it][AInference Embeddings:  46%|████▋     | 50/108 [01:33<02:14,  2.31s/it]
+Inference Embeddings:  29%|██▉       | 46/159 [01:25<03:16,  1.74s/it][AInference Embeddings:  47%|████▋     | 51/108 [01:35<02:06,  2.22s/it]
+Inference Embeddings:  30%|██▉       | 47/159 [01:26<03:06,  1.67s/it][AInference Embeddings:  48%|████▊     | 52/108 [01:37<02:01,  2.17s/it]
+Inference Embeddings:  30%|███       | 48/159 [01:28<03:02,  1.64s/it][A
+Inference Embeddings:  31%|███       | 49/159 [01:29<02:51,  1.56s/it][AInference Embeddings:  49%|████▉     | 53/108 [01:38<01:52,  2.04s/it]
+Inference Embeddings:  31%|███▏      | 50/159 [01:30<02:36,  1.44s/it][AInference Embeddings:  50%|█████     | 54/108 [01:40<01:39,  1.85s/it]
+Inference Embeddings:  32%|███▏      | 51/159 [01:31<02:24,  1.33s/it][AInference Embeddings:  51%|█████     | 55/108 [01:41<01:31,  1.73s/it]
+Inference Embeddings:  33%|███▎      | 52/159 [01:33<02:15,  1.27s/it][AInference Embeddings:  52%|█████▏    | 56/108 [01:43<01:26,  1.66s/it]
+Inference Embeddings:  33%|███▎      | 53/159 [01:34<02:09,  1.22s/it][A
+Inference Embeddings:  34%|███▍      | 54/159 [01:35<02:04,  1.18s/it][AInference Embeddings:  53%|█████▎    | 57/108 [01:44<01:19,  1.56s/it]
+Inference Embeddings:  35%|███▍      | 55/159 [01:36<01:58,  1.14s/it][AInference Embeddings:  54%|█████▎    | 58/108 [01:46<01:15,  1.51s/it]
+Inference Embeddings:  35%|███▌      | 56/159 [01:37<01:54,  1.11s/it][AInference Embeddings:  55%|█████▍    | 59/108 [01:47<01:11,  1.46s/it]
+Inference Embeddings:  36%|███▌      | 57/159 [01:38<01:50,  1.08s/it][A
+Inference Embeddings:  36%|███▋      | 58/159 [01:39<01:47,  1.06s/it][AInference Embeddings:  56%|█████▌    | 60/108 [01:48<01:07,  1.40s/it]
+Inference Embeddings:  37%|███▋      | 59/159 [01:40<01:44,  1.05s/it][AInference Embeddings:  56%|█████▋    | 61/108 [01:49<01:02,  1.33s/it]
+Inference Embeddings:  38%|███▊      | 60/159 [01:41<01:43,  1.04s/it][AInference Embeddings:  57%|█████▋    | 62/108 [01:51<01:02,  1.37s/it]
+Inference Embeddings:  38%|███▊      | 61/159 [01:42<01:47,  1.09s/it][AInference Embeddings:  58%|█████▊    | 63/108 [01:52<01:04,  1.44s/it]
+Inference Embeddings:  39%|███▉      | 62/159 [01:43<01:49,  1.13s/it][A
+Inference Embeddings:  40%|███▉      | 63/159 [01:44<01:48,  1.13s/it][AInference Embeddings:  59%|█████▉    | 64/108 [01:54<01:02,  1.43s/it]
+Inference Embeddings:  40%|████      | 64/159 [01:46<01:46,  1.12s/it][AInference Embeddings:  60%|██████    | 65/108 [01:55<01:01,  1.42s/it]
+Inference Embeddings:  41%|████      | 65/159 [01:46<01:40,  1.07s/it][AInference Embeddings:  61%|██████    | 66/108 [01:56<00:56,  1.36s/it]
+Inference Embeddings:  42%|████▏     | 66/159 [01:47<01:37,  1.05s/it][AInference Embeddings:  62%|██████▏   | 67/108 [01:57<00:51,  1.26s/it]
+Inference Embeddings:  42%|████▏     | 67/159 [01:49<01:36,  1.05s/it][AInference Embeddings:  63%|██████▎   | 68/108 [01:58<00:47,  1.19s/it]
+Inference Embeddings:  43%|████▎     | 68/159 [01:50<01:36,  1.06s/it][AInference Embeddings:  64%|██████▍   | 69/108 [02:00<00:44,  1.15s/it]
+Inference Embeddings:  43%|████▎     | 69/159 [01:51<01:34,  1.05s/it][AInference Embeddings:  65%|██████▍   | 70/108 [02:00<00:41,  1.10s/it]
+Inference Embeddings:  44%|████▍     | 70/159 [01:52<01:32,  1.04s/it][AInference Embeddings:  66%|██████▌   | 71/108 [02:01<00:37,  1.02s/it]
+Inference Embeddings:  45%|████▍     | 71/159 [01:53<01:34,  1.07s/it][AInference Embeddings:  67%|██████▋   | 72/108 [02:02<00:38,  1.06s/it]
+Inference Embeddings:  45%|████▌     | 72/159 [01:54<01:35,  1.09s/it][AInference Embeddings:  68%|██████▊   | 73/108 [02:04<00:38,  1.10s/it]
+Inference Embeddings:  46%|████▌     | 73/159 [01:55<01:36,  1.12s/it][AInference Embeddings:  69%|██████▊   | 74/108 [02:05<00:38,  1.13s/it]
+Inference Embeddings:  47%|████▋     | 74/159 [01:56<01:35,  1.13s/it][AInference Embeddings:  69%|██████▉   | 75/108 [02:06<00:37,  1.12s/it]
+Inference Embeddings:  47%|████▋     | 75/159 [01:57<01:33,  1.12s/it][AInference Embeddings:  70%|███████   | 76/108 [02:07<00:35,  1.11s/it]
+Inference Embeddings:  48%|████▊     | 76/159 [01:58<01:31,  1.10s/it][AInference Embeddings:  71%|███████▏  | 77/108 [02:08<00:32,  1.06s/it]
+Inference Embeddings:  48%|████▊     | 77/159 [01:59<01:27,  1.06s/it][AInference Embeddings:  72%|███████▏  | 78/108 [02:09<00:29,  1.02it/s]
+Inference Embeddings:  49%|████▉     | 78/159 [02:00<01:12,  1.12it/s][AInference Embeddings:  73%|███████▎  | 79/108 [02:09<00:23,  1.22it/s]
+Inference Embeddings:  50%|████▉     | 79/159 [02:00<01:00,  1.31it/s][AInference Embeddings:  74%|███████▍  | 80/108 [02:10<00:19,  1.41it/s]Inference Embeddings:  75%|███████▌  | 81/108 [02:10<00:16,  1.63it/s]
+Inference Embeddings:  50%|█████     | 80/159 [02:01<00:51,  1.52it/s][AInference Embeddings:  76%|███████▌  | 82/108 [02:10<00:13,  1.88it/s]
+Inference Embeddings:  51%|█████     | 81/159 [02:01<00:44,  1.76it/s][AInference Embeddings:  77%|███████▋  | 83/108 [02:11<00:12,  2.04it/s]
+Inference Embeddings:  52%|█████▏    | 82/159 [02:02<00:39,  1.95it/s][A
+Inference Embeddings:  52%|█████▏    | 83/159 [02:02<00:34,  2.17it/s][AInference Embeddings:  78%|███████▊  | 84/108 [02:11<00:10,  2.24it/s]Inference Embeddings:  79%|███████▊  | 85/108 [02:12<00:09,  2.43it/s]
+Inference Embeddings:  53%|█████▎    | 84/159 [02:02<00:31,  2.37it/s][AInference Embeddings:  80%|███████▉  | 86/108 [02:12<00:08,  2.62it/s]
+Inference Embeddings:  53%|█████▎    | 85/159 [02:03<00:29,  2.50it/s][AInference Embeddings:  81%|████████  | 87/108 [02:12<00:07,  2.87it/s]
+Inference Embeddings:  54%|█████▍    | 86/159 [02:03<00:27,  2.65it/s][AInference Embeddings:  81%|████████▏ | 88/108 [02:12<00:06,  3.08it/s]
+Inference Embeddings:  55%|█████▍    | 87/159 [02:03<00:25,  2.87it/s][AInference Embeddings:  82%|████████▏ | 89/108 [02:13<00:05,  3.20it/s]
+Inference Embeddings:  55%|█████▌    | 88/159 [02:03<00:23,  3.06it/s][AInference Embeddings:  83%|████████▎ | 90/108 [02:13<00:05,  3.33it/s]
+Inference Embeddings:  56%|█████▌    | 89/159 [02:04<00:21,  3.22it/s][AInference Embeddings:  84%|████████▍ | 91/108 [02:13<00:04,  3.46it/s]
+Inference Embeddings:  57%|█████▋    | 90/159 [02:04<00:20,  3.30it/s][AInference Embeddings:  85%|████████▌ | 92/108 [02:13<00:04,  3.60it/s]
+Inference Embeddings:  57%|█████▋    | 91/159 [02:04<00:19,  3.51it/s][AInference Embeddings:  86%|████████▌ | 93/108 [02:14<00:03,  3.86it/s]
+Inference Embeddings:  58%|█████▊    | 92/159 [02:04<00:18,  3.61it/s][AInference Embeddings:  87%|████████▋ | 94/108 [02:14<00:03,  3.90it/s]
+Inference Embeddings:  58%|█████▊    | 93/159 [02:05<00:17,  3.69it/s][AInference Embeddings:  88%|████████▊ | 95/108 [02:14<00:03,  3.98it/s]
+Inference Embeddings:  59%|█████▉    | 94/159 [02:05<00:17,  3.80it/s][AInference Embeddings:  89%|████████▉ | 96/108 [02:14<00:03,  3.83it/s]
+Inference Embeddings:  60%|█████▉    | 95/159 [02:05<00:16,  3.86it/s][AInference Embeddings:  90%|████████▉ | 97/108 [02:15<00:02,  3.91it/s]
+Inference Embeddings:  60%|██████    | 96/159 [02:05<00:16,  3.90it/s][AInference Embeddings:  91%|█████████ | 98/108 [02:15<00:02,  3.82it/s]
+Inference Embeddings:  61%|██████    | 97/159 [02:06<00:16,  3.85it/s][AInference Embeddings:  92%|█████████▏| 99/108 [02:15<00:02,  3.98it/s]
+Inference Embeddings:  62%|██████▏   | 98/159 [02:06<00:15,  4.01it/s][AInference Embeddings:  93%|█████████▎| 100/108 [02:15<00:01,  4.14it/s]
+Inference Embeddings:  62%|██████▏   | 99/159 [02:06<00:14,  4.26it/s][AInference Embeddings:  94%|█████████▎| 101/108 [02:16<00:01,  4.16it/s]
+Inference Embeddings:  63%|██████▎   | 100/159 [02:06<00:13,  4.43it/s][AInference Embeddings:  94%|█████████▍| 102/108 [02:16<00:01,  4.22it/s]
+Inference Embeddings:  64%|██████▎   | 101/159 [02:07<00:13,  4.42it/s][AInference Embeddings:  95%|█████████▌| 103/108 [02:16<00:01,  4.32it/s]
+Inference Embeddings:  64%|██████▍   | 102/159 [02:07<00:12,  4.58it/s][AInference Embeddings:  96%|█████████▋| 104/108 [02:16<00:00,  4.38it/s]
+Inference Embeddings:  65%|██████▍   | 103/159 [02:07<00:12,  4.44it/s][AInference Embeddings:  97%|█████████▋| 105/108 [02:17<00:00,  4.39it/s]
+Inference Embeddings:  65%|██████▌   | 104/159 [02:07<00:11,  4.63it/s][AInference Embeddings:  98%|█████████▊| 106/108 [02:17<00:00,  4.50it/s]
+Inference Embeddings:  66%|██████▌   | 105/159 [02:07<00:11,  4.78it/s][AInference Embeddings:  99%|█████████▉| 107/108 [02:17<00:00,  4.55it/s]
+Inference Embeddings:  67%|██████▋   | 106/159 [02:08<00:19,  2.75it/s][AInference Embeddings: 100%|██████████| 108/108 [02:18<00:00,  2.42it/s]Inference Embeddings: 100%|██████████| 108/108 [02:18<00:00,  1.28s/it]
+
+Inference Embeddings:  67%|██████▋   | 107/159 [02:09<00:20,  2.59it/s][A
+Inference Embeddings:  68%|██████▊   | 108/159 [02:09<00:20,  2.52it/s][A
+Inference Embeddings:  69%|██████▊   | 109/159 [02:09<00:15,  3.21it/s][A
+Inference Embeddings:  69%|██████▉   | 110/159 [02:09<00:12,  3.95it/s][A
+Inference Embeddings:  70%|██████▉   | 111/159 [02:09<00:10,  4.78it/s][A
+Inference Embeddings:  70%|███████   | 112/159 [02:09<00:08,  5.41it/s][A
+Inference Embeddings:  72%|███████▏  | 114/159 [02:10<00:06,  6.87it/s][A
+Inference Embeddings:  72%|███████▏  | 115/159 [02:10<00:06,  7.26it/s][A
+Inference Embeddings:  73%|███████▎  | 116/159 [02:10<00:05,  7.81it/s][A
+Inference Embeddings:  74%|███████▎  | 117/159 [02:10<00:05,  8.14it/s][A
+Inference Embeddings:  74%|███████▍  | 118/159 [02:10<00:04,  8.37it/s][A
+Inference Embeddings:  75%|███████▌  | 120/159 [02:10<00:04,  8.90it/s][A
+Inference Embeddings:  76%|███████▌  | 121/159 [02:10<00:04,  8.40it/s][A
+Inference Embeddings:  77%|███████▋  | 122/159 [02:11<00:04,  8.56it/s][A
+Inference Embeddings:  77%|███████▋  | 123/159 [02:11<00:04,  8.37it/s][A
+Inference Embeddings:  79%|███████▊  | 125/159 [02:11<00:03,  8.81it/s][A
+Inference Embeddings:  80%|███████▉  | 127/159 [02:11<00:03,  9.33it/s][A
+Inference Embeddings:  81%|████████  | 129/159 [02:11<00:03,  9.62it/s][A
+Inference Embeddings:  82%|████████▏ | 131/159 [02:12<00:02,  9.66it/s][A
+Inference Embeddings:  84%|████████▎ | 133/159 [02:12<00:02,  9.77it/s][A
+Inference Embeddings:  85%|████████▍ | 135/159 [02:12<00:02, 10.40it/s][A
+Inference Embeddings:  86%|████████▌ | 137/159 [02:12<00:02, 10.60it/s][A
+Inference Embeddings:  87%|████████▋ | 139/159 [02:12<00:01, 10.94it/s][A
+Inference Embeddings:  89%|████████▊ | 141/159 [02:12<00:01, 11.12it/s][A
+Inference Embeddings:  90%|████████▉ | 143/159 [02:13<00:01, 11.23it/s][A
+Inference Embeddings:  91%|█████████ | 145/159 [02:13<00:01, 11.60it/s][A
+Inference Embeddings:  92%|█████████▏| 147/159 [02:13<00:00, 12.30it/s][A
+Inference Embeddings:  94%|█████████▎| 149/159 [02:13<00:00, 12.69it/s][A
+Inference Embeddings:  95%|█████████▍| 151/159 [02:13<00:00, 12.85it/s][A
+Inference Embeddings:  96%|█████████▌| 153/159 [02:13<00:00, 12.69it/s][A
+Inference Embeddings:  97%|█████████▋| 155/159 [02:13<00:00, 12.75it/s][A
+Inference Embeddings:  99%|█████████▊| 157/159 [02:14<00:00, 12.42it/s][A
+Inference Embeddings: 100%|██████████| 159/159 [02:14<00:00, 12.32it/s][AInference Embeddings: 100%|██████████| 159/159 [02:14<00:00,  1.18it/s]
+INFO:     127.0.0.1:53484 - "GET /api/v1/documents HTTP/1.1" 200 OK
+2026-07-01 20:56:55,772 INFO     uvicorn.access: 127.0.0.1:53484 - "GET /api/v1/documents HTTP/1.1" 200
+INFO:     127.0.0.1:53741 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+2026-07-01 20:57:18,808 INFO     uvicorn.access: 127.0.0.1:53741 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-07-01 20:57:18,808 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-07-01 20:57:18,808 INFO     backend.chat: [QUERY   ] question='what is the nav of each of the shares'
+2026-07-01 20:57:18,809 INFO     backend.chat: [ROUTER  ] intent='simple'
+2026-07-01 20:57:18,809 INFO     backend.chat: [RETRIEVE] Starting hybrid search — top_k=5 (intent=simple)
+2026-07-01 20:57:19,203 INFO     backend.chat: [RETRIEVE] Done — 5 candidates  (0.39s)
+2026-07-01 20:57:19,203 INFO     backend.chat: [RERANK  ] Starting — 5 candidates → top 7
+2026-07-01 20:57:26,400 INFO     backend.reranker: [RERANK  ] [████████████████████] 5/5 (100%)
+2026-07-01 20:57:26,400 INFO     backend.chat: [RERANK  ] Done — 5 selected  best=0.049  (7.20s)
+2026-07-01 20:57:26,400 INFO     backend.chat: [LLM     ] Sending to 'qwen2.5:7b' — 5 sources in context
+2026-07-01 20:57:40,303 INFO     backend.chat: [LLM     ] First token received  (13.90s)
+2026-07-01 20:57:46,164 INFO     backend.chat: [LLM     ] Streaming complete  (19.76s total)
+2026-07-01 20:57:46,164 INFO     backend.chat: ────────────────────────────────────────────────────────────
+INFO:     127.0.0.1:53825 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+2026-07-01 20:58:48,458 INFO     uvicorn.access: 127.0.0.1:53825 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-07-01 20:58:48,459 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-07-01 20:58:48,459 INFO     backend.chat: [QUERY   ] question='what is the revenue for 2025 of hnb assuarane'
+2026-07-01 20:58:48,459 INFO     backend.chat: [ROUTER  ] intent='simple'
+2026-07-01 20:58:48,459 INFO     backend.chat: [RETRIEVE] Starting hybrid search — top_k=5 (intent=simple)
+2026-07-01 20:58:49,089 INFO     backend.chat: [RETRIEVE] Done — 5 candidates  (0.63s)
+2026-07-01 20:58:49,089 INFO     backend.chat: [RERANK  ] Starting — 5 candidates → top 7
+2026-07-01 20:58:50,737 INFO     backend.reranker: [RERANK  ] [████████████████████] 5/5 (100%)
+2026-07-01 20:58:50,738 INFO     backend.chat: [RERANK  ] Done — 5 selected  best=0.987  (1.65s)
+2026-07-01 20:58:50,739 INFO     backend.chat: [LLM     ] Sending to 'qwen2.5:7b' — 5 sources in context
+2026-07-01 20:58:56,190 INFO     backend.chat: [LLM     ] First token received  (5.45s)
+2026-07-01 20:59:02,973 INFO     backend.chat: [LLM     ] Streaming complete  (12.23s total)
+2026-07-01 20:59:02,973 INFO     backend.chat: ────────────────────────────────────────────────────────────
+INFO:     127.0.0.1:53875 - "GET /api/v1/documents HTTP/1.1" 200 OK
+2026-07-01 21:01:07,280 INFO     uvicorn.access: 127.0.0.1:53875 - "GET /api/v1/documents HTTP/1.1" 200
+INFO:     127.0.0.1:53882 - "POST /api/v1/documents/upload HTTP/1.1" 200 OK
+2026-07-01 21:01:13,605 INFO     uvicorn.access: 127.0.0.1:53882 - "POST /api/v1/documents/upload HTTP/1.1" 200
+INFO:     127.0.0.1:53882 - "GET /api/v1/documents HTTP/1.1" 200 OK
+2026-07-01 21:01:13,627 INFO     uvicorn.access: 127.0.0.1:53882 - "GET /api/v1/documents HTTP/1.1" 200
+INFO:     127.0.0.1:53893 - "DELETE /api/v1/documents/f9592a67-74f4-4517-9d24-66bd49f13af0 HTTP/1.1" 200 OK
+2026-07-01 21:01:31,679 INFO     uvicorn.access: 127.0.0.1:53893 - "DELETE /api/v1/documents/f9592a67-74f4-4517-9d24-66bd49f13af0 HTTP/1.1" 200
+INFO:     127.0.0.1:54092 - "DELETE /api/v1/documents/5594d38f-4f3e-4b4b-b0bc-4de770c7cd70 HTTP/1.1" 200 OK
+2026-07-01 21:01:38,930 INFO     uvicorn.access: 127.0.0.1:54092 - "DELETE /api/v1/documents/5594d38f-4f3e-4b4b-b0bc-4de770c7cd70 HTTP/1.1" 200
+pre tokenize:   0%|          | 0/93 [00:00<?, ?it/s]pre tokenize:   4%|▍         | 4/93 [00:00<00:02, 38.56it/s]pre tokenize:  28%|██▊       | 26/93 [00:00<00:00, 143.20it/s]pre tokenize: 100%|██████████| 93/93 [00:00<00:00, 345.24it/s]
+INFO:     127.0.0.1:54753 - "POST /api/v1/documents/upload HTTP/1.1" 200 OK
+2026-07-01 21:01:55,650 INFO     uvicorn.access: 127.0.0.1:54753 - "POST /api/v1/documents/upload HTTP/1.1" 200
+INFO:     127.0.0.1:54753 - "GET /api/v1/documents HTTP/1.1" 200 OK
+2026-07-01 21:01:55,669 INFO     uvicorn.access: 127.0.0.1:54753 - "GET /api/v1/documents HTTP/1.1" 200
+Inference Embeddings:   0%|          | 0/93 [00:00<?, ?it/s]INFO:     127.0.0.1:54757 - "GET /api/v1/documents HTTP/1.1" 200 OK
+2026-07-01 21:02:04,612 INFO     uvicorn.access: 127.0.0.1:54757 - "GET /api/v1/documents HTTP/1.1" 200
+Inference Embeddings:   1%|          | 1/93 [00:06<10:19,  6.73s/it]Inference Embeddings:   2%|▏         | 2/93 [00:13<10:25,  6.88s/it]Inference Embeddings:   3%|▎         | 3/93 [00:20<10:09,  6.77s/it]Inference Embeddings:   4%|▍         | 4/93 [00:22<07:21,  4.96s/it]Inference Embeddings:   5%|▌         | 5/93 [00:23<05:15,  3.59s/it]Inference Embeddings:   6%|▋         | 6/93 [00:24<03:59,  2.75s/it]Inference Embeddings:   8%|▊         | 7/93 [00:25<03:10,  2.21s/it]Inference Embeddings:   9%|▊         | 8/93 [00:27<02:38,  1.86s/it]Inference Embeddings:  10%|▉         | 9/93 [00:28<02:14,  1.61s/it]
+pre tokenize:   0%|          | 0/130 [00:00<?, ?it/s][A
+pre tokenize:  26%|██▌       | 34/130 [00:00<00:00, 332.65it/s][A
+pre tokenize:  92%|█████████▏| 120/130 [00:00<00:00, 639.20it/s][Apre tokenize: 100%|██████████| 130/130 [00:00<00:00, 632.61it/s]
+Inference Embeddings:  11%|█         | 10/93 [00:29<01:57,  1.42s/it]
+Inference Embeddings:   0%|          | 0/130 [00:00<?, ?it/s][AInference Embeddings:  12%|█▏        | 11/93 [00:30<02:05,  1.53s/it]
+Inference Embeddings:   1%|          | 1/130 [00:01<03:46,  1.76s/it][AInference Embeddings:  13%|█▎        | 12/93 [00:32<02:09,  1.60s/it]
+Inference Embeddings:   2%|▏         | 2/130 [00:03<03:47,  1.78s/it][AInference Embeddings:  14%|█▍        | 13/93 [00:34<02:12,  1.66s/it]
+Inference Embeddings:   2%|▏         | 3/130 [00:05<03:46,  1.79s/it][AInference Embeddings:  15%|█▌        | 14/93 [00:36<02:14,  1.70s/it]
+Inference Embeddings:   3%|▎         | 4/130 [00:07<03:45,  1.79s/it][AInference Embeddings:  16%|█▌        | 15/93 [00:37<02:14,  1.73s/it]
+Inference Embeddings:   4%|▍         | 5/130 [00:08<03:46,  1.81s/it][AInference Embeddings:  17%|█▋        | 16/93 [00:39<02:16,  1.77s/it]Inference Embeddings:  18%|█▊        | 17/93 [00:41<02:16,  1.80s/it]
+Inference Embeddings:   5%|▍         | 6/130 [00:10<03:47,  1.83s/it][AInference Embeddings:  19%|█▉        | 18/93 [00:43<02:15,  1.80s/it]
+Inference Embeddings:   5%|▌         | 7/130 [00:12<03:44,  1.83s/it][AInference Embeddings:  20%|██        | 19/93 [00:45<02:14,  1.81s/it]
+Inference Embeddings:   6%|▌         | 8/130 [00:14<03:43,  1.83s/it][AInference Embeddings:  22%|██▏       | 20/93 [00:47<02:11,  1.81s/it]
+Inference Embeddings:   7%|▋         | 9/130 [00:16<03:39,  1.82s/it][A
+Inference Embeddings:   8%|▊         | 10/130 [00:18<03:36,  1.80s/it][AInference Embeddings:  23%|██▎       | 21/93 [00:48<02:09,  1.79s/it]
+Inference Embeddings:   8%|▊         | 11/130 [00:19<03:34,  1.80s/it][AInference Embeddings:  24%|██▎       | 22/93 [00:50<02:07,  1.80s/it]Inference Embeddings:  25%|██▍       | 23/93 [00:52<02:07,  1.82s/it]
+Inference Embeddings:   9%|▉         | 12/130 [00:21<03:35,  1.83s/it][A
+Inference Embeddings:  10%|█         | 13/130 [00:23<03:35,  1.85s/it][AInference Embeddings:  26%|██▌       | 24/93 [00:54<02:07,  1.84s/it]
+Inference Embeddings:  11%|█         | 14/130 [00:25<03:32,  1.84s/it][AInference Embeddings:  27%|██▋       | 25/93 [00:56<02:04,  1.83s/it]
+Inference Embeddings:  12%|█▏        | 15/130 [00:27<03:29,  1.82s/it][AInference Embeddings:  28%|██▊       | 26/93 [00:58<02:01,  1.82s/it]
+Inference Embeddings:  12%|█▏        | 16/130 [00:29<03:26,  1.81s/it][AInference Embeddings:  29%|██▉       | 27/93 [00:59<01:59,  1.81s/it]
+Inference Embeddings:  13%|█▎        | 17/130 [00:30<03:22,  1.79s/it][AInference Embeddings:  30%|███       | 28/93 [01:01<01:56,  1.79s/it]
+Inference Embeddings:  14%|█▍        | 18/130 [00:32<03:20,  1.79s/it][AInference Embeddings:  31%|███       | 29/93 [01:03<01:54,  1.79s/it]
+Inference Embeddings:  15%|█▍        | 19/130 [00:34<03:18,  1.79s/it][AInference Embeddings:  32%|███▏      | 30/93 [01:05<01:52,  1.79s/it]Inference Embeddings:  33%|███▎      | 31/93 [01:07<01:51,  1.79s/it]
+Inference Embeddings:  15%|█▌        | 20/130 [00:36<03:17,  1.80s/it][A
+Inference Embeddings:  16%|█▌        | 21/130 [00:37<03:15,  1.79s/it][AInference Embeddings:  34%|███▍      | 32/93 [01:08<01:49,  1.79s/it]
+Inference Embeddings:  17%|█▋        | 22/130 [00:39<03:12,  1.78s/it][AInference Embeddings:  35%|███▌      | 33/93 [01:10<01:47,  1.78s/it]Inference Embeddings:  37%|███▋      | 34/93 [01:12<01:45,  1.79s/it]
+Inference Embeddings:  18%|█▊        | 23/130 [00:41<03:11,  1.79s/it][AInference Embeddings:  38%|███▊      | 35/93 [01:14<01:43,  1.78s/it]
+Inference Embeddings:  18%|█▊        | 24/130 [00:43<03:08,  1.78s/it][A
+Inference Embeddings:  19%|█▉        | 25/130 [00:45<03:06,  1.77s/it][AInference Embeddings:  39%|███▊      | 36/93 [01:15<01:41,  1.77s/it]
+Inference Embeddings:  20%|██        | 26/130 [00:46<02:45,  1.59s/it][AInference Embeddings:  40%|███▉      | 37/93 [01:18<01:49,  1.96s/it]
+Inference Embeddings:  21%|██        | 27/130 [00:47<02:46,  1.62s/it][A
+Inference Embeddings:  22%|██▏       | 28/130 [00:49<02:48,  1.65s/it][AInference Embeddings:  41%|████      | 38/93 [01:20<01:51,  2.04s/it]
+Inference Embeddings:  22%|██▏       | 29/130 [00:51<02:44,  1.63s/it][AInference Embeddings:  42%|████▏     | 39/93 [01:22<01:49,  2.04s/it]
+Inference Embeddings:  23%|██▎       | 30/130 [00:52<02:33,  1.54s/it][AInference Embeddings:  43%|████▎     | 40/93 [01:24<01:40,  1.89s/it]
+Inference Embeddings:  24%|██▍       | 31/130 [00:53<02:20,  1.42s/it][AInference Embeddings:  44%|████▍     | 41/93 [01:25<01:31,  1.76s/it]
+Inference Embeddings:  25%|██▍       | 32/130 [00:54<02:09,  1.33s/it][A
+Inference Embeddings:  25%|██▌       | 33/130 [00:55<02:02,  1.26s/it][AInference Embeddings:  45%|████▌     | 42/93 [01:26<01:23,  1.64s/it]
+Inference Embeddings:  26%|██▌       | 34/130 [00:56<01:54,  1.20s/it][AInference Embeddings:  46%|████▌     | 43/93 [01:28<01:18,  1.57s/it]
+Inference Embeddings:  27%|██▋       | 35/130 [00:58<01:50,  1.17s/it][AInference Embeddings:  47%|████▋     | 44/93 [01:29<01:14,  1.52s/it]
+Inference Embeddings:  28%|██▊       | 36/130 [00:59<01:46,  1.13s/it][A
+Inference Embeddings:  28%|██▊       | 37/130 [01:00<01:43,  1.11s/it][AInference Embeddings:  48%|████▊     | 45/93 [01:30<01:09,  1.45s/it]
+Inference Embeddings:  29%|██▉       | 38/130 [01:01<01:40,  1.09s/it][AInference Embeddings:  49%|████▉     | 46/93 [01:32<01:04,  1.38s/it]
+Inference Embeddings:  30%|███       | 39/130 [01:02<01:37,  1.07s/it][AInference Embeddings:  51%|█████     | 47/93 [01:33<01:02,  1.36s/it]
+Inference Embeddings:  31%|███       | 40/130 [01:03<01:34,  1.05s/it][AInference Embeddings:  52%|█████▏    | 48/93 [01:34<01:00,  1.33s/it]
+Inference Embeddings:  32%|███▏      | 41/130 [01:04<01:32,  1.04s/it][AInference Embeddings:  53%|█████▎    | 49/93 [01:36<00:57,  1.30s/it]
+Inference Embeddings:  32%|███▏      | 42/130 [01:05<01:30,  1.02s/it][A
+Inference Embeddings:  33%|███▎      | 43/130 [01:06<01:28,  1.02s/it][AInference Embeddings:  54%|█████▍    | 50/93 [01:37<00:54,  1.27s/it]
+Inference Embeddings:  34%|███▍      | 44/130 [01:07<01:26,  1.01s/it][AInference Embeddings:  55%|█████▍    | 51/93 [01:38<00:52,  1.26s/it]
+Inference Embeddings:  35%|███▍      | 45/130 [01:08<01:25,  1.00s/it][AInference Embeddings:  56%|█████▌    | 52/93 [01:39<00:50,  1.23s/it]
+Inference Embeddings:  35%|███▌      | 46/130 [01:09<01:24,  1.01s/it][AInference Embeddings:  57%|█████▋    | 53/93 [01:40<00:49,  1.23s/it]
+Inference Embeddings:  36%|███▌      | 47/130 [01:10<01:23,  1.00s/it][A
+Inference Embeddings:  37%|███▋      | 48/130 [01:11<01:22,  1.00s/it][AInference Embeddings:  58%|█████▊    | 54/93 [01:42<00:47,  1.22s/it]
+Inference Embeddings:  38%|███▊      | 49/130 [01:12<01:21,  1.00s/it][AInference Embeddings:  59%|█████▉    | 55/93 [01:43<00:45,  1.21s/it]
+Inference Embeddings:  38%|███▊      | 50/130 [01:13<01:20,  1.00s/it][AInference Embeddings:  60%|██████    | 56/93 [01:44<00:44,  1.20s/it]
+Inference Embeddings:  39%|███▉      | 51/130 [01:14<01:19,  1.01s/it][AInference Embeddings:  61%|██████▏   | 57/93 [01:45<00:41,  1.16s/it]
+Inference Embeddings:  40%|████      | 52/130 [01:15<01:19,  1.02s/it][AInference Embeddings:  62%|██████▏   | 58/93 [01:46<00:39,  1.12s/it]
+Inference Embeddings:  41%|████      | 53/130 [01:16<01:19,  1.03s/it][AInference Embeddings:  63%|██████▎   | 59/93 [01:47<00:37,  1.10s/it]
+Inference Embeddings:  42%|████▏     | 54/130 [01:17<01:18,  1.03s/it][AInference Embeddings:  65%|██████▍   | 60/93 [01:48<00:35,  1.09s/it]
+Inference Embeddings:  42%|████▏     | 55/130 [01:18<01:17,  1.03s/it][AInference Embeddings:  66%|██████▌   | 61/93 [01:49<00:33,  1.06s/it]
+Inference Embeddings:  43%|████▎     | 56/130 [01:19<01:15,  1.03s/it][AInference Embeddings:  67%|██████▋   | 62/93 [01:50<00:32,  1.04s/it]
+Inference Embeddings:  44%|████▍     | 57/130 [01:20<01:14,  1.01s/it][AInference Embeddings:  68%|██████▊   | 63/93 [01:51<00:28,  1.06it/s]Inference Embeddings:  69%|██████▉   | 64/93 [01:51<00:23,  1.25it/s]
+Inference Embeddings:  45%|████▍     | 58/130 [01:20<01:02,  1.15it/s][AInference Embeddings:  70%|██████▉   | 65/93 [01:52<00:18,  1.49it/s]
+Inference Embeddings:  45%|████▌     | 59/130 [01:21<00:51,  1.37it/s][AInference Embeddings:  71%|███████   | 66/93 [01:52<00:15,  1.73it/s]
+Inference Embeddings:  46%|████▌     | 60/130 [01:21<00:42,  1.63it/s][A
+Inference Embeddings:  47%|████▋     | 61/130 [01:22<00:37,  1.85it/s][AInference Embeddings:  72%|███████▏  | 67/93 [01:52<00:13,  1.94it/s]Inference Embeddings:  73%|███████▎  | 68/93 [01:53<00:11,  2.16it/s]
+Inference Embeddings:  48%|████▊     | 62/130 [01:22<00:32,  2.08it/s][AInference Embeddings:  74%|███████▍  | 69/93 [01:53<00:10,  2.37it/s]
+Inference Embeddings:  48%|████▊     | 63/130 [01:22<00:29,  2.31it/s][A
+Inference Embeddings:  49%|████▉     | 64/130 [01:23<00:26,  2.52it/s][AInference Embeddings:  75%|███████▌  | 70/93 [01:53<00:08,  2.57it/s]
+Inference Embeddings:  50%|█████     | 65/130 [01:23<00:23,  2.75it/s][AInference Embeddings:  76%|███████▋  | 71/93 [01:54<00:07,  2.75it/s]Inference Embeddings:  77%|███████▋  | 72/93 [01:54<00:06,  3.04it/s]
+Inference Embeddings:  51%|█████     | 66/130 [01:23<00:21,  2.93it/s][AInference Embeddings:  78%|███████▊  | 73/93 [01:54<00:06,  3.26it/s]
+Inference Embeddings:  52%|█████▏    | 67/130 [01:23<00:20,  3.10it/s][AInference Embeddings:  80%|███████▉  | 74/93 [01:54<00:05,  3.44it/s]
+Inference Embeddings:  52%|█████▏    | 68/130 [01:24<00:18,  3.30it/s][AInference Embeddings:  81%|████████  | 75/93 [01:55<00:04,  3.71it/s]
+Inference Embeddings:  53%|█████▎    | 69/130 [01:24<00:17,  3.49it/s][AInference Embeddings:  82%|████████▏ | 76/93 [01:55<00:04,  3.92it/s]
+Inference Embeddings:  54%|█████▍    | 70/130 [01:24<00:16,  3.65it/s][AInference Embeddings:  83%|████████▎ | 77/93 [01:55<00:03,  4.19it/s]
+Inference Embeddings:  55%|█████▍    | 71/130 [01:24<00:15,  3.80it/s][AInference Embeddings:  84%|████████▍ | 78/93 [01:55<00:03,  4.32it/s]
+Inference Embeddings:  55%|█████▌    | 72/130 [01:25<00:14,  3.96it/s][AInference Embeddings:  85%|████████▍ | 79/93 [01:55<00:03,  4.58it/s]
+Inference Embeddings:  56%|█████▌    | 73/130 [01:25<00:13,  4.16it/s][AInference Embeddings:  86%|████████▌ | 80/93 [01:56<00:02,  4.67it/s]
+Inference Embeddings:  57%|█████▋    | 74/130 [01:25<00:13,  4.29it/s][AInference Embeddings:  87%|████████▋ | 81/93 [01:56<00:02,  4.62it/s]
+Inference Embeddings:  58%|█████▊    | 75/130 [01:25<00:13,  4.18it/s][AInference Embeddings:  88%|████████▊ | 82/93 [01:56<00:02,  4.51it/s]
+Inference Embeddings:  58%|█████▊    | 76/130 [01:25<00:12,  4.39it/s][AInference Embeddings:  89%|████████▉ | 83/93 [01:56<00:02,  4.52it/s]
+Inference Embeddings:  59%|█████▉    | 77/130 [01:26<00:11,  4.42it/s][AInference Embeddings:  90%|█████████ | 84/93 [01:57<00:01,  4.63it/s]
+Inference Embeddings:  60%|██████    | 78/130 [01:26<00:11,  4.54it/s][AInference Embeddings:  91%|█████████▏| 85/93 [01:57<00:01,  4.70it/s]
+Inference Embeddings:  61%|██████    | 79/130 [01:26<00:11,  4.60it/s][AInference Embeddings:  92%|█████████▏| 86/93 [01:57<00:01,  4.80it/s]Inference Embeddings:  94%|█████████▎| 87/93 [01:57<00:01,  4.85it/s]
+Inference Embeddings:  62%|██████▏   | 80/130 [01:26<00:10,  4.70it/s][AInference Embeddings:  95%|█████████▍| 88/93 [01:57<00:01,  4.96it/s]
+Inference Embeddings:  62%|██████▏   | 81/130 [01:27<00:10,  4.63it/s][AInference Embeddings:  96%|█████████▌| 89/93 [01:58<00:00,  5.00it/s]
+Inference Embeddings:  63%|██████▎   | 82/130 [01:27<00:09,  4.81it/s][AInference Embeddings:  97%|█████████▋| 90/93 [01:58<00:00,  5.14it/s]
+Inference Embeddings:  64%|██████▍   | 83/130 [01:27<00:09,  4.98it/s][AInference Embeddings:  98%|█████████▊| 91/93 [01:58<00:00,  4.90it/s]
+Inference Embeddings:  65%|██████▍   | 84/130 [01:27<00:09,  4.88it/s][A
+Inference Embeddings:  65%|██████▌   | 85/130 [01:27<00:08,  5.13it/s][AInference Embeddings:  99%|█████████▉| 92/93 [01:58<00:00,  4.92it/s]
+Inference Embeddings:  66%|██████▌   | 86/130 [01:27<00:08,  5.41it/s][AInference Embeddings: 100%|██████████| 93/93 [01:58<00:00,  5.08it/s]Inference Embeddings: 100%|██████████| 93/93 [01:58<00:00,  1.28s/it]
+
+Inference Embeddings:  67%|██████▋   | 87/130 [01:28<00:11,  3.76it/s][A
+Inference Embeddings:  68%|██████▊   | 88/130 [01:28<00:09,  4.57it/s][A
+Inference Embeddings:  68%|██████▊   | 89/130 [01:28<00:07,  5.40it/s][A
+Inference Embeddings:  70%|███████   | 91/130 [01:28<00:05,  6.86it/s][A
+Inference Embeddings:  71%|███████   | 92/130 [01:28<00:05,  7.31it/s][A
+Inference Embeddings:  72%|███████▏  | 93/130 [01:29<00:04,  7.73it/s][A
+Inference Embeddings:  73%|███████▎  | 95/130 [01:29<00:04,  8.47it/s][A
+Inference Embeddings:  74%|███████▍  | 96/130 [01:29<00:03,  8.74it/s][A
+Inference Embeddings:  75%|███████▍  | 97/130 [01:29<00:03,  9.03it/s][A
+Inference Embeddings:  76%|███████▌  | 99/130 [01:29<00:03,  9.32it/s][A
+Inference Embeddings:  78%|███████▊  | 101/130 [01:29<00:03,  8.40it/s][A
+Inference Embeddings:  78%|███████▊  | 102/130 [01:30<00:03,  8.68it/s][A
+Inference Embeddings:  79%|███████▉  | 103/130 [01:30<00:03,  8.53it/s][A
+Inference Embeddings:  81%|████████  | 105/130 [01:30<00:02,  9.10it/s][A
+Inference Embeddings:  82%|████████▏ | 106/130 [01:30<00:02,  8.78it/s][A
+Inference Embeddings:  83%|████████▎ | 108/130 [01:30<00:02,  9.58it/s][A
+Inference Embeddings:  84%|████████▍ | 109/130 [01:30<00:02,  9.05it/s][A
+Inference Embeddings:  85%|████████▌ | 111/130 [01:30<00:01,  9.90it/s][A
+Inference Embeddings:  87%|████████▋ | 113/130 [01:31<00:01, 10.62it/s][A
+Inference Embeddings:  88%|████████▊ | 115/130 [01:31<00:01, 11.20it/s][A
+Inference Embeddings:  90%|█████████ | 117/130 [01:31<00:01, 11.63it/s][A
+Inference Embeddings:  92%|█████████▏| 119/130 [01:31<00:00, 12.11it/s][A
+Inference Embeddings:  93%|█████████▎| 121/130 [01:31<00:00, 12.69it/s][A
+Inference Embeddings:  95%|█████████▍| 123/130 [01:31<00:00, 12.91it/s][A
+Inference Embeddings:  96%|█████████▌| 125/130 [01:32<00:00, 13.02it/s][A
+Inference Embeddings:  98%|█████████▊| 127/130 [01:32<00:00, 13.40it/s][A
+Inference Embeddings:  99%|█████████▉| 129/130 [01:32<00:00, 13.22it/s][AInference Embeddings: 100%|██████████| 130/130 [01:32<00:00,  1.41it/s]
+INFO:     127.0.0.1:54980 - "GET /api/v1/documents HTTP/1.1" 200 OK
+2026-07-01 21:06:27,441 INFO     uvicorn.access: 127.0.0.1:54980 - "GET /api/v1/documents HTTP/1.1" 200
+INFO:     127.0.0.1:54983 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+2026-07-01 21:06:46,996 INFO     uvicorn.access: 127.0.0.1:54983 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-07-01 21:06:46,996 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-07-01 21:06:46,996 INFO     backend.chat: [QUERY   ] question='what is the nav of all the shares available'
+2026-07-01 21:06:46,996 INFO     backend.chat: [ROUTER  ] intent='simple'
+2026-07-01 21:06:46,996 INFO     backend.chat: [RETRIEVE] Starting hybrid search — top_k=5 (intent=simple)
+2026-07-01 21:06:47,313 INFO     backend.chat: [RETRIEVE] Done — 5 candidates  (0.32s)
+2026-07-01 21:06:47,313 INFO     backend.chat: [RERANK  ] Starting — 5 candidates → top 7
+2026-07-01 21:06:53,027 INFO     backend.reranker: [RERANK  ] [████████████████████] 5/5 (100%)
+2026-07-01 21:06:53,027 INFO     backend.chat: [RERANK  ] Done — 5 selected  best=0.003  (5.71s)
+2026-07-01 21:06:53,027 INFO     backend.chat: [LLM     ] Sending to 'qwen2.5:7b' — 5 sources in context
+2026-07-01 21:07:06,674 INFO     backend.chat: [LLM     ] First token received  (13.65s)
+2026-07-01 21:07:11,099 INFO     backend.chat: [LLM     ] Streaming complete  (18.07s total)
+2026-07-01 21:07:11,100 INFO     backend.chat: ────────────────────────────────────────────────────────────
+INFO:     127.0.0.1:55041 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+2026-07-01 21:07:39,820 INFO     uvicorn.access: 127.0.0.1:55041 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-07-01 21:07:39,822 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-07-01 21:07:39,822 INFO     backend.chat: [QUERY   ] question='in that case calculate the nav fpr each share. nav is total assets/total shares'
+2026-07-01 21:07:39,823 INFO     backend.chat: [ROUTER  ] intent='complex'
+2026-07-01 21:07:39,823 INFO     backend.chat: [RETRIEVE] Starting hybrid search — top_k=20 (intent=complex)
+2026-07-01 21:07:40,489 INFO     backend.chat: [RETRIEVE] Done — 20 candidates  (0.67s)
+2026-07-01 21:07:40,489 INFO     backend.chat: [RERANK  ] Starting — 20 candidates → top 7
+2026-07-01 21:07:42,162 INFO     backend.reranker: [RERANK  ] [█████░░░░░░░░░░░░░░░] 5/20 (25%)
+2026-07-01 21:07:43,377 INFO     backend.reranker: [RERANK  ] [██████████░░░░░░░░░░] 10/20 (50%)
+2026-07-01 21:07:44,640 INFO     backend.reranker: [RERANK  ] [███████████████░░░░░] 15/20 (75%)
+2026-07-01 21:07:45,854 INFO     backend.reranker: [RERANK  ] [████████████████████] 20/20 (100%)
+2026-07-01 21:07:45,855 INFO     backend.chat: [RERANK  ] Done — 7 selected  best=0.142  (5.37s)
+2026-07-01 21:07:45,855 INFO     backend.chat: [LLM     ] Sending to 'qwen2.5:7b' — 7 sources in context
+2026-07-01 21:07:58,284 INFO     backend.chat: [LLM     ] First token received  (12.43s)
+2026-07-01 21:08:04,649 INFO     backend.chat: [LLM     ] Streaming complete  (18.79s total)
+2026-07-01 21:08:04,650 INFO     backend.chat: ────────────────────────────────────────────────────────────
+INFO:     127.0.0.1:55049 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+2026-07-01 21:08:41,643 INFO     uvicorn.access: 127.0.0.1:55049 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-07-01 21:08:41,644 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-07-01 21:08:41,645 INFO     backend.chat: [QUERY   ] question='what are the available compaies in the knowladge base'
+2026-07-01 21:08:41,645 INFO     backend.chat: [ROUTER  ] intent='complex'
+2026-07-01 21:08:41,645 INFO     backend.chat: [RETRIEVE] Starting hybrid search — top_k=20 (intent=complex)
+2026-07-01 21:08:42,665 INFO     backend.chat: [RETRIEVE] Done — 20 candidates  (1.02s)
+2026-07-01 21:08:42,665 INFO     backend.chat: [RERANK  ] Starting — 20 candidates → top 7
+2026-07-01 21:08:44,580 INFO     backend.reranker: [RERANK  ] [█████░░░░░░░░░░░░░░░] 5/20 (25%)
+2026-07-01 21:08:45,815 INFO     backend.reranker: [RERANK  ] [██████████░░░░░░░░░░] 10/20 (50%)
+2026-07-01 21:08:47,074 INFO     backend.reranker: [RERANK  ] [███████████████░░░░░] 15/20 (75%)
+2026-07-01 21:08:48,292 INFO     backend.reranker: [RERANK  ] [████████████████████] 20/20 (100%)
+2026-07-01 21:08:48,294 INFO     backend.chat: [RERANK  ] Done — 7 selected  best=0.001  (5.63s)
+2026-07-01 21:08:48,295 INFO     backend.chat: [LLM     ] Sending to 'qwen2.5:7b' — 7 sources in context
+2026-07-01 21:08:58,896 INFO     backend.chat: [LLM     ] First token received  (10.60s)
+2026-07-01 21:09:01,891 INFO     backend.chat: [LLM     ] Streaming complete  (13.60s total)
+2026-07-01 21:09:01,891 INFO     backend.chat: ────────────────────────────────────────────────────────────
+INFO:     127.0.0.1:55080 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+2026-07-01 21:09:25,955 INFO     uvicorn.access: 127.0.0.1:55080 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-07-01 21:09:25,956 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-07-01 21:09:25,956 INFO     backend.chat: [QUERY   ] question='what was the revenue in 2025 for each company'
+2026-07-01 21:09:25,956 INFO     backend.chat: [ROUTER  ] intent='simple'
+2026-07-01 21:09:25,956 INFO     backend.chat: [RETRIEVE] Starting hybrid search — top_k=5 (intent=simple)
+2026-07-01 21:09:26,256 INFO     backend.chat: [RETRIEVE] Done — 5 candidates  (0.30s)
+2026-07-01 21:09:26,256 INFO     backend.chat: [RERANK  ] Starting — 5 candidates → top 7
+2026-07-01 21:09:27,938 INFO     backend.reranker: [RERANK  ] [████████████████████] 5/5 (100%)
+2026-07-01 21:09:27,938 INFO     backend.chat: [RERANK  ] Done — 5 selected  best=0.397  (1.68s)
+2026-07-01 21:09:27,938 INFO     backend.chat: [LLM     ] Sending to 'qwen2.5:7b' — 5 sources in context
+2026-07-01 21:09:43,372 INFO     backend.chat: [LLM     ] First token received  (15.43s)
+2026-07-01 21:09:53,321 INFO     backend.chat: [LLM     ] Streaming complete  (25.38s total)
+2026-07-01 21:09:53,321 INFO     backend.chat: ────────────────────────────────────────────────────────────
+INFO:     127.0.0.1:55095 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+2026-07-01 21:10:15,820 INFO     uvicorn.access: 127.0.0.1:55095 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-07-01 21:10:15,822 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-07-01 21:10:15,822 INFO     backend.chat: [QUERY   ] question='what about DIST'
+2026-07-01 21:10:15,822 INFO     backend.chat: [ROUTER  ] intent='complex'
+2026-07-01 21:10:15,823 INFO     backend.chat: [RETRIEVE] Starting hybrid search — top_k=20 (intent=complex)
+2026-07-01 21:10:16,612 INFO     backend.chat: [RETRIEVE] Done — 20 candidates  (0.79s)
+2026-07-01 21:10:16,613 INFO     backend.chat: [RERANK  ] Starting — 20 candidates → top 7
+2026-07-01 21:10:18,368 INFO     backend.reranker: [RERANK  ] [█████░░░░░░░░░░░░░░░] 5/20 (25%)
+2026-07-01 21:10:19,622 INFO     backend.reranker: [RERANK  ] [██████████░░░░░░░░░░] 10/20 (50%)
+2026-07-01 21:10:20,901 INFO     backend.reranker: [RERANK  ] [███████████████░░░░░] 15/20 (75%)
+2026-07-01 21:10:22,144 INFO     backend.reranker: [RERANK  ] [████████████████████] 20/20 (100%)
+2026-07-01 21:10:22,145 INFO     backend.chat: [RERANK  ] Done — 7 selected  best=0.004  (5.53s)
+2026-07-01 21:10:22,145 INFO     backend.chat: [LLM     ] Sending to 'qwen2.5:7b' — 7 sources in context
+2026-07-01 21:10:37,742 INFO     backend.chat: [LLM     ] First token received  (15.60s)
+2026-07-01 21:10:46,437 INFO     backend.chat: [LLM     ] Streaming complete  (24.29s total)
+2026-07-01 21:10:46,437 INFO     backend.chat: ────────────────────────────────────────────────────────────
+INFO:     127.0.0.1:55121 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+2026-07-01 21:11:10,547 INFO     uvicorn.access: 127.0.0.1:55121 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-07-01 21:11:10,548 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-07-01 21:11:10,548 INFO     backend.chat: [QUERY   ] question='i need the revenue of distilleries'
+2026-07-01 21:11:10,548 INFO     backend.chat: [ROUTER  ] intent='complex'
+2026-07-01 21:11:10,548 INFO     backend.chat: [RETRIEVE] Starting hybrid search — top_k=20 (intent=complex)
+2026-07-01 21:11:11,465 INFO     backend.chat: [RETRIEVE] Done — 20 candidates  (0.92s)
+2026-07-01 21:11:11,465 INFO     backend.chat: [RERANK  ] Starting — 20 candidates → top 7
+2026-07-01 21:11:12,988 INFO     backend.reranker: [RERANK  ] [█████░░░░░░░░░░░░░░░] 5/20 (25%)
+2026-07-01 21:11:14,176 INFO     backend.reranker: [RERANK  ] [██████████░░░░░░░░░░] 10/20 (50%)
+2026-07-01 21:11:15,370 INFO     backend.reranker: [RERANK  ] [███████████████░░░░░] 15/20 (75%)
+2026-07-01 21:11:16,571 INFO     backend.reranker: [RERANK  ] [████████████████████] 20/20 (100%)
+2026-07-01 21:11:16,571 INFO     backend.chat: [RERANK  ] Done — 7 selected  best=0.397  (5.11s)
+2026-07-01 21:11:16,571 INFO     backend.chat: [LLM     ] Sending to 'qwen2.5:7b' — 7 sources in context
+2026-07-01 21:11:32,105 INFO     backend.chat: [LLM     ] First token received  (15.53s)
+2026-07-01 21:11:41,253 INFO     backend.chat: [LLM     ] Streaming complete  (24.68s total)
+2026-07-01 21:11:41,254 INFO     backend.chat: ────────────────────────────────────────────────────────────
+INFO:     127.0.0.1:55142 - "POST /api/v1/chat/query HTTP/1.1" 200 OK
+2026-07-01 21:11:55,946 INFO     uvicorn.access: 127.0.0.1:55142 - "POST /api/v1/chat/query HTTP/1.1" 200
+2026-07-01 21:11:55,948 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-07-01 21:11:55,949 INFO     backend.chat: [QUERY   ] question='what was the revenue in 2025 foe hnb assuarance'
+2026-07-01 21:11:55,949 INFO     backend.chat: [ROUTER  ] intent='simple'
+2026-07-01 21:11:55,949 INFO     backend.chat: [RETRIEVE] Starting hybrid search — top_k=5 (intent=simple)
+2026-07-01 21:11:56,479 INFO     backend.chat: [RETRIEVE] Done — 5 candidates  (0.53s)
+2026-07-01 21:11:56,479 INFO     backend.chat: [RERANK  ] Starting — 5 candidates → top 7
+2026-07-01 21:11:58,113 INFO     backend.reranker: [RERANK  ] [████████████████████] 5/5 (100%)
+2026-07-01 21:11:58,113 INFO     backend.chat: [RERANK  ] Done — 5 selected  best=0.810  (1.63s)
+2026-07-01 21:11:58,113 INFO     backend.chat: [LLM     ] Sending to 'qwen2.5:7b' — 5 sources in context
+2026-07-01 21:12:13,519 INFO     backend.chat: [LLM     ] First token received  (15.41s)
+2026-07-01 21:12:22,724 INFO     backend.chat: [LLM     ] Streaming complete  (24.61s total)
+2026-07-01 21:12:22,724 INFO     backend.chat: ────────────────────────────────────────────────────────────
+2026-07-01 21:13:20,157 INFO     uvicorn.error: Shutting down
+INFO:     Shutting down
+2026-07-01 21:13:20,270 INFO     uvicorn.error: Waiting for application shutdown.
+INFO:     Waiting for application shutdown.
+2026-07-01 21:13:20,278 INFO     uvicorn.error: Application shutdown complete.
+INFO:     Application shutdown complete.
+2026-07-01 21:13:20,281 INFO     uvicorn.error: Finished server process [55257]
+INFO:     Finished server process [55257]
+/Users/hiran/.local/share/uv/python/cpython-3.12.11-macos-aarch64-none/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+2026-07-02 18:05:31,886 INFO     uvicorn.error: Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2026-07-02 18:05:31,886 INFO     uvicorn.error: Started reloader process [25576] using WatchFiles
+2026-07-02 18:05:35,282 INFO     uvicorn.error: Started server process [25610]
+2026-07-02 18:05:35,282 INFO     uvicorn.error: Waiting for application startup.
+2026-07-02 18:05:35,282 INFO     backend.db: [DB      ] Initialising connection pool...
+2026-07-02 18:05:35,361 INFO     backend.db: [DB      ] Pool ready
+2026-07-02 18:05:35,361 INFO     backend: [STARTUP ] Pre-warming embedding model...
+2026-07-02 18:06:31,602 INFO     backend: [STARTUP ] Pre-warming reranker model...
+2026-07-02 18:06:31,603 INFO     backend.reranker: [RERANK  ] Loading model 'BAAI/bge-reranker-v2-m3' ...
+2026-07-02 18:06:34,975 INFO     backend.reranker: [RERANK  ] Model ready
+2026-07-02 18:06:34,976 INFO     backend: [STARTUP ] Models ready — server accepting requests
+2026-07-02 18:06:34,976 INFO     uvicorn.error: Application startup complete.
+2026-07-02 18:06:37,868 INFO     uvicorn.access: 127.0.0.1:56267 - "GET /health HTTP/1.1" 200
+2026-07-02 18:06:53,426 INFO     uvicorn.access: 127.0.0.1:56274 - "GET /api/v1/health HTTP/1.1" 404
+2026-07-02 18:06:53,452 INFO     uvicorn.access: 127.0.0.1:56274 - "GET /api/v1/documents HTTP/1.1" 200
+2026-07-02 18:24:28,771 INFO     uvicorn.access: 127.0.0.1:57226 - "GET /health HTTP/1.1" 200
+2026-07-02 18:46:23,182 INFO     uvicorn.access: 127.0.0.1:58368 - "GET /api/v1/documents HTTP/1.1" 200
+2026-07-02 18:46:25,745 INFO     uvicorn.access: 127.0.0.1:58368 - "GET /api/v1/documents HTTP/1.1" 200
+2026-07-02 18:55:16,272 INFO     uvicorn.access: 127.0.0.1:58753 - "GET /health HTTP/1.1" 200
+2026-07-02 20:36:13,516 INFO     uvicorn.access: 127.0.0.1:64320 - "GET /api/v1/documents HTTP/1.1" 200

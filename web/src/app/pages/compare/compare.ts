@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ChartModule } from 'primeng/chart';
 import { FundService } from '../../shared/services/fund.service';
 import { formatCompact } from '../../shared/utils/formatters';
+import { FundsSubnav } from '../../shared/components/funds-subnav/funds-subnav';
+import { PriceSync } from '../../shared/components/price-sync/price-sync';
 
 interface MarketEntry {
   fund_name: string;
@@ -29,7 +31,7 @@ const COLORS = ['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6','#06B6D4','#F9
 
 @Component({
   selector: 'app-compare',
-  imports: [FormsModule, ChartModule],
+  imports: [FormsModule, ChartModule, FundsSubnav, PriceSync],
   templateUrl: './compare.html',
   styleUrl: './compare.css',
 })
@@ -133,6 +135,17 @@ export class Compare implements OnInit {
     return combined.sort((a, b) => a.date.localeCompare(b.date)).filter(d => d.price > 0);
   }
 
+  // Dates you actually bought units — kept separate from the rest of the NAV
+  // line so purchase markers stay visible now that nav_history is daily
+  // (~170 points/fund since the price-scraper started backfilling) instead of
+  // the ~22 sparse monthly points it used to be, where every point got the
+  // same dot and purchases still stood out on their own.
+  private portfolioTransactionDates(): Set<string> {
+    const fund = this.selectedPortfolioFund();
+    if (!fund) return new Set();
+    return new Set((fund.transactions || []).map(t => t.date.substring(0, 10)));
+  }
+
   chartData = computed(() => {
     const marketFunds = this.selectedMarketFunds();
     const portfolioFund = this.selectedPortfolioFund();
@@ -171,10 +184,11 @@ export class Compare implements OnInit {
           label: `★ ${portfolioFund.name}`,
           data: series.map(d => normalize ? ((d.price - basePrice) / basePrice) * 100 : d.price),
           xLabels: series.map(d => d.date),
+          isPortfolio: true,
           borderColor: color,
           backgroundColor: color + '30',
           tension: 0.3,
-          pointRadius: 2,
+          pointRadius: 0,
           borderWidth: 3,
           borderDash: [6, 3],
           fill: false,
@@ -184,9 +198,22 @@ export class Compare implements OnInit {
 
     // Merge all unique dates as labels
     const allLabels = [...new Set(datasets.flatMap(ds => ds.xLabels || []))].sort();
+    const txDates = this.portfolioTransactionDates();
     const finalDatasets = datasets.map(ds => {
       const map = new Map((ds.xLabels || []).map((l: string, i: number) => [l, ds.data[i]]));
-      return { ...ds, data: allLabels.map(l => map.has(l) ? map.get(l) : null) };
+      const data = allLabels.map(l => map.has(l) ? map.get(l) : null);
+      if (!ds.isPortfolio) return { ...ds, data };
+      // Only render a point where you actually made a purchase — the rest of
+      // the (now daily) NAV line stays a plain line so those markers pop.
+      return {
+        ...ds,
+        data,
+        pointRadius: allLabels.map(l => (map.has(l) && txDates.has(l)) ? 5 : 0),
+        pointHoverRadius: allLabels.map(l => (map.has(l) && txDates.has(l)) ? 7 : 3),
+        pointBackgroundColor: ds.borderColor,
+        pointBorderColor: '#fff',
+        pointBorderWidth: 1,
+      };
     });
 
     return { labels: allLabels, datasets: finalDatasets };

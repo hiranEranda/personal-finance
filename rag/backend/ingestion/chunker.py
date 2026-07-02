@@ -5,8 +5,8 @@ from backend.ingestion.normalizer.base import NormalizedDocument
 
 _CHARS_PER_TOKEN = 4
 _MIN_CHUNK_CHARS = 300 * _CHARS_PER_TOKEN   # ~1200 chars
-_MAX_CHUNK_CHARS = 600 * _CHARS_PER_TOKEN   # ~2400 chars
-_OVERLAP_CHARS = 50 * _CHARS_PER_TOKEN      # ~200 chars
+_MAX_CHUNK_CHARS = 480 * _CHARS_PER_TOKEN   # ~1920 chars — fits bge-m3's 512-token limit with room for prefix
+_OVERLAP_CHARS = 40 * _CHARS_PER_TOKEN      # ~160 chars
 _TABLE_ROWS_PER_CHUNK = 8
 
 

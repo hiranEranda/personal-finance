@@ -1,0 +1,14 @@
+<div class="flex items-center justify-between flex-wrap gap-3 mb-6">
+  <div class="flex gap-1.5 flex-wrap">
+    @for (tab of tabs; track tab.path) {
+      <a
+        [routerLink]="tab.path"
+        routerLinkActive="funds-subnav-tab-active"
+        class="funds-subnav-tab"
+      >{{ tab.label }}</a>
+    }
+  </div>
+  <div class="flex items-center gap-2">
+    <ng-content></ng-content>
+  </div>
+</div>

@@ -19,6 +19,7 @@ export interface ChatSource {
 }
 
 export interface ChatEvent {
+  session_id?: string;
   sources?: ChatSource[];
   text?: string;
 }
@@ -53,11 +54,17 @@ export class RagService {
     question: string,
     institution?: string,
     period?: string,
+    sessionId?: string,
   ): AsyncGenerator<ChatEvent> {
     const res = await fetch(`${RAG_BASE}/chat/query`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question, institution: institution || undefined, period: period || undefined }),
+      body: JSON.stringify({
+        question,
+        institution: institution || undefined,
+        period: period || undefined,
+        session_id: sessionId || undefined,
+      }),
     });
 
     if (!res.ok) {

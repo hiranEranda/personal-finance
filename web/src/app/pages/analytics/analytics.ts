@@ -3,13 +3,14 @@ import { FormsModule } from '@angular/forms';
 import { FundService } from '../../shared/services/fund.service';
 import { SavingStatus } from '../../shared/components/saving-status/saving-status';
 import { AdvancedAnalytics } from '../../shared/components/advanced-analytics/advanced-analytics';
+import { FundsSubnav } from '../../shared/components/funds-subnav/funds-subnav';
 import { PortfolioAnalytics } from '../../shared/types/fund.types';
 
 const VIEW_OVERALL = 'overall';
 
 @Component({
   selector: 'app-analytics',
-  imports: [FormsModule, SavingStatus, AdvancedAnalytics],
+  imports: [FormsModule, SavingStatus, AdvancedAnalytics, FundsSubnav],
   templateUrl: './analytics.html',
   styleUrl: './analytics.css',
 })

@@ -1,14 +1,19 @@
 import asyncio
+import logging
 from pathlib import Path
 
 from backend.config import settings
+from backend.db import aliases_repo
 from backend.ingestion import deduplicator
+from backend.ingestion.alias_extractor import extract_aliases
 from backend.ingestion.chunker import chunk_document
 from backend.ingestion.doc_classifier import classify
 from backend.ingestion.embedder import embed_texts
 from backend.ingestion.normalizer.company_financials import normalize
 from backend.ingestion.pdf_parser import parse_to_markdown
 from backend.rag.vector_store import ensure_collection, upsert_chunks
+
+logger = logging.getLogger("backend.pipeline")
 
 _PDF_STORAGE = Path(settings.pdf_storage_path)
 
@@ -62,6 +67,18 @@ def _run_ingestion(file_bytes: bytes, doc_id: str, filename: str) -> None:
             currency=doc.currency,
             chunk_count=count,
         )
+
+        # Auto-detect abbreviation aliases from the document text and persist
+        # them so query expansion picks them up on the next retrieval.
+        alias_candidates = extract_aliases(raw_text)
+        for alias, expansion in alias_candidates.items():
+            aliases_repo.upsert(alias, expansion, source="auto")
+        if alias_candidates:
+            logger.info(
+                "[ALIASES ] Auto-detected %d candidate(s): %s",
+                len(alias_candidates),
+                list(alias_candidates.keys()),
+            )
 
     except Exception as exc:
         deduplicator.update(doc_id, status="error", error=str(exc))

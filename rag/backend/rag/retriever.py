@@ -1,3 +1,7 @@
+import logging
+import re
+import time
+
 from qdrant_client.models import (
     FieldCondition,
     Filter,
@@ -12,6 +16,57 @@ from backend.config import settings
 from backend.ingestion.embedder import embed_query
 from backend.rag.vector_store import get_client
 
+logger = logging.getLogger("backend.retriever")
+
+# ---------------------------------------------------------------------------
+# REC-004: alias expansion — loaded from DB with a 60-second TTL cache
+# ---------------------------------------------------------------------------
+
+_alias_cache: dict[str, str] = {}
+_alias_cache_ts: float = 0.0
+_ALIAS_TTL = 60.0
+
+
+def _load_aliases() -> dict[str, str]:
+    try:
+        from backend.db import aliases_repo
+        return {row["alias"]: row["expansion"] for row in aliases_repo.list_active()}
+    except Exception as exc:
+        logger.warning("[ALIASES ] Could not load from DB: %r", exc)
+        return {}
+
+
+def _get_aliases() -> dict[str, str]:
+    global _alias_cache, _alias_cache_ts
+    if time.monotonic() - _alias_cache_ts > _ALIAS_TTL:
+        _alias_cache = _load_aliases()
+        _alias_cache_ts = time.monotonic()
+    return _alias_cache
+
+
+def expand_query(query: str) -> str:
+    """Append full-form expansions for any domain shorthand found in the query.
+
+    Matches are whole-word and case-insensitive. The original query text is
+    preserved — expansions are appended, never substituted.
+    """
+    aliases = _get_aliases()
+    if not aliases:
+        return query
+    q_lower = query.lower()
+    expansions = [
+        expansion
+        for alias, expansion in aliases.items()
+        if re.search(rf"\b{re.escape(alias)}\b", q_lower)
+    ]
+    if expansions:
+        return query + " " + " ".join(expansions)
+    return query
+
+
+# ---------------------------------------------------------------------------
+# Retrieval
+# ---------------------------------------------------------------------------
 
 def retrieve(
     query: str,
@@ -22,8 +77,12 @@ def retrieve(
     if top_k is None:
         top_k = settings.retrieval_top_k
 
+    expanded = expand_query(query)
+    if expanded != query:
+        logger.info("[ALIASES ] Expanded query: '%s'", expanded)
+
     client = get_client()
-    query_emb = embed_query(query)
+    query_emb = embed_query(expanded)
 
     must_filters = []
     if institution:
