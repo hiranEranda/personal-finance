@@ -62,6 +62,23 @@ app.use(
 	}),
 );
 
+// --- Share Parser Proxy: /api/share-parser/* → FastAPI at :8003/api/v1/shares/* ---
+// Must also stay before express.json() — /upload forwards multipart PDF uploads.
+app.use(
+	"/api/share-parser",
+	createProxyMiddleware({
+		target: process.env.SHARE_PARSER_URL || "http://localhost:8003",
+		changeOrigin: true,
+		pathRewrite: { "^/": "/api/v1/shares/" },
+		on: {
+			error: (err, req, res) => {
+				console.error("Share parser proxy error:", err.message);
+				res.status(502).json({ error: "Share parser unavailable. Is that service running?" });
+			},
+		},
+	}),
+);
+
 app.use(express.json({ limit: "10mb" })); // Allow larger payloads for portfolio data
 
 // --- Helper Functions ---

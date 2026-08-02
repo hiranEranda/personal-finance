@@ -165,6 +165,24 @@ CREATE TABLE IF NOT EXISTS share_weekly_prices (
 
 CREATE INDEX IF NOT EXISTS idx_share_weekly_prices_ticker ON share_weekly_prices(ticker);
 
+-- Tracks which CSE broker contract-note PDFs (share-parser service, backs the
+-- Sync/Add buttons on the shares dashboard) have already been ingested, so a
+-- re-sync of the reciepts/bought + reciepts/sold folders never double-inserts
+-- the same trade/sell rows. Filename-based dedupe, same approach as
+-- processed_deposit_files — broker export filenames are timestamped/unique.
+CREATE TABLE IF NOT EXISTS processed_share_files (
+    id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    note_type      VARCHAR(10) NOT NULL,  -- 'bought' | 'sold'
+    pdf_filename   TEXT NOT NULL,
+    status         VARCHAR(20) NOT NULL DEFAULT 'pending', -- pending|inserted|error
+    tickers        TEXT,       -- comma-separated tickers found in the note, for quick review
+    detail         TEXT,       -- parse error message, when status = 'error'
+    created_at     TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (note_type, pdf_filename)
+);
+
+CREATE INDEX IF NOT EXISTS idx_processed_share_files_status ON processed_share_files(status);
+
 -- === Funds: unit trust tracker ===
 --
 -- Backs the /funds page (fund metadata + purchase transactions).

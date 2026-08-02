@@ -11,6 +11,7 @@ import {
   Holding,
   SectorSlice,
   WeeklySnapshot,
+  ShareSyncSummary,
   PORTFOLIO_PALETTE,
 } from './portfolio.types';
 
@@ -19,6 +20,10 @@ import {
 // share_* tables. Single-document API: GET loads the whole portfolio, POST
 // (debounced) saves the whole thing back.
 const API_URL = 'http://localhost:3001/api/portfolio';
+
+// share-parser service (Sync/Add buttons) — proxied by server/server.js at
+// /api/share-parser/* → FastAPI :8003/api/v1/shares/*.
+const SHARE_PARSER_URL = 'http://localhost:3001/api/share-parser';
 
 const EMPTY_DOC: PortfolioDocument = {
   settings: { sellSideFeeRate: 0.0112 },
@@ -185,6 +190,24 @@ export class PortfolioService {
 
   private update(mutator: (doc: PortfolioDocument) => PortfolioDocument): void {
     this._doc.update(mutator);
+  }
+
+  // ---- share-parser: Sync / Add (contract-note PDF ingestion) ----
+  // Re-fetches the whole document from Postgres after a sync/upload so the
+  // in-memory doc picks up rows the parser inserted directly — otherwise the
+  // next debounced autosave would overwrite them with the stale in-memory copy.
+  reload(): void {
+    this.load();
+  }
+
+  syncShares() {
+    return this.http.post<ShareSyncSummary>(`${SHARE_PARSER_URL}/sync`, {});
+  }
+
+  uploadShares(files: FileList) {
+    const form = new FormData();
+    Array.from(files).forEach(f => form.append('files', f));
+    return this.http.post<ShareSyncSummary>(`${SHARE_PARSER_URL}/upload`, form);
   }
 
   // ---- tickers ----

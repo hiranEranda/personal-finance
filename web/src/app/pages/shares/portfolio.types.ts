@@ -79,6 +79,17 @@ export interface WeeklySnapshot {
   investedToDate: number;
 }
 
+// Returned by the share-parser service (Sync/Add buttons) — see
+// share-parser/backend/sync_service.py, which builds this dict directly.
+export interface ShareSyncSummary {
+  scanned: number;
+  trades_inserted: number;
+  sells_inserted: number;
+  tickers_created: number;
+  skipped_duplicates: number;
+  parse_errors: number;
+}
+
 export const PORTFOLIO_PALETTE = [
   '#0891b2',
   '#6366f1',

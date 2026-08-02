@@ -49,6 +49,21 @@ services:
     depends_on:
       - postgres
 
+  share-parser:
+    build: ./share-parser
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./share-parser:/app
+      - ./reciepts/bought:/data/share_bought
+      - ./reciepts/sold:/data/share_sold
+    environment:
+      DATABASE_URL: postgresql://postgres@postgres:5432/financeos
+      BOUGHT_DIR: /data/share_bought
+      SOLD_DIR: /data/share_sold
+    depends_on:
+      - postgres
+
   server:
     build: ./server
     ports:
@@ -61,12 +76,14 @@ services:
       RAG_BACKEND_URL: http://host.docker.internal:8000
       PRICE_SCRAPER_URL: http://price-scraper:8001
       DEPOSIT_PARSER_URL: http://deposit-parser:8002
+      SHARE_PARSER_URL: http://share-parser:8003
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
       - postgres
       - price-scraper
       - deposit-parser
+      - share-parser
 
   web:
     build: ./web

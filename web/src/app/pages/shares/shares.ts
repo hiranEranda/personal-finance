@@ -2,7 +2,7 @@ import { Component, inject, signal, computed, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChartModule } from 'primeng/chart';
 import { PortfolioService } from './portfolio.service';
-import { Holding, PortfolioTrade, PortfolioSell } from './portfolio.types';
+import { Holding, PortfolioTrade, PortfolioSell, ShareSyncSummary } from './portfolio.types';
 import { ThemeService } from '../../shared/services/theme';
 import { formatNumber, formatCompact } from '../../shared/utils/formatters';
 
@@ -29,6 +29,11 @@ export class Shares {
   ];
 
   activeTab = signal<SharesTab>('dashboard');
+
+  // ---- sync / add (contract-note PDF ingestion) ----
+  ingesting = signal(false);
+  ingestMessage = signal<string | null>(null);
+  ingestError = signal<string | null>(null);
 
   // ---- inline price editing (dashboard) ----
   editingTicker = signal<string | null>(null);
@@ -432,5 +437,50 @@ export class Shares {
     if (!name) return;
     this.svc.addSector(name);
     this.newSectorName = '';
+  }
+
+  // ---- sync / add (contract-note PDF ingestion) ----
+  syncNow(): void {
+    if (this.ingesting()) return;
+    this.ingesting.set(true);
+    this.ingestMessage.set(null);
+    this.ingestError.set(null);
+    this.svc.syncShares().subscribe({
+      next: summary => this.onIngestDone(summary),
+      error: () => this.onIngestFailed('Sync failed. Is the share-parser service running?'),
+    });
+  }
+
+  onFilesSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+    if (!files || files.length === 0) return;
+    this.ingesting.set(true);
+    this.ingestMessage.set(null);
+    this.ingestError.set(null);
+    this.svc.uploadShares(files).subscribe({
+      next: summary => this.onIngestDone(summary),
+      error: () => this.onIngestFailed('Upload failed. Is the share-parser service running?'),
+    });
+    input.value = '';
+  }
+
+  private onIngestDone(summary: ShareSyncSummary): void {
+    this.ingesting.set(false);
+    const parts: string[] = [];
+    if (summary.trades_inserted) parts.push(`${summary.trades_inserted} buy${summary.trades_inserted === 1 ? '' : 's'}`);
+    if (summary.sells_inserted) parts.push(`${summary.sells_inserted} sell${summary.sells_inserted === 1 ? '' : 's'}`);
+    if (summary.tickers_created) parts.push(`${summary.tickers_created} new ticker${summary.tickers_created === 1 ? '' : 's'}`);
+    if (summary.skipped_duplicates) parts.push(`${summary.skipped_duplicates} already synced`);
+    if (summary.parse_errors) parts.push(`${summary.parse_errors} couldn't be read`);
+    this.ingestMessage.set(
+      summary.scanned === 0 ? 'No new contract notes found.' : (parts.join(', ') || 'Processed, nothing new.')
+    );
+    this.svc.reload();
+  }
+
+  private onIngestFailed(message: string): void {
+    this.ingesting.set(false);
+    this.ingestError.set(message);
   }
 }

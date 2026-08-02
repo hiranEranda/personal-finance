@@ -68,3 +68,9 @@
 .shares-chip-x:hover {
   color: var(--color-negative);
 }
+
+/* label-based "+ Add" button can't use the native :disabled pseudo-class */
+.shares-btn-disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}

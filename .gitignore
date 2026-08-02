@@ -21,6 +21,10 @@ yarn-error.log
 *.pyc
 **/.venv/
 
+# CSE broker contract-note PDFs (share-parser Sync/Add folders) — personal
+# financial documents, never commit these.
+/reciepts/
+
 # Local secrets — real credentials live in these, never commit them.
 # .env.example files are intentionally kept tracked as templates.
 **/.env

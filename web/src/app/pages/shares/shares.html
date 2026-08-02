@@ -141,6 +141,29 @@
           </div>
         </div>
       </div>
+
+      <div class="flex items-center gap-3 mt-4 flex-wrap">
+        <button type="button" class="pt-btn pt-btn-ghost" (click)="syncNow()" [disabled]="ingesting()">
+          {{ ingesting() ? 'Working…' : 'Sync' }}
+        </button>
+        <label class="pt-btn" [class.shares-btn-disabled]="ingesting()">
+          + Add
+          <input
+            type="file"
+            accept=".pdf"
+            multiple
+            class="hidden"
+            [disabled]="ingesting()"
+            (change)="onFilesSelected($event)"
+          />
+        </label>
+        @if (ingestMessage()) {
+          <span class="text-[13px] token-text-muted">{{ ingestMessage() }}</span>
+        }
+        @if (ingestError()) {
+          <span class="text-[13px] token-negative">{{ ingestError() }}</span>
+        }
+      </div>
     }
 
     <!-- ============ TICKER REGISTER ============ -->
