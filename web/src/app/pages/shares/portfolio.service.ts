@@ -107,6 +107,30 @@ export class PortfolioService {
     return holdings;
   });
 
+  // Realized P&L across every ticker that ever had a sell — independent of
+  // whether that ticker is still in the register. holdings() (below) is
+  // keyed off tickers(), so deleting a fully-sold ticker (the normal way to
+  // clear it off the dashboard once qtyHeld hits 0) would otherwise wipe its
+  // historical realized P&L from the totals along with it. Trade/sell
+  // history is intentionally never cascade-deleted (see database/schema.sql,
+  // share_trades/share_sells) specifically so this figure stays accurate.
+  readonly realizedPLAllTime = computed(() => {
+    const { trades, sells } = this._doc();
+    const tickersWithSells = new Set(sells.map(s => s.ticker));
+    let total = 0;
+    tickersWithSells.forEach(ticker => {
+      const myTrades = trades.filter(t => t.ticker === ticker);
+      const mySells = sells.filter(s => s.ticker === ticker);
+      const qtyBought = myTrades.reduce((a, b) => a + b.qty, 0);
+      const totalCost = myTrades.reduce((a, b) => a + this.tradeTotalCost(b), 0);
+      const avgCost = qtyBought > 0 ? totalCost / qtyBought : 0;
+      const qtySold = mySells.reduce((a, b) => a + b.qty, 0);
+      const netProceeds = mySells.reduce((a, b) => a + (b.qty * b.sellPrice - b.commission), 0);
+      total += netProceeds - avgCost * qtySold;
+    });
+    return total;
+  });
+
   readonly totals = computed(() => {
     const holdings = this.holdings();
     const totalMarketValue = holdings.reduce((a, b) => a + b.marketValue, 0);
@@ -114,7 +138,7 @@ export class PortfolioService {
     const totalCostBasisHeld = holdings.reduce((a, b) => a + b.costBasisHeld, 0);
     const totalUnrealizedPL = holdings.reduce((a, b) => a + b.unrealizedPL, 0);
     const totalUnrealizedPct = totalCostBasisHeld !== 0 ? totalUnrealizedPL / totalCostBasisHeld : 0;
-    const totalRealizedPL = holdings.reduce((a, b) => a + b.realizedPL, 0);
+    const totalRealizedPL = this.realizedPLAllTime();
     return { totalMarketValue, totalCost, totalUnrealizedPL, totalUnrealizedPct, totalRealizedPL };
   });
 

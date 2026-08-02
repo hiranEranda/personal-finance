@@ -191,6 +191,16 @@ table.pt-table td {
   border-top: 1px solid var(--app-border);
 }
 
+/* Free-text notes columns must not be allowed to stretch and squeeze the
+   other columns in the row — cap the width and ellipsize; full text is
+   still available via the native title tooltip on hover. */
+.pt-td-notes {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .num {
   font-variant-numeric: tabular-nums;
 }

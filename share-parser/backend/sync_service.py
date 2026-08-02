@@ -39,7 +39,9 @@ def _process_one(pdf_path: Path, summary: dict) -> None:
         return
 
     note_type = parsed["note_type"]
+    tx_date = parsed["transaction_date"]
     tickers_seen = []
+    notes = f"Auto-synced from {parser.short_label(pdf_path.name)}"
 
     for item in parsed["items"]:
         ticker = item["ticker"]
@@ -47,14 +49,23 @@ def _process_one(pdf_path: Path, summary: dict) -> None:
             summary["tickers_created"] += 1
         tickers_seen.append(ticker)
 
-        notes = f"Auto-synced from {pdf_path.name} (contract {item['contract_no']})"
         if note_type == "bought":
+            # Content-based dedupe: skip if this exact trade is already in
+            # the log, whether from an earlier sync or a manual entry made
+            # before this feature existed — filename-level dedupe alone
+            # can't catch that.
+            if shares_repo.trade_exists(ticker, tx_date, item["qty"], item["rate"]):
+                summary["skipped_duplicates"] += 1
+                continue
             fees_total = round(item["amount"] - item["gross_value"], 4)
-            shares_repo.insert_trade(ticker, parsed["transaction_date"], item["qty"], item["rate"], fees_total, notes)
+            shares_repo.insert_trade(ticker, tx_date, item["qty"], item["rate"], fees_total, notes)
             summary["trades_inserted"] += 1
         else:
+            if shares_repo.sell_exists(ticker, tx_date, item["qty"], item["rate"]):
+                summary["skipped_duplicates"] += 1
+                continue
             commission = round(item["gross_value"] - item["amount"], 4)
-            shares_repo.insert_sell(ticker, parsed["transaction_date"], item["qty"], item["rate"], commission, notes)
+            shares_repo.insert_sell(ticker, tx_date, item["qty"], item["rate"], commission, notes)
             summary["sells_inserted"] += 1
 
     shares_repo.record_processed_file(note_type, pdf_path.name, "inserted", ",".join(tickers_seen), None)

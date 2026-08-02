@@ -67,6 +67,29 @@ def _next_id(cur, table: str) -> int:
     return cur.fetchone()[0]
 
 
+def trade_exists(ticker: str, buy_date: date, qty: float, buy_price: float) -> bool:
+    """Exact-match dedupe against the trade log — catches a contract note
+    line that's already there, whether from a prior sync or a manual entry
+    made before this feature existed (same source document, same numbers)."""
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT 1 FROM share_trades WHERE ticker = %s AND buy_date = %s AND qty = %s AND buy_price = %s",
+            (ticker, buy_date, qty, buy_price),
+        )
+        return cur.fetchone() is not None
+
+
+def sell_exists(ticker: str, sell_date: date, qty: float, sell_price: float) -> bool:
+    with get_conn() as conn:
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT 1 FROM share_sells WHERE ticker = %s AND sell_date = %s AND qty = %s AND sell_price = %s",
+            (ticker, sell_date, qty, sell_price),
+        )
+        return cur.fetchone() is not None
+
+
 def insert_trade(ticker: str, buy_date: date, qty: float, buy_price: float, fees_total: float, notes: str) -> int:
     with get_conn() as conn:
         cur = conn.cursor()

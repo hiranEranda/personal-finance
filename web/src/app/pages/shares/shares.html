@@ -295,7 +295,7 @@
                 <td class="text-right num">{{ num(gross(t)) }}</td>
                 <td class="text-right num">{{ num(fees(t)) }}</td>
                 <td class="text-right num font-semibold">{{ num(totalCost(t)) }}</td>
-                <td class="token-text-muted">{{ t.notes }}</td>
+                <td class="token-text-muted pt-td-notes" [title]="t.notes">{{ t.notes }}</td>
                 <td>
                   <button type="button" class="shares-delete" (click)="svc.deleteTrade(t.id)">Delete</button>
                 </td>
@@ -363,7 +363,7 @@
                 <td class="text-right num">{{ num(s.sellPrice) }}</td>
                 <td class="text-right num">{{ num(s.commission) }}</td>
                 <td class="text-right num font-semibold">{{ num(netProceeds(s)) }}</td>
-                <td class="token-text-muted">{{ s.notes }}</td>
+                <td class="token-text-muted pt-td-notes" [title]="s.notes">{{ s.notes }}</td>
                 <td>
                   <button type="button" class="shares-delete" (click)="svc.deleteSell(s.id)">Delete</button>
                 </td>

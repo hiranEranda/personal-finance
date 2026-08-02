@@ -94,3 +94,18 @@ def list_pdfs(folder: Path) -> list[Path]:
     if not folder.exists():
         return []
     return sorted(folder.glob("*.pdf"))
+
+
+_FILENAME_RE = re.compile(r"^(?P<account>.+?)_Contract_Notes_(?P<type>BOUGHT|SOLD)_(?P<date>\d{4}_\d{2}_\d{2})")
+
+
+def short_label(filename: str) -> str:
+    """Capital Alliance's export names are long and mostly boilerplate —
+    'CAS-168978-LI_00_Contract_Notes_BOUGHT_2026_07_08_Page_No__04_08_38.pdf'
+    — trims that down to 'CAS-168978-LI_00_BOUGHT_2026_07_08' for the trade
+    log's notes field. Falls back to the bare filename for any other naming
+    convention."""
+    match = _FILENAME_RE.match(filename)
+    if match:
+        return f"{match.group('account')}_{match.group('type')}_{match.group('date')}"
+    return Path(filename).stem
